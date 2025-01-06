@@ -311,7 +311,7 @@
             </button>
         </div>
     </div>
-    <!-- Add this template div to your success.html -->
+    <!-- PDF Template -->
     <div class="pdf-template" id="pdfTemplate">
         <div class="pdf-header">
             <h1>Ultimate Skills Assessment Report</h1>
@@ -340,9 +340,6 @@
             </ul>
         </div>
     </div>
-
-    <!-- PDF Template -->
-    <div class="pdf-template" id="pdfTemplate"></div>
 
     <script>
         // Constants and Configuration
@@ -448,14 +445,29 @@
         class PDFGenerator {
             constructor(assessmentData) {
                 this.assessmentData = assessmentData;
-                this.pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                this.pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
                 this.pageWidth = this.pdf.internal.pageSize.getWidth();
                 this.pageHeight = this.pdf.internal.pageSize.getHeight();
                 this.margin = 20;
             }
-    
-            // Your existing PDFGenerator methods remain unchanged
-            // [Keep all the PDFGenerator methods as they are]
+
+            async generatePDF() {
+                // Populate the PDF template with assessment data
+                document.getElementById('pdfName').innerText = this.assessmentData.name;
+                document.getElementById('pdfDate').innerText = this.assessmentData.date;
+                document.getElementById('pdfAssessmentDate').innerText = this.assessmentData.date;
+
+                // Optionally, populate skill sections and summary points here
+
+                // Use html2canvas to capture the PDF template
+                const pdfTemplate = document.getElementById('pdfTemplate');
+                const canvas = await html2canvas(pdfTemplate);
+                const imgData = canvas.toDataURL('image/png');
+
+                // Add the image to the PDF and save
+                this.pdf.addImage(imgData, 'PNG', this.margin, this.margin, this.pageWidth - 2 * this.margin, 0);
+                this.pdf.save('Assessment_Report.pdf');
+            }
         }
     
         // Main Functions
