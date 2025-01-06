@@ -352,6 +352,175 @@
             position: absolute;
             left: 0;
         }
+        /* Level Card Styles */
+        .level-card {
+            background: linear-gradient(135deg, #7a1fbf, #4f46e5);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .level-info h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .level-icon {
+            font-size: 48px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .progress-track {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            transition: width 0.3s ease;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Achievement Cards */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .achievement-card {
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .achievement-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .achievement-locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .stat-card {
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Development Path */
+        .development-path {
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .path-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Text utility classes */
+        .text-muted {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -382,8 +551,109 @@
             </ul>
         </div>
         <div class="assessment-results">
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-info">
+                        <h2>Level <span id="playerLevel">5</span></h2>
+                        <p>Ultimate Skills Master</p>
+                    </div>
+                    <div class="level-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="levelProgress"></div>
+                </div>
+                <div class="progress-labels">
+                    <span id="progressPercent">0%</span>
+                    <span>Next Level</span>
+                </div>
+            </div>
+        
+            <div class="achievements-grid">
+                <div class="achievement-card" id="masterHandler">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div>
+                        <h3>Master Handler</h3>
+                        <p class="text-muted">Exceptional throwing skills</p>
+                    </div>
+                </div>
+                <div class="achievement-card" id="speedDemon">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3>Speed Demon</h3>
+                        <p class="text-muted">Outstanding cutting ability</p>
+                    </div>
+                </div>
+                <div class="achievement-card" id="strategist">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                        <i class="fas fa-chess"></i>
+                    </div>
+                    <div>
+                        <h3>Strategic Mind</h3>
+                        <p class="text-muted">High game IQ</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-trophy"></i>
+                        <span>Top Skill</span>
+                    </div>
+                    <div class="stat-value" id="topSkill">-</div>
+                    <div class="stat-label" id="topSkillRating">0/10</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Focus Area</span>
+                    </div>
+                    <div class="stat-value" id="focusSkill">-</div>
+                    <div class="stat-label" id="focusSkillRating">0/10</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Average Rating</span>
+                    </div>
+                    <div class="stat-value" id="avgRating">0.0</div>
+                    <div class="stat-label">Across all skills</div>
+                </div>
+            </div>
+        
+            <div class="development-path">
+                <h3 class="section-title">Development Path</h3>
+                <div class="path-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4 id="focusAreaTitle">Focus on Primary Skill</h4>
+                        <p id="focusAreaDesc">Specific drills and exercises for improvement</p>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4 id="maintainTitle">Maintain Strengths</h4>
+                        <p id="maintainDesc">Continue practicing your best skills</p>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Set New Goals</h4>
+                        <p>Define specific targets for your next assessment</p>
+                    </div>
+                </div>
+            </div>
+        
             <div class="results-summary" id="resultsSummary">
-                <!-- Results will be populated by JavaScript -->
+                <!-- Original results will still be populated here -->
             </div>
         </div>
         <div class="reminder-box">
@@ -625,6 +895,94 @@
         }
 
         // Main Functions
+        function calculateLevel(ratings) {
+            const avgRating = Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length;
+            return Math.floor(avgRating);
+        }
+
+        function calculateProgress(ratings) {
+            const avgRating = Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length;
+            return ((avgRating % 1) * 100).toFixed(0);
+        }
+
+        function updateAchievements(ratings) {
+            // Master Handler achievement
+            const masterHandler = document.getElementById('masterHandler');
+            if (ratings.throwing >= 8) {
+                masterHandler.classList.remove('achievement-locked');
+            } else {
+                masterHandler.classList.add('achievement-locked');
+            }
+
+            // Speed Demon achievement
+            const speedDemon = document.getElementById('speedDemon');
+            if (ratings.downfield_cutting >= 8) {
+                speedDemon.classList.remove('achievement-locked');
+            } else {
+                speedDemon.classList.add('achievement-locked');
+            }
+
+            // Strategic Mind achievement
+            const strategist = document.getElementById('strategist');
+            if (ratings.mental_game >= 8) {
+                strategist.classList.remove('achievement-locked');
+            } else {
+                strategist.classList.add('achievement-locked');
+            }
+        }
+
+        function updateStats(ratings) {
+            // Find highest and lowest rated skills
+            let highestSkill = { name: '', value: 0 };
+            let lowestSkill = { name: '', value: 10 };
+            
+            Object.entries(ratings).forEach(([skill, value]) => {
+                if (value > highestSkill.value) {
+                    highestSkill = { name: skill, value };
+                }
+                if (value < lowestSkill.value) {
+                    lowestSkill = { name: skill, value };
+                }
+            });
+
+            // Calculate average
+            const avgRating = (Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length).toFixed(1);
+
+            // Update UI
+            document.getElementById('topSkill').textContent = utils.formatSkillName(highestSkill.name);
+            document.getElementById('topSkillRating').textContent = `${highestSkill.value}/10`;
+            document.getElementById('focusSkill').textContent = utils.formatSkillName(lowestSkill.name);
+            document.getElementById('focusSkillRating').textContent = `${lowestSkill.value}/10`;
+            document.getElementById('avgRating').textContent = avgRating;
+
+            // Update development path
+            document.getElementById('focusAreaTitle').textContent = `Focus on ${utils.formatSkillName(lowestSkill.name)}`;
+            document.getElementById('maintainTitle').textContent = `Maintain ${utils.formatSkillName(highestSkill.name)}`;
+        }
+
+        // Modify the existing populateResults function by adding these lines after the original content:
+        const originalPopulateResults = populateResults;
+        populateResults = function() {
+            const assessmentData = AssessmentDataManager.getAssessmentData();
+            if (!assessmentData) {
+                // ... existing error handling ...
+                return;
+            }
+
+            // Original results population
+            originalPopulateResults();
+
+            // Update new UI elements
+            const level = calculateLevel(assessmentData.ratings);
+            const progress = calculateProgress(assessmentData.ratings);
+
+            document.getElementById('playerLevel').textContent = level;
+            document.getElementById('levelProgress').style.width = `${progress}%`;
+            document.getElementById('progressPercent').textContent = `${progress}%`;
+
+            updateAchievements(assessmentData.ratings);
+            updateStats(assessmentData.ratings);
+        };
         function populateResults() {
             const assessmentData = AssessmentDataManager.getAssessmentData();
             const resultsDiv = document.getElementById('resultsSummary');
