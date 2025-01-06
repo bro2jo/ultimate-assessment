@@ -1087,32 +1087,44 @@
         };
 
         const ACHIEVEMENT_THRESHOLDS = {
-            // Removed masterHandler as it's based on old 'throwing' skill
-            speedDemon: { skills: [
-                'isolation_cutting',
-                'continuation_cutting',
-                'angles',
-                'fakes_footwork',
-                'timing_field_vision',
-                'decisiveness',
-                'catching',
-                'zone_offense',
-                'reading_the_disc'
-            ], threshold: 8 },
-            strategist: { skill: 'mental_game', threshold: 8 },
-            athleticExcellence: { category: 'Fitness & Athleticism', threshold: 8 },
-            movementMaster: { skills: [
-                'isolation_cutting',
-                'continuation_cutting',
-                'angles',
-                'fakes_footwork',
-                'timing_field_vision',
-                'decisiveness',
-                'catching',
-                'zone_offense',
-                'reading_the_disc'
-            ], threshold: 9 },
-            defenseMaster: { // Newly added achievement for Defending
+            speedDemon: { 
+                skills: [
+                    'isolation_cutting',
+                    'continuation_cutting',
+                    'angles',
+                    'fakes_footwork',
+                    'timing_field_vision',
+                    'decisiveness',
+                    'catching',
+                    'zone_offense',
+                    'reading_the_disc'
+                ],
+                threshold: 8 
+            },
+            strategist: { 
+                skills: [
+                    'defensive_strategy',
+                    'offensive_strategy',
+                    'mental_game',
+                    'feedback_implementation'
+                ],
+                threshold: 8 
+            },
+            athleticExcellence: { 
+                skills: [
+                    'speed_explosiveness',
+                    'endurance',
+                    'vertical_leap',
+                    'change_of_direction',
+                    'boxing_out',
+                    'laying_out',
+                    'recovery',
+                    'flexibility_mobility',
+                    'injury_prevention'
+                ],
+                threshold: 8 
+            },
+            defenseMaster: {
                 skills: [
                     'normal_marking',
                     'sideline_trap_marking',
@@ -1134,11 +1146,12 @@
                     'decision_making_vision',
                     'flow_awareness',
                     'throw_and_go',
-                    'offensive_pattern_recognition'
+                    'offensive_pattern_recognition',
+                    'handler_movement'  // Added handler_movement
                 ],
                 threshold: 8
             },
-            masterThrower: { // New achievement based on new Throwing Skills
+            masterThrower: {
                 skills: [
                     'backhand_power',
                     'backhand_accuracy',
@@ -1167,23 +1180,7 @@
                     'hucking_placement'
                 ],
                 threshold: 8
-            },
-            ultimate_master: { // Added missing 'ultimate_master' achievement
-                skills: [
-                    'poise_with_disc',
-                    'breaking_the_mark',
-                    'handler_movement',
-                    'speed_explosiveness',
-                    'backhand_power',
-                    'forehand_power',
-                    'mental_game',
-                    'defensive_pattern_recognition',
-                    'flow_awareness'
-                ],
-                threshold: 10
             }
-            // (Optional) Add new achievement thresholds here if needed
-            // e.g., feedbackImplementation: { skill: 'feedback_implementation', threshold: 8 }
         };
 
         class AppError extends Error {
