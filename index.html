@@ -880,22 +880,19 @@
             </div>
             <!-- New Skills Added End Here -->
 
-            <!-- 3. Downfield Cutting -->
-            <!-- Note: The "Downfield Cutting" section has been replaced with the above new skills -->
-            <!-- If you prefer to keep "Downfield Cutting" as a category heading without a separate section, you can remove or adjust the section-title accordingly -->
-
-            <!-- 4. Defense -->
+            <!-- 4. Defending -->
             <div class="section-title">
-                <i class="fas fa-shield-alt"></i> Defense
+                <i class="fas fa-shield-alt"></i> Defending
             </div>
 
-            <div class="form-group" data-skill="marking">
+            <!-- 1. Normal Marking -->
+            <div class="form-group" data-skill="normal_marking">
                 <div class="skill-category">
-                    <span class="skill-name">Marking</span>
+                    <span class="skill-name">Normal Marking</span>
                     <span class="skill-value">5</span>
                 </div>
                 <div class="skill-slider">
-                    <input type="range" min="1" max="10" value="5" name="marking" class="skill-range">
+                    <input type="range" min="1" max="10" value="5" name="normal_marking" class="skill-range">
                     <div class="rating-labels">
                         <span>Bad</span>
                         <span>Great</span>
@@ -903,17 +900,18 @@
                 </div>
                 <div class="skill-description">
                     <i class="fas fa-info-circle"></i>
-                    Ability to effectively prevent throws and maintain proper marking position.
+                    Applying pressure while maintaining balance and preventing breaks.
                 </div>
             </div>
 
-            <div class="form-group" data-skill="downfield_defense">
+            <!-- 2. Sideline Trap Marking -->
+            <div class="form-group" data-skill="sideline_trap_marking">
                 <div class="skill-category">
-                    <span class="skill-name">Downfield Defense</span>
+                    <span class="skill-name">Sideline Trap Marking</span>
                     <span class="skill-value">5</span>
                 </div>
                 <div class="skill-slider">
-                    <input type="range" min="1" max="10" value="5" name="downfield_defense" class="skill-range">
+                    <input type="range" min="1" max="10" value="5" name="sideline_trap_marking" class="skill-range">
                     <div class="rating-labels">
                         <span>Bad</span>
                         <span>Great</span>
@@ -921,17 +919,18 @@
                 </div>
                 <div class="skill-description">
                     <i class="fas fa-info-circle"></i>
-                    Effectiveness in defending cuts and maintaining positioning downfield.
+                    Trapping the offense on the sideline and creating high pressure situations.
                 </div>
             </div>
 
-            <div class="form-group" data-skill="handler_defense">
+            <!-- 3. Downfield Defending -->
+            <div class="form-group" data-skill="downfield_defending">
                 <div class="skill-category">
-                    <span class="skill-name">Handler Defense</span>
+                    <span class="skill-name">Downfield Defending</span>
                     <span class="skill-value">5</span>
                 </div>
                 <div class="skill-slider">
-                    <input type="range" min="1" max="10" value="5" name="handler_defense" class="skill-range">
+                    <input type="range" min="1" max="10" value="5" name="downfield_defending" class="skill-range">
                     <div class="rating-labels">
                         <span>Bad</span>
                         <span>Great</span>
@@ -939,9 +938,124 @@
                 </div>
                 <div class="skill-description">
                     <i class="fas fa-info-circle"></i>
-                    Ability to contain handler movement and prevent reset options.
+                    Staying close to cutters and contesting their movements effectively.
                 </div>
             </div>
+
+            <!-- 4. Handler Defending -->
+            <div class="form-group" data-skill="handler_defending">
+                <div class="skill-category">
+                    <span class="skill-name">Handler Defending</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="handler_defending" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Neutralizing handler movements and preventing easy resets.
+                </div>
+            </div>
+
+            <!-- 5. Defensive Pattern Recognition -->
+            <div class="form-group" data-skill="defensive_pattern_recognition">
+                <div class="skill-category">
+                    <span class="skill-name">Defensive Pattern Recognition</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="defensive_pattern_recognition" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Identifying individual and team tendencies to tailor defensive positioning, tactics, and reaction.
+                </div>
+            </div>
+
+            <!-- 6. Help Defense -->
+            <div class="form-group" data-skill="help_defense">
+                <div class="skill-category">
+                    <span class="skill-name">Help Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="help_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Leaving your mark strategically to disrupt offensive flow.
+                </div>
+            </div>
+
+            <!-- 7. Switching on Defense -->
+            <div class="form-group" data-skill="switching_on_defense">
+                <div class="skill-category">
+                    <span class="skill-name">Switching on Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="switching_on_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Communicating and switching efficiently to maintain strong coverage.
+                </div>
+            </div>
+
+            <!-- 8. Zone Defense -->
+            <div class="form-group" data-skill="zone_defense">
+                <div class="skill-category">
+                    <span class="skill-name">Zone Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="zone_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Understanding roles and positioning to counter zone offenses.
+                </div>
+            </div>
+
+            <!-- 9. Defensive Mental Fortitude -->
+            <div class="form-group" data-skill="defensive_mental_fortitude">
+                <div class="skill-category">
+                    <span class="skill-name">Defensive Mental Fortitude</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="defensive_mental_fortitude" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Staying resilient and focused throughout the whole point.
+                </div>
+            </div>
+            <!-- Defending Skills End Here -->
 
             <!-- 5. Handling -->
             <div class="section-title">

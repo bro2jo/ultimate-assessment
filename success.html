@@ -667,7 +667,17 @@
                 'handler_cutting'
             ],
             'Throwing Skills': ['throwing', 'disc_moves'],
-            'Defense': ['marking', 'downfield_defense', 'handler_defense'],
+            'Defending': [ // Renamed from 'Defense' to 'Defending' and updated skills
+                'normal_marking', // Renamed from 'marking'
+                'sideline_trap_marking',
+                'downfield_defending', // Renamed from 'downfield_defense'
+                'handler_defending', // Renamed from 'handler_defense'
+                'defensive_pattern_recognition',
+                'help_defense',
+                'switching_on_defense',
+                'zone_defense',
+                'defensive_mental_fortitude'
+            ],
             'Fitness & Athleticism': [
                 'speed_explosiveness',
                 'endurance',
@@ -716,7 +726,21 @@
                 'catching',
                 'zone_offense',
                 'reading_the_disc'
-            ], threshold: 9 } // New achievement based on detailed cutting skills
+            ], threshold: 9 }, // New achievement based on detailed cutting skills
+            defenseMaster: { // Newly added achievement for Defending
+                skills: [
+                    'normal_marking',
+                    'sideline_trap_marking',
+                    'downfield_defending',
+                    'handler_defending',
+                    'defensive_pattern_recognition',
+                    'help_defense',
+                    'switching_on_defense',
+                    'zone_defense',
+                    'defensive_mental_fortitude'
+                ],
+                threshold: 8
+            }
             // (Optional) Add new achievement thresholds here if needed
             // e.g., feedbackImplementation: { skill: 'feedback_implementation', threshold: 8 }
         };
