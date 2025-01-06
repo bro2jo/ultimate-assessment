@@ -1627,8 +1627,8 @@
                     });
 
                     // Generate skill bar HTML
-                    const generateSkillBar = (skill, isHighlight) => `
-                        <div class="skill-bar ${isHighlight ? 'highlight' : ''}">
+                    const generateSkillBar = (skill) => `
+                        <div class="skill-bar>
                             <div class="skill-info">
                                 <span class="skill-icon ${skill.tier}-tier">
                                     <i class="fas ${
@@ -1659,7 +1659,7 @@
                                     <span class="category-avg">${categoryAvg}/10</span>
                                 </div>
                                 <div class="category-skills">
-                                    ${skills.map((skill, index) => generateSkillBar(skill, index === 0)).join('')}
+                                   ${skills.map(skill => generateSkillBar(skill)).join('')}
                                 </div>
                             </div>
                         `;
