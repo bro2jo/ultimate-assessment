@@ -372,12 +372,35 @@ const PDF_OPTIONS = {
     }
 };
 const pdfStyles = `
+@page {
+    margin: 0;
+    size: A4;
+}
+
 .pdf-template {
     background: white;
     color: #333;
     width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
     padding: 20mm;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.pdf-page {
+    background: white;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 0 auto;
+    position: relative;
+    page-break-after: always;
+}
+
+.pdf-page:last-child {
+    page-break-after: avoid;
 }
 
 .pdf-header {
@@ -459,6 +482,7 @@ const pdfStyles = `
     padding: 20px;
     background: #f8f8f8;
     border-radius: 8px;
+    page-break-inside: avoid;
 }
 
 .pdf-summary h3 {
@@ -482,6 +506,20 @@ const pdfStyles = `
     color: #ff9123;
     position: absolute;
     left: 0;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .pdf-template {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 20mm;
+        margin: 0 auto;
+    }
 }`;
 // Utility Functions
 function getUrlParams() {
@@ -649,26 +687,50 @@ function populateResults() {
     resultsDiv.innerHTML = metaHtml + resultsHtml;
 }
 
-function generatePdfContent(assessmentData) {
-    // Set basic information
-    document.getElementById('pdfName').textContent = assessmentData.name;
-    document.getElementById('pdfDate').textContent = new Date().toLocaleDateString();
-    document.getElementById('pdfAssessmentDate').textContent = assessmentData.date;
-
-    // Generate skill sections
-    document.getElementById('pdfSkillSections').innerHTML = generateSkillSections(assessmentData.ratings);
-
-    // Generate summary
-    const summary = calculateSkillSummary(assessmentData.ratings);
-    const summaryPoints = [
+function generateSummaryPoints(ratings) {
+    const summary = calculateSkillSummary(ratings);
+    const points = [
         `Strongest Category: ${summary.strongestCategory} (Avg: ${summary.strongestScore.toFixed(1)})`,
         `Areas for Development: ${summary.weakestCategory} (Avg: ${summary.weakestScore.toFixed(1)})`,
         summary.topSkills.length > 0 ? `Top Skills: ${summary.topSkills.map(s => formatSkillName(s.name)).join(', ')}` : null,
         summary.improvementAreas.length > 0 ? `Focus Areas: ${summary.improvementAreas.map(s => formatSkillName(s.name)).join(', ')}` : null
     ].filter(Boolean);
 
-    document.getElementById('pdfSummaryPoints').innerHTML = 
-        summaryPoints.map(point => `<li>${point}</li>`).join('');
+    return points.map(point => `<li>${point}</li>`).join('');
+}
+
+function generatePdfContent(assessmentData) {
+    const skillSections = generateSkillSections(assessmentData.ratings);
+    const template = document.getElementById('pdfTemplate');
+    
+    template.innerHTML = `
+        <div class="pdf-page">
+            <div class="pdf-header">
+                <h1>Ultimate Skills Assessment Report</h1>
+                <div class="assessment-date">${assessmentData.date}</div>
+            </div>
+
+            <div class="pdf-meta">
+                <div class="pdf-meta-item">
+                    <strong>Player Name:</strong>
+                    <span>${assessmentData.name}</span>
+                </div>
+                <div class="pdf-meta-item">
+                    <strong>Assessment Date:</strong>
+                    <span>${assessmentData.date}</span>
+                </div>
+            </div>
+
+            ${skillSections}
+
+            <div class="pdf-summary">
+                <h3>Assessment Summary</h3>
+                <ul>
+                    ${generateSummaryPoints(assessmentData.ratings)}
+                </ul>
+            </div>
+        </div>
+    `;
 }
 
 async function saveResults() {
@@ -695,9 +757,9 @@ async function saveResults() {
         // Generate PDF content
         generatePdfContent(assessmentData);
 
-        // Configure PDF options with improved settings
+        // Configure PDF options with improved settings for pagination
         const options = {
-            margin: [15, 15, 15, 15],
+            margin: 0,
             filename: `ultimate-skills-assessment-${assessmentData.name.toLowerCase().replace(/\s+/g, '-')}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
@@ -706,25 +768,50 @@ async function saveResults() {
                 logging: false,
                 allowTaint: true,
                 scrollY: 0,
-                width: 210 * 2.83465, // A4 width in pixels at 96 DPI
-                height: 297 * 2.83465, // A4 height in pixels at 96 DPI
+                windowWidth: 210 * 2.83465, // A4 width in pixels at 96 DPI
+                windowHeight: 297 * 2.83465, // A4 height in pixels at 96 DPI
                 backgroundColor: '#ffffff'
             },
             jsPDF: {
                 unit: 'mm',
                 format: 'a4',
                 orientation: 'portrait',
-                compress: true
+                compress: true,
+                hotfixes: ['px_scaling']
             },
             pagebreak: {
                 mode: ['avoid-all', 'css', 'legacy'],
                 before: '.page-break-before',
-                after: '.page-break-after'
+                after: '.page-break-after',
+                avoid: ['tr', '.pdf-skill-item', '.pdf-section h2']
             }
         };
 
+        // Create a wrapper for content to ensure proper page breaks
+        const contentWrapper = document.createElement('div');
+        contentWrapper.style.width = '210mm';
+        contentWrapper.style.margin = '0 auto';
+        contentWrapper.style.background = 'white';
+        contentWrapper.innerHTML = pdfTemplate.innerHTML;
+        pdfTemplate.innerHTML = '';
+        pdfTemplate.appendChild(contentWrapper);
+
         // Generate PDF with progress handling
-        await html2pdf().set(options).from(pdfTemplate).save();
+        await html2pdf()
+            .set(options)
+            .from(pdfTemplate)
+            .toPdf()
+            .get('pdf')
+            .then((pdf) => {
+                // Add page numbers
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(10);
+                    pdf.text(`Page ${i} of ${totalPages}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
+                }
+            })
+            .save();
 
     } catch (error) {
         console.error('PDF generation error:', error);
