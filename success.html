@@ -577,61 +577,64 @@
     </style>
 </head>
 <body>
-    <div class="success-container">
-        <div class="success-header">
-            <div class="success-icon">
+    <main class="success-container">
+        <!-- Header Section -->
+        <header class="success-header">
+            <div class="success-icon" aria-hidden="true">
                 <i class="fas fa-check"></i>
             </div>
             <h1>Assessment Submitted Successfully!</h1>
             <p class="subtitle">Thank you for completing your Ultimate skills self-assessment.</p>
-        </div>
-
-        <div class="next-steps">
-            <h2><i class="fas fa-forward"></i> Next Steps</h2>
+        </header>
+    
+        <!-- Next Steps Section -->
+        <section class="next-steps">
+            <h2><i class="fas fa-forward" aria-hidden="true"></i> Next Steps</h2>
             <ul class="steps-list">
                 <li>
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
                     <div>Schedule your next assessment in 3 months to track your progress. Regular assessments help monitor improvement.</div>
                 </li>
                 <li>
-                    <i class="fas fa-bullseye"></i>
+                    <i class="fas fa-bullseye" aria-hidden="true"></i>
                     <div>Focus on skills you rated lower and create specific drills or exercises to improve them.</div>
                 </li>
                 <li>
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-users" aria-hidden="true"></i>
                     <div>Share your goals with teammates or coaches to get support and guidance in your development.</div>
                 </li>
             </ul>
-        </div>
-        <div class="assessment-results">
+        </section>
+    
+        <!-- Assessment Results Section -->
+        <section class="assessment-results">
             <div class="level-card">
                 <div class="level-header">
                     <div class="level-info">
-                        <h2>Current Rating: <span id="playerRating">0</span></h2>
+                        <h2>Current Rating: <span id="playerRating" aria-live="polite">0</span></h2>
                         <p id="levelTitle">Ultimate Skills Assessment</p>
                     </div>
-                    <div class="level-icon" id="levelIcon">
+                    <div class="level-icon" id="levelIcon" aria-hidden="true">
                         <i class="fas fa-star"></i>
                     </div>
                 </div>
-                <div class="progress-track">
+                <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-fill" id="levelProgress"></div>
                 </div>
                 <div class="progress-labels">
-                    <span id="progressPercent">0</span>
+                    <span id="progressPercent" aria-live="polite">0</span>
                     <span>Maximum Rating: 100</span>
                 </div>
             </div>
-
-            <!-- Canvas Container for Responsive Chart -->
-            <div class="chart-container">
+    
+            <div class="chart-container" role="img" aria-label="Skills radar chart">
                 <canvas id="radarChart"></canvas>
             </div>
-
-            <div class="achievements-grid">
-                <!-- Original achievements -->
-                <div class="achievement-card achievement-locked" id="masterHandler">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);">
+    
+            <div class="achievements-grid" role="list">
+                <!-- Achievement Cards -->
+                <div class="achievement-card achievement-locked" id="masterHandler" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);" aria-hidden="true">
                         <i class="fas fa-crown"></i>
                     </div>
                     <div>
@@ -639,8 +642,8 @@
                         <p class="text-muted">Exceptional throwing skills</p>
                     </div>
                 </div>
-                <div class="achievement-card achievement-locked" id="speedDemon">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);">
+                <div class="achievement-card achievement-locked" id="speedDemon" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);" aria-hidden="true">
                         <i class="fas fa-bolt"></i>
                     </div>
                     <div>
@@ -648,8 +651,8 @@
                         <p class="text-muted">Outstanding cutting ability</p>
                     </div>
                 </div>
-                <div class="achievement-card achievement-locked" id="strategist">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                <div class="achievement-card achievement-locked" id="strategist" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #a855f7, #7c3aed);" aria-hidden="true">
                         <i class="fas fa-chess"></i>
                     </div>
                     <div>
@@ -657,10 +660,8 @@
                         <p class="text-muted">High game IQ</p>
                     </div>
                 </div>
-                
-                <!-- New category achievements -->
-                <div class="achievement-card achievement-locked" id="cutting_movement_master">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #22c55e, #059669);">
+                <div class="achievement-card achievement-locked" id="cutting_movement_master" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #22c55e, #059669);" aria-hidden="true">
                         <i class="fas fa-running"></i>
                     </div>
                     <div>
@@ -668,8 +669,8 @@
                         <p class="text-muted">Exceptional cutting skills</p>
                     </div>
                 </div>
-                <div class="achievement-card achievement-locked" id="defense_master">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);">
+                <div class="achievement-card achievement-locked" id="defense_master" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);" aria-hidden="true">
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <div>
@@ -677,8 +678,8 @@
                         <p class="text-muted">Superior defensive skills</p>
                     </div>
                 </div>
-                <div class="achievement-card achievement-locked" id="athletic_master">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f472b6, #db2777);">
+                <div class="achievement-card achievement-locked" id="athletic_master" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f472b6, #db2777);" aria-hidden="true">
                         <i class="fas fa-dumbbell"></i>
                     </div>
                     <div>
@@ -686,10 +687,8 @@
                         <p class="text-muted">Exceptional physical ability</p>
                     </div>
                 </div>
-                
-                <!-- Ultimate Mastery Achievement -->
-                <div class="achievement-card achievement-locked" id="ultimate_master">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f59e0b, #b45309);">
+                <div class="achievement-card achievement-locked" id="ultimate_master" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f59e0b, #b45309);" aria-hidden="true">
                         <i class="fas fa-trophy"></i>
                     </div>
                     <div>
@@ -698,88 +697,90 @@
                     </div>
                 </div>
             </div>
-        
+    
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">
-                        <i class="fas fa-trophy"></i>
+                        <i class="fas fa-trophy" aria-hidden="true"></i>
                         <span>Top Skill</span>
                     </div>
-                    <div class="stat-value" id="topSkill">-</div>
+                    <div class="stat-value" id="topSkill" aria-live="polite">-</div>
                     <div class="stat-label" id="topSkillRating">0/10</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
-                        <i class="fas fa-bullseye"></i>
+                        <i class="fas fa-bullseye" aria-hidden="true"></i>
                         <span>Focus Area</span>
                     </div>
-                    <div class="stat-value" id="focusSkill">-</div>
+                    <div class="stat-value" id="focusSkill" aria-live="polite">-</div>
                     <div class="stat-label" id="focusSkillRating">0/10</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-chart-line" aria-hidden="true"></i>
                         <span>Average Rating</span>
                     </div>
                     <div class="stat-value" id="avgRating">0.0</div>
                     <div class="stat-label">Across all skills</div>
                 </div>
             </div>
-        
+    
             <div class="development-path">
                 <h3 class="section-title">Development Path</h3>
                 <div class="path-step">
-                    <div class="step-number">1</div>
+                    <div class="step-number" aria-hidden="true">1</div>
                     <div class="step-content">
                         <h4 id="focusAreaTitle">Focus on Primary Skill</h4>
                         <p id="focusAreaDesc">Specific drills and exercises for improvement</p>
                     </div>
                 </div>
                 <div class="path-step">
-                    <div class="step-number">2</div>
+                    <div class="step-number" aria-hidden="true">2</div>
                     <div class="step-content">
                         <h4 id="maintainTitle">Maintain Strengths</h4>
                         <p id="maintainDesc">Continue practicing your best skills</p>
                     </div>
                 </div>
                 <div class="path-step">
-                    <div class="step-number">3</div>
+                    <div class="step-number" aria-hidden="true">3</div>
                     <div class="step-content">
                         <h4>Set New Goals</h4>
                         <p>Define specific targets for your next assessment</p>
                     </div>
                 </div>
             </div>
-        
-            <div class="results-summary" id="resultsSummary">
-                <!-- Original results will still be populated here -->
+    
+            <div class="results-summary" id="resultsSummary" aria-live="polite">
+                <!-- Results will be populated by JavaScript -->
             </div>
-        </div>
-        <div class="reminder-box">
-            <i class="fas fa-bell reminder-icon"></i>
+        </section>
+    
+        <aside class="reminder-box" role="note">
+            <i class="fas fa-bell reminder-icon" aria-hidden="true"></i>
             <div class="reminder-text">
                 <strong>Pro Tip:</strong> Take photos or videos of your practice sessions. They're great for tracking progress and getting feedback from experienced players.
             </div>
-        </div>
-
+        </aside>
+    
         <div class="action-buttons">
-            <a href="/" class="button">
-                <i class="fas fa-redo"></i>
+            <a href="/" class="button" role="button">
+                <i class="fas fa-redo" aria-hidden="true"></i>
                 Take Another Assessment
             </a>
-            <button onclick="saveResults()" class="button outline" id="saveButton">
-                <i class="fas fa-download"></i>
+            <button type="button" onclick="saveResults()" class="button outline" id="saveButton">
+                <i class="fas fa-download" aria-hidden="true"></i>
                 Save Results as PDF
             </button>
         </div>
-    </div>
+    </main>
+    
     <!-- PDF Template -->
-    <div class="pdf-template" id="pdfTemplate">
+    <div class="pdf-template" id="pdfTemplate" hidden>
         <div class="pdf-header">
             <h1>Ultimate Skills Assessment Report</h1>
             <div class="assessment-date" id="pdfDate"></div>
         </div>
-
+    
         <div class="pdf-meta">
             <div class="pdf-meta-item">
                 <strong>Player Name:</strong>
@@ -790,11 +791,11 @@
                 <span id="pdfAssessmentDate"></span>
             </div>
         </div>
-
+    
         <div id="pdfSkillSections">
             <!-- Skill sections will be populated by JavaScript -->
         </div>
-
+    
         <div class="pdf-summary">
             <h3>Assessment Summary</h3>
             <ul id="pdfSummaryPoints">
