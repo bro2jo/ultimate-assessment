@@ -1299,7 +1299,6 @@
                 return points.map(point => `<li>${point}</li>`).join('');
             }
         }
-
         class ChartManager {
             static detailedSkills = {};  // Add static class property to store skills data
 
@@ -1352,7 +1351,45 @@
                     }]
                 };
             }
-
+            static getChartOptions() {
+                return {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                            pointLabels: {
+                                color: '#e5e5e5',
+                                font: { size: 14 }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e5e5e5',
+                                font: { size: 14 }
+                            }
+                        },
+                        tooltip: {
+                            enabled: false,
+                            external: function(context) {
+                                ChartManager.handleChartTooltip(context);  // Changed to explicitly reference ChartManager
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1200,
+                        easing: 'easeOutBounce'
+                    }
+                };
+            }
             static handleChartTooltip(context) {
                 const { chart, tooltip } = context;
                 let tooltipEl = document.getElementById('chartjs-tooltip');
