@@ -804,7 +804,7 @@
     </div>
 
     <script>
-        // Constants and Configuration
+        // Configuration Constants
         const SKILL_CATEGORIES = {
             'Cutting & Movement': ['downfield_cutting', 'handler_cutting'],
             'Throwing Skills': ['throwing', 'disc_moves'],
@@ -813,448 +813,381 @@
             'Strategy & Game IQ': ['defensive_strategy', 'offensive_strategy', 'mental_game'],
             'Physical': ['fitness']
         };
-        // Level System Configuration
+
         const LEVEL_CONFIG = {
-            0: {
-                title: 'Beginner',
-                description: 'Starting Your Ultimate Journey',
-                icon: 'seedling'
+            0: { title: 'Beginner', description: 'Starting Your Ultimate Journey', icon: 'seedling' },
+            20: { title: 'Developing', description: 'Building Fundamental Skills', icon: 'child' },
+            40: { title: 'Intermediate', description: 'Refining Your Game', icon: 'running' },
+            60: { title: 'Advanced', description: 'Mastering Complex Skills', icon: 'star' },
+            80: { title: 'Elite', description: 'Exceptional Performance', icon: 'crown' },
+            95: { title: 'Master', description: 'Ultimate Skills Master', icon: 'trophy' }
+        };
+
+        const ACHIEVEMENT_THRESHOLDS = {
+            masterHandler: { skill: 'throwing', threshold: 8 },
+            speedDemon: { skill: 'downfield_cutting', threshold: 8 },
+            strategist: { skill: 'mental_game', threshold: 8 }
+        };
+
+        class AppError extends Error {
+            constructor(message, context) {
+                super(message);
+                this.context = context;
+                this.name = 'AppError';
+            }
+        }
+
+        const ErrorHandler = {
+            handleError(error, context) {
+                console.error(`Error in ${context}:`, error);
+                this.showUserError(context);
+                return null;
             },
-            20: {
-                title: 'Developing',
-                description: 'Building Fundamental Skills',
-                icon: 'child'
-            },
-            40: {
-                title: 'Intermediate',
-                description: 'Refining Your Game',
-                icon: 'running'
-            },
-            60: {
-                title: 'Advanced',
-                description: 'Mastering Complex Skills',
-                icon: 'star'
-            },
-            80: {
-                title: 'Elite',
-                description: 'Exceptional Performance',
-                icon: 'crown'
-            },
-            95: {
-                title: 'Master',
-                description: 'Ultimate Skills Master',
-                icon: 'trophy'
+
+            showUserError(context) {
+                const errorMessages = {
+                    'data-retrieval': 'Unable to retrieve assessment data. Please try again.',
+                    'pdf-generation': 'Error generating PDF. Please try again.',
+                    'chart-creation': 'Unable to create skill chart.',
+                    'ui-update': 'Error updating display.',
+                    'validation': 'Invalid data format.',
+                    'default': 'An unexpected error occurred. Please try again.'
+                };
+                alert(errorMessages[context] || errorMessages.default);
             }
         };
-        // Utility Functions
-        const utils = {
-            isValidSkill: (skill) => {
+
+        class Utils {
+            static isValidSkill(skill) {
                 return Object.values(SKILL_CATEGORIES).flat().includes(skill);
-            },
+            }
 
-            sanitizeInput: (input) => {
+            static sanitizeInput(input) {
                 if (typeof input !== 'string') return '';
-                return input.replace(/[<>&]/g, (char) => {
-                    const entities = {
-                        '<': '&lt;',
-                        '>': '&gt;',
-                        '&': '&amp;'
-                    };
-                    return entities[char] || char;
-                });
-            },
+                const entities = { '<': '&lt;', '>': '&gt;', '&': '&amp;' };
+                return input.replace(/[<>&]/g, char => entities[char] || char);
+            }
 
-            formatSkillName: (skill) => {
+            static formatSkillName(skill) {
                 if (typeof skill !== 'string') return '';
                 return skill
                     .replace(/_/g, ' ')
                     .split(' ')
                     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                     .join(' ');
-            },
+            }
 
-            validateRating: (rating) => {
+            static validateRating(rating) {
                 const num = Number(rating);
                 return !isNaN(num) && num >= 1 && num <= 10 ? num : 5;
-            },
+            }
 
-            getUrlParams: () => {
+            static getUrlParams() {
                 try {
-                    const params = new URLSearchParams(window.location.search);
-                    return Object.fromEntries(params.entries());
+                    return Object.fromEntries(new URLSearchParams(window.location.search).entries());
                 } catch (error) {
-                    console.error('Error parsing URL parameters:', error);
+                    ErrorHandler.handleError(error, 'url-params');
                     return {};
                 }
             }
-        };
 
-        // Global Variable for Detailed Skills (Used in Tooltips)
-        let detailedSkills = {};
+            static calculateAverage(values) {
+                if (!values.length) return 0;
+                return values.reduce((a, b) => a + b, 0) / values.length;
+            }
 
-        // Improved Assessment Data Management
+            static sanitizeFileName(name) {
+                return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            }
+        }
+
+        class DOMHelper {
+            static getElement(id) {
+                const element = document.getElementById(id);
+                if (!element) {
+                    throw new AppError(`Element with id '${id}' not found`, 'dom-access');
+                }
+                return element;
+            }
+
+            static setContent(id, content) {
+                try {
+                    this.getElement(id).textContent = content;
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'dom-update');
+                }
+            }
+
+            static setHTML(id, html) {
+                try {
+                    this.getElement(id).innerHTML = html;
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'dom-update');
+                }
+            }
+
+            static toggleClass(id, className, condition) {
+                try {
+                    const element = this.getElement(id);
+                    element.classList.toggle(className, condition);
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'dom-update');
+                }
+            }
+
+            static setStyle(id, property, value) {
+                try {
+                    this.getElement(id).style[property] = value;
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'dom-update');
+                }
+            }
+        }
+
         class AssessmentDataManager {
             static getAssessmentData() {
                 try {
-                    // Try localStorage first
                     const storedData = localStorage.getItem('skillAssessment');
                     if (storedData) {
-                        const parsed = JSON.parse(storedData);
-                        const validatedData = this.validateAssessmentData(parsed);
-                        console.log('Retrieved data from localStorage:', validatedData);
-                        return validatedData;
+                        return this.validateAssessmentData(JSON.parse(storedData));
                     }
 
-                    // Fall back to URL parameters
-                    const urlParams = utils.getUrlParams();
+                    const urlParams = Utils.getUrlParams();
                     if (Object.keys(urlParams).length === 0) return null;
 
                     const assessmentData = {
-                        name: utils.sanitizeInput(urlParams.name) || 'Anonymous',
-                        email: utils.sanitizeInput(urlParams.email) || '',
+                        name: Utils.sanitizeInput(urlParams.name) || 'Anonymous',
+                        email: Utils.sanitizeInput(urlParams.email) || '',
                         date: new Date().toLocaleDateString(),
                         ratings: {}
                     };
 
-                    // Validate and add ratings
                     Object.entries(urlParams)
-                        .filter(([key]) => utils.isValidSkill(key))
+                        .filter(([key]) => Utils.isValidSkill(key))
                         .forEach(([key, value]) => {
-                            assessmentData.ratings[key] = utils.validateRating(value);
+                            assessmentData.ratings[key] = Utils.validateRating(value);
                         });
 
-                    console.log('Retrieved data from URL parameters:', assessmentData);
                     return assessmentData;
-
                 } catch (error) {
-                    console.error('Error getting assessment data:', error);
-                    return null;
+                    return ErrorHandler.handleError(error, 'data-retrieval');
                 }
             }
 
             static validateAssessmentData(data) {
-                if (!data || typeof data !== 'object') return null;
+                if (!data || typeof data !== 'object') {
+                    throw new AppError('Invalid assessment data structure', 'validation');
+                }
 
                 return {
-                    name: utils.sanitizeInput(data.name) || 'Anonymous',
-                    email: utils.sanitizeInput(data.email) || '',
+                    name: Utils.sanitizeInput(data.name) || 'Anonymous',
+                    email: Utils.sanitizeInput(data.email) || '',
                     date: data.date || new Date().toLocaleDateString(),
                     ratings: Object.entries(data.ratings || {})
-                        .filter(([key]) => utils.isValidSkill(key))
+                        .filter(([key]) => Utils.isValidSkill(key))
                         .reduce((acc, [key, value]) => {
-                            acc[key] = utils.validateRating(value);
+                            acc[key] = Utils.validateRating(value);
                             return acc;
                         }, {})
                 };
             }
         }
 
-        // Core Assessment Functions
-        function calculateRating(ratings) {
-            const values = Object.values(ratings);
-            const avgRating = (values.reduce((a, b) => a + b, 0) / values.length);
-            return Math.round(avgRating * 10); // Scale to 0-100 for progress bar
-        }
-        function updateRatingUI(ratings) {
-            const rating = calculateRating(ratings);
-            
-            // Update rating display
-            document.getElementById('playerRating').textContent = rating;
-            
-            // Update progress bar
-            document.getElementById('levelProgress').style.width = `${rating}%`;
-            document.getElementById('progressPercent').textContent = rating;
-        }
-        function calculateSkillSummary(ratings) {
-            const summary = {
-                strongestCategory: '',
-                strongestScore: 0,
-                weakestCategory: '',
-                weakestScore: 10,
-                topSkills: [],
-                improvementAreas: []
-            };
+        class SkillsAnalyzer {
+            static calculateSkillSummary(ratings) {
+                const summary = {
+                    strongestCategory: '',
+                    strongestScore: 0,
+                    weakestCategory: '',
+                    weakestScore: 10,
+                    topSkills: [],
+                    improvementAreas: []
+                };
 
-            for (const [category, skills] of Object.entries(SKILL_CATEGORIES)) {
-                const validSkills = skills.filter(skill => ratings[skill]);
-                if (validSkills.length === 0) continue;
-
-                const categoryAvg = validSkills.reduce((sum, skill) => 
-                    sum + Number(ratings[skill]), 0) / validSkills.length;
-
-                if (categoryAvg > summary.strongestScore) {
-                    summary.strongestScore = categoryAvg;
-                    summary.strongestCategory = category;
-                }
-                if (categoryAvg < summary.weakestScore) {
-                    summary.weakestScore = categoryAvg;
-                    summary.weakestCategory = category;
-                }
-
-                validSkills.forEach(skill => {
-                    const rating = Number(ratings[skill]);
-                    if (rating >= 8) summary.topSkills.push({ name: skill, rating });
-                    if (rating <= 4) summary.improvementAreas.push({ name: skill, rating });
-                });
-            }
-
-            return summary;
-        }
-
-        function generateSkillSections(ratings) {
-            return Object.entries(SKILL_CATEGORIES)
-                .map(([category, skills]) => {
+                Object.entries(SKILL_CATEGORIES).forEach(([category, skills]) => {
                     const validSkills = skills.filter(skill => ratings[skill]);
-                    if (validSkills.length === 0) return '';
+                    if (!validSkills.length) return;
 
-                    const skillsList = validSkills.map(skill => `
-                        <div class="pdf-skill-item">
-                            <span class="pdf-skill-name">${utils.formatSkillName(skill)}</span>
-                            <div style="display: flex; align-items: center;">
-                                <span class="pdf-rating-value">${ratings[skill]}/10</span>
-                                <div class="pdf-rating-bar">
-                                    <div class="pdf-rating-fill" style="width: ${ratings[skill] * 10}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
+                    const categoryAvg = Utils.calculateAverage(
+                        validSkills.map(skill => Number(ratings[skill]))
+                    );
 
-                    return `
-                        <div class="pdf-section">
-                            <h2>${category}</h2>
-                            <div class="pdf-skill-grid">
-                                ${skillsList}
-                            </div>
-                        </div>
-                    `;
-                })
-                .join('');
-        }
-
-        function generateSummaryPoints(ratings) {
-            const summary = calculateSkillSummary(ratings);
-            const points = [
-                `Strongest Category: ${summary.strongestCategory} (Avg: ${summary.strongestScore.toFixed(1)})`,
-                `Areas for Development: ${summary.weakestCategory} (Avg: ${summary.weakestScore.toFixed(1)})`,
-                summary.topSkills.length > 0 ? `Top Skills: ${summary.topSkills.map(s => utils.formatSkillName(s.name)).join(', ')}` : null,
-                summary.improvementAreas.length > 0 ? `Focus Areas: ${summary.improvementAreas.map(s => utils.formatSkillName(s.name)).join(', ')}` : null
-            ].filter(Boolean);
-
-            return points.map(point => `<li>${point}</li>`).join('');
-        }
-
-        // Main Functions
-        function calculateLevel(ratings) {
-            // Convert ratings to 100-point scale
-            const values = Object.values(ratings);
-            const avgRating = (values.reduce((a, b) => a + b, 0) / values.length) * 10;
-            
-            // Find the appropriate level based on the rating
-            const levels = Object.keys(LEVEL_CONFIG).map(Number).sort((a, b) => a - b);
-            const currentLevel = levels.reduce((acc, level) => {
-                if (avgRating >= level) return level;
-                return acc;
-            }, 0);
-
-            // Calculate progress to next level
-            const nextLevel = levels.find(level => level > currentLevel) || 100;
-            const progress = Math.min(100, Math.max(0, avgRating));
-            
-            return {
-                currentLevel,
-                nextLevel,
-                progress: Math.round(progress),
-                config: LEVEL_CONFIG[currentLevel]
-            };
-        }
-
-        function updateLevelUI(ratings) {
-            const levelData = calculateLevel(ratings);
-            
-            // Update level display
-            document.getElementById('playerLevel').textContent = levelData.config.title;
-            document.getElementById('levelTitle').textContent = levelData.config.description;
-            
-            // Update progress
-            document.getElementById('levelProgress').style.width = `${levelData.progress}%`;
-            document.getElementById('progressPercent').textContent = levelData.progress;
-            
-            // Update icon
-            const levelIcon = document.getElementById('levelIcon');
-            levelIcon.innerHTML = `<i class="fas fa-${levelData.config.icon}"></i>`;
-            
-            // Update next milestone text
-            const nextLevelConfig = LEVEL_CONFIG[levelData.nextLevel];
-            if (nextLevelConfig) {
-                document.getElementById('nextMilestone').textContent = `Next: ${nextLevelConfig.title}`;
-            } else {
-                document.getElementById('nextMilestone').textContent = 'Mastery Achieved';
-            }
-        }
-
-        function updateAchievements(ratings) {
-            // Helper function to calculate category average
-            function getCategoryAverage(skills) {
-                const validSkills = skills.filter(skill => ratings[skill]);
-                if (validSkills.length === 0) return 0;
-                return validSkills.reduce((sum, skill) => sum + Number(ratings[skill]), 0) / validSkills.length;
-            }
-
-            // Check original achievements
-            if (document.getElementById('masterHandler')) {
-                const masterHandler = document.getElementById('masterHandler');
-                if (ratings.throwing >= 8) {
-                    masterHandler.classList.remove('achievement-locked');
-                } else {
-                    masterHandler.classList.add('achievement-locked');
-                }
-            }
-
-            if (document.getElementById('speedDemon')) {
-                const speedDemon = document.getElementById('speedDemon');
-                if (ratings.downfield_cutting >= 8) {
-                    speedDemon.classList.remove('achievement-locked');
-                } else {
-                    speedDemon.classList.add('achievement-locked');
-                }
-            }
-
-            if (document.getElementById('strategist')) {
-                const strategist = document.getElementById('strategist');
-                if (ratings.mental_game >= 8) {
-                    strategist.classList.remove('achievement-locked');
-                } else {
-                    strategist.classList.add('achievement-locked');
-                }
-            }
-
-            // Check category achievements
-            const categoryElements = {
-                'cutting_movement_master': 'Cutting & Movement',
-                'defense_master': 'Defense',
-                'athletic_master': 'Athletic Skills'
-            };
-
-            Object.entries(categoryElements).forEach(([elementId, categoryName]) => {
-                const element = document.getElementById(elementId);
-                if (element) {
-                    const categoryAvg = getCategoryAverage(SKILL_CATEGORIES[categoryName]);
-                    if (categoryAvg >= 8) {
-                        element.classList.remove('achievement-locked');
-                    } else {
-                        element.classList.add('achievement-locked');
+                    if (categoryAvg > summary.strongestScore) {
+                        summary.strongestScore = categoryAvg;
+                        summary.strongestCategory = category;
                     }
-                }
-            });
+                    if (categoryAvg < summary.weakestScore) {
+                        summary.weakestScore = categoryAvg;
+                        summary.weakestCategory = category;
+                    }
 
-            // Check for ultimate mastery (any skill rated 10)
-            const hasPerfectSkill = Object.values(ratings).some(rating => Number(rating) === 10);
-            const ultimateMaster = document.getElementById('ultimate_master');
-            if (ultimateMaster) {
-                if (hasPerfectSkill) {
-                    ultimateMaster.classList.remove('achievement-locked');
-                } else {
-                    ultimateMaster.classList.add('achievement-locked');
-                }
+                    validSkills.forEach(skill => {
+                        const rating = Number(ratings[skill]);
+                        if (rating >= 8) summary.topSkills.push({ name: skill, rating });
+                        if (rating <= 4) summary.improvementAreas.push({ name: skill, rating });
+                    });
+                });
+
+                return summary;
+            }
+
+            static calculateRating(ratings) {
+                const values = Object.values(ratings);
+                return Math.round(Utils.calculateAverage(values) * 10);
+            }
+
+            static calculateLevel(ratings) {
+                const avgRating = Utils.calculateAverage(Object.values(ratings)) * 10;
+                const levels = Object.keys(LEVEL_CONFIG).map(Number).sort((a, b) => a - b);
+                
+                const currentLevel = levels.reduce((acc, level) => 
+                    avgRating >= level ? level : acc, 0);
+                
+                const nextLevel = levels.find(level => level > currentLevel) || 100;
+                const progress = Math.min(100, Math.max(0, avgRating));
+                
+                return {
+                    currentLevel,
+                    nextLevel,
+                    progress: Math.round(progress),
+                    config: LEVEL_CONFIG[currentLevel]
+                };
             }
         }
 
-        // Updated stats calculation function
-        function updateStats(ratings) {
-            // Find all skills with their values
-            const skillRatings = Object.entries(ratings).map(([skill, value]) => ({
-                name: skill,
-                value: Number(value)
-            }));
+        class UIManager {
+            static init() {
+                try {
+                    const data = AssessmentDataManager.getAssessmentData();
+                    if (!data) return;
 
-            // Sort by value in descending order
-            skillRatings.sort((a, b) => b.value - a.value);
-
-            // Get highest rated skills (including ties)
-            const highestValue = skillRatings[0].value;
-            const highestSkills = skillRatings.filter(skill => skill.value === highestValue);
-
-            // Get lowest rated skills (including ties)
-            const lowestValue = skillRatings[skillRatings.length - 1].value;
-            const lowestSkills = skillRatings.filter(skill => skill.value === lowestValue);
-
-            // Update UI for top skills
-            const topSkillElement = document.getElementById('topSkill');
-            const topSkillRatingElement = document.getElementById('topSkillRating');
-            
-            if (highestSkills.length === 1) {
-                topSkillElement.textContent = utils.formatSkillName(highestSkills[0].name);
-            } else {
-                topSkillElement.textContent = `${highestSkills.length} Skills Tied`;
+                    this.updateUI(data);
+                    ChartManager.initializeRadarChart(data);
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'initialization');
+                }
             }
-            topSkillRatingElement.textContent = `${highestValue}/10`;
 
-            // Update UI for focus skills
-            const focusSkillElement = document.getElementById('focusSkill');
-            const focusSkillRatingElement = document.getElementById('focusSkillRating');
-            
-            if (lowestSkills.length === 1) {
-                focusSkillElement.textContent = utils.formatSkillName(lowestSkills[0].name);
-            } else {
-                focusSkillElement.textContent = `${lowestSkills.length} Skills Tied`;
+            static updateUI(data) {
+                try {
+                    this.updateAchievements(data.ratings);
+                    this.updateStats(data.ratings);
+                    this.updateLevel(data.ratings);
+                    this.updateResults(data);
+                    this.updateLevelTitle(data.name);
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'ui-update');
+                }
             }
-            focusSkillRatingElement.textContent = `${lowestValue}/10`;
 
-            // Update development path
-            document.getElementById('focusAreaTitle').textContent = lowestSkills.length === 1 
-                ? `Focus on ${utils.formatSkillName(lowestSkills[0].name)}`
-                : 'Focus on Lowest Rated Skills';
-            
-            document.getElementById('focusAreaDesc').textContent = lowestSkills.length === 1
-                ? 'Specific drills and exercises for improvement'
-                : `Work on: ${lowestSkills.map(s => utils.formatSkillName(s.name)).join(', ')}`;
+            static updateAchievements(ratings) {
+                Object.entries(ACHIEVEMENT_THRESHOLDS).forEach(([id, { skill, threshold }]) => {
+                    DOMHelper.toggleClass(id, 'achievement-locked', ratings[skill] < threshold);
+                });
 
-            document.getElementById('maintainTitle').textContent = highestSkills.length === 1
-                ? `Maintain ${utils.formatSkillName(highestSkills[0].name)}`
-                : 'Maintain Top Skills';
-            
-            document.getElementById('maintainDesc').textContent = highestSkills.length === 1
-                ? 'Continue practicing your best skill'
-                : `Keep practicing: ${highestSkills.map(s => utils.formatSkillName(s.name)).join(', ')}`;
-        }
+                const getCategoryAverage = (skills) => {
+                    const validSkills = skills.filter(skill => ratings[skill]);
+                    return validSkills.length ? Utils.calculateAverage(validSkills.map(skill => ratings[skill])) : 0;
+                };
 
-        function populateResults() {
-            const assessmentData = AssessmentDataManager.getAssessmentData();
-            if (!assessmentData) {
+                const categoryAchievements = {
+                    cutting_movement_master: 'Cutting & Movement',
+                    defense_master: 'Defense',
+                    athletic_master: 'Athletic Skills'
+                };
+
+                Object.entries(categoryAchievements).forEach(([id, category]) => {
+                    const avgRating = getCategoryAverage(SKILL_CATEGORIES[category]);
+                    DOMHelper.toggleClass(id, 'achievement-locked', avgRating < 8);
+                });
+
+                const hasPerfectSkill = Object.values(ratings).some(rating => Number(rating) === 10);
+                DOMHelper.toggleClass('ultimate_master', 'achievement-locked', !hasPerfectSkill);
+            }
+
+            static updateStats(ratings) {
+                const skillRatings = Object.entries(ratings)
+                    .map(([skill, value]) => ({ name: skill, value: Number(value) }))
+                    .sort((a, b) => b.value - a.value);
+
+                const highestValue = skillRatings[0].value;
+                const highestSkills = skillRatings.filter(skill => skill.value === highestValue);
+                const lowestValue = skillRatings[skillRatings.length - 1].value;
+                const lowestSkills = skillRatings.filter(skill => skill.value === lowestValue);
+
+                DOMHelper.setContent('topSkill', 
+                    highestSkills.length === 1 ? Utils.formatSkillName(highestSkills[0].name) 
+                    : `${highestSkills.length} Skills Tied`);
+                DOMHelper.setContent('topSkillRating', `${highestValue}/10`);
+
+                DOMHelper.setContent('focusSkill',
+                    lowestSkills.length === 1 ? Utils.formatSkillName(lowestSkills[0].name)
+                    : `${lowestSkills.length} Skills Tied`);
+                DOMHelper.setContent('focusSkillRating', `${lowestValue}/10`);
+
+                this.updateDevelopmentPath(highestSkills, lowestSkills);
+            }
+
+            static updateDevelopmentPath(highestSkills, lowestSkills) {
+                DOMHelper.setContent('focusAreaTitle',
+                    lowestSkills.length === 1 
+                        ? `Focus on ${Utils.formatSkillName(lowestSkills[0].name)}`
+                        : 'Focus on Lowest Rated Skills');
+                
+                DOMHelper.setContent('focusAreaDesc',
+                    lowestSkills.length === 1
+                        ? 'Specific drills and exercises for improvement'
+                        : `Work on: ${lowestSkills.map(s => Utils.formatSkillName(s.name)).join(', ')}`);
+
+                DOMHelper.setContent('maintainTitle',
+                    highestSkills.length === 1
+                        ? `Maintain ${Utils.formatSkillName(highestSkills[0].name)}`
+                        : 'Maintain Top Skills');
+                
+                DOMHelper.setContent('maintainDesc',
+                    highestSkills.length === 1
+                        ? 'Continue practicing your best skill'
+                        : `Keep practicing: ${highestSkills.map(s => Utils.formatSkillName(s.name)).join(', ')}`);
+            }
+
+            static updateLevel(ratings) {
+                const levelData = SkillsAnalyzer.calculateLevel(ratings);
+                
+                DOMHelper.setContent('playerRating', levelData.progress);
+                DOMHelper.setContent('levelTitle', levelData.config.description);
+                DOMHelper.setStyle('levelProgress', 'width', `${levelData.progress}%`);
+                DOMHelper.setContent('progressPercent', levelData.progress);
+                
+                DOMHelper.setHTML('levelIcon', `<i class="fas fa-${levelData.config.icon}"></i>`);
+                
+                const nextLevelConfig = LEVEL_CONFIG[levelData.nextLevel];
+                DOMHelper.setContent('nextMilestone', 
+                    nextLevelConfig ? `Next: ${nextLevelConfig.title}` : 'Mastery Achieved');
+            }
+
+            static updateLevelTitle(name) {
+                DOMHelper.setContent('levelTitle', `${name} - ${new Date().toLocaleDateString()}`);
+            }
+
+            static updateResults(data) {
                 const resultsDiv = document.getElementById('resultsSummary');
-                if (resultsDiv) {
-                    resultsDiv.innerHTML = `
-                        <div class="assessment-meta">
-                            <div style="color: #ff4444;">Error: Assessment data not found.</div>
-                        </div>
-                    `;
-                }
-                return;
-            }
+                if (!resultsDiv) return;
 
-            // Update UI elements
-            updateAchievements(assessmentData.ratings);
-            updateStats(assessmentData.ratings);
-            updateRatingUI(assessmentData.ratings);
-
-            // Populate results summary
-            const resultsDiv = document.getElementById('resultsSummary');
-            if (resultsDiv) {
                 const metaHtml = `
                     <div class="assessment-meta">
-                        <div>Name: ${assessmentData.name}</div>
-                        <div>Date: ${assessmentData.date}</div>
+                        <div>Name: ${data.name}</div>
+                        <div>Date: ${data.date}</div>
                     </div>
                 `;
 
                 const resultsHtml = Object.entries(SKILL_CATEGORIES)
                     .map(([category, skills]) => {
                         const categorySkills = skills
-                            .filter(skill => assessmentData.ratings[skill])
+                            .filter(skill => data.ratings[skill])
                             .map(skill => `
                                 <div class="skill-result">
-                                    <span>${utils.formatSkillName(skill)}</span>
-                                    <span class="rating">${assessmentData.ratings[skill]}/10</span>
+                                    <span>${Utils.formatSkillName(skill)}</span>
+                                    <span class="rating">${data.ratings[skill]}/10</span>
                                 </div>
                             `).join('');
 
@@ -1271,941 +1204,269 @@
             }
         }
 
-        function populatePDFTemplate(data) {
-            try {
-                const pdfName = document.getElementById('pdfName');
-                const pdfDate = document.getElementById('pdfDate');
-                const pdfAssessmentDate = document.getElementById('pdfAssessmentDate');
-                const pdfSkillSections = document.getElementById('pdfSkillSections');
-                const pdfSummaryPoints = document.getElementById('pdfSummaryPoints');
+        class PDFManager {
+            static async generatePDF(data) {
+                try {
+                    await this.populatePDFTemplate(data);
+                    const element = DOMHelper.getElement('pdfTemplate');
+                    element.classList.add('visible');
 
-                if (!pdfName || !pdfDate || !pdfAssessmentDate || !pdfSkillSections || !pdfSummaryPoints) {
-                    throw new Error('One or more PDF template elements are missing.');
+                    const options = {
+                        margin: [10, 20, 20, 20],
+                        filename: `ultimate-skills-assessment-${Utils.sanitizeFileName(data.name)}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['css'] }
+                    };
+
+                    await html2pdf().set(options).from(element).save();
+                    element.classList.remove('visible');
+
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'pdf-generation');
                 }
+            }
 
-                pdfName.innerText = data.name;
-                pdfDate.innerText = data.date;
-                pdfAssessmentDate.innerText = data.date;
+            static async populatePDFTemplate(data) {
+                try {
+                    const elements = ['pdfName', 'pdfDate', 'pdfAssessmentDate', 'pdfSkillSections', 'pdfSummaryPoints']
+                        .map(id => ({ id, element: document.getElementById(id) }));
 
-                // Populate skill sections
-                const skillSections = generateSkillSections(data.ratings);
-                pdfSkillSections.innerHTML = skillSections;
-                console.log('Skill sections populated:', skillSections);
+                    if (elements.some(({ element }) => !element)) {
+                        throw new AppError('Missing PDF template elements', 'pdf-generation');
+                    }
 
-                // Populate summary points
-                const summaryPoints = generateSummaryPoints(data.ratings);
-                pdfSummaryPoints.innerHTML = summaryPoints;
-                console.log('Summary points populated:', summaryPoints);
+                    elements.forEach(({ id, element }) => {
+                        if (id.includes('Date')) {
+                            element.innerText = data.date;
+                        } else if (id === 'pdfName') {
+                            element.innerText = data.name;
+                        }
+                    });
 
-            } catch (error) {
-                console.error('Error populating PDF template:', error);
+                    DOMHelper.setHTML('pdfSkillSections', this.generateSkillSections(data.ratings));
+                    DOMHelper.setHTML('pdfSummaryPoints', this.generateSummaryPoints(data.ratings));
+
+                } catch (error) {
+                    throw new AppError('Error populating PDF template', 'pdf-generation');
+                }
+            }
+
+            static generateSkillSections(ratings) {
+                return Object.entries(SKILL_CATEGORIES)
+                    .map(([category, skills]) => {
+                        const validSkills = skills.filter(skill => ratings[skill]);
+                        if (!validSkills.length) return '';
+
+                        const skillsList = validSkills.map(skill => `
+                            <div class="pdf-skill-item">
+                                <span class="pdf-skill-name">${Utils.formatSkillName(skill)}</span>
+                                <div style="display: flex; align-items: center;">
+                                    <span class="pdf-rating-value">${ratings[skill]}/10</span>
+                                    <div class="pdf-rating-bar">
+                                        <div class="pdf-rating-fill" style="width: ${ratings[skill] * 10}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+
+                        return `
+                            <div class="pdf-section">
+                                <h2>${category}</h2>
+                                <div class="pdf-skill-grid">
+                                    ${skillsList}
+                                </div>
+                            </div>
+                        `;
+                    })
+                    .join('');
+            }
+
+            static generateSummaryPoints(ratings) {
+                const summary = SkillsAnalyzer.calculateSkillSummary(ratings);
+                const points = [
+                    `Strongest Category: ${summary.strongestCategory} (Avg: ${summary.strongestScore.toFixed(1)})`,
+                    `Areas for Development: ${summary.weakestCategory} (Avg: ${summary.weakestScore.toFixed(1)})`,
+                    summary.topSkills.length > 0 ? 
+                        `Top Skills: ${summary.topSkills.map(s => Utils.formatSkillName(s.name)).join(', ')}` : null,
+                    summary.improvementAreas.length > 0 ? 
+                        `Focus Areas: ${summary.improvementAreas.map(s => Utils.formatSkillName(s.name)).join(', ')}` : null
+                ].filter(Boolean);
+
+                return points.map(point => `<li>${point}</li>`).join('');
             }
         }
 
-        function sanitizeFileName(name) {
-            return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        }
-
-        function saveResults() {
-            try {
-                const assessmentData = AssessmentDataManager.getAssessmentData();
-                if (!assessmentData) {
-                    throw new Error('No assessment data found');
+        class ChartManager {
+            static initializeRadarChart(data) {
+                try {
+                    const ctx = DOMHelper.getElement('radarChart').getContext('2d');
+                    const chartData = this.prepareChartData(data);
+                    
+                    new Chart(ctx, {
+                        type: 'radar',
+                        data: chartData,
+                        options: this.getChartOptions()
+                    });
+                } catch (error) {
+                    ErrorHandler.handleError(error, 'chart-creation');
                 }
-                console.log('Assessment Data:', assessmentData);
+            }
 
-                // Populate the PDF template with data
-                populatePDFTemplate(assessmentData);
-                console.log('PDF template populated.');
+            static prepareChartData(data) {
+                const labels = Object.keys(SKILL_CATEGORIES);
+                const detailedSkills = {};
 
-                const element = document.getElementById('pdfTemplate');
-                if (!element) {
-                    throw new Error('PDF template element not found.');
-                }
-                console.log('PDF template element found:', element);
+                const dataPoints = labels.map(category => {
+                    const skills = SKILL_CATEGORIES[category];
+                    const validSkills = skills.filter(skill => data.ratings[skill]);
+                    const average = validSkills.length > 0
+                        ? Utils.calculateAverage(validSkills.map(skill => data.ratings[skill]))
+                        : 0;
 
-                // Make the PDF template visible for html2pdf.js to capture
-                element.classList.add('visible');
+                    detailedSkills[category] = validSkills.map(skill => ({
+                        name: Utils.formatSkillName(skill),
+                        value: data.ratings[skill]
+                    }));
 
-                const opt = {
-                    margin:       [10, 20, 20, 20], // Top, Right, Bottom, Left in millimeters
-                    filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak:    { mode: ['css'] }
-                };
-
-                console.log('Starting PDF generation with options:', opt);
-                html2pdf().set(opt).from(element).save().then(() => {
-                    console.log('PDF generation completed.');
-                    // Hide the PDF template after generation
-                    element.classList.remove('visible');
+                    return average;
                 });
 
-            } catch (error) {
-                console.error('PDF Generation Error:', error);
-                alert('There was an error generating your PDF. Please try again.');
+                return {
+                    labels,
+                    datasets: [{
+                        label: 'Skill Ratings',
+                        data: dataPoints,
+                        backgroundColor: 'rgba(122, 31, 191, 0.2)',
+                        borderColor: 'rgba(255, 145, 35, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 145, 35, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 145, 35, 1)'
+                    }]
+                };
             }
-        }
 
-        // Chart.js Radar Chart Implementation
-        function initializeRadarChart() {
-            const ctx = document.getElementById('radarChart').getContext('2d');
-            const assessmentData = AssessmentDataManager.getAssessmentData();
-            if (!assessmentData) return;
-
-            // Prepare data for Chart.js
-            const labels = Object.keys(SKILL_CATEGORIES);
-            detailedSkills = {}; // Reset detailedSkills
-
-            const dataPoints = Object.keys(SKILL_CATEGORIES).map(category => {
-                const skills = SKILL_CATEGORIES[category];
-                const validSkills = skills.filter(skill => assessmentData.ratings[skill]);
-                const average = validSkills.length > 0
-                    ? validSkills.reduce((sum, skill) => sum + assessmentData.ratings[skill], 0) / validSkills.length
-                    : 0;
-                // Populate detailedSkills for tooltips
-                detailedSkills[category] = validSkills.map(skill => ({
-                    name: utils.formatSkillName(skill),
-                    value: assessmentData.ratings[skill]
-                }));
-                return average; // 0-10 scale
-            });
-
-            const data = {
-                labels: labels,
-                datasets: [{
-                    label: 'Skill Ratings',
-                    data: dataPoints,
-                    backgroundColor: 'rgba(122, 31, 191, 0.2)',
-                    borderColor: 'rgba(255, 145, 35, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(255, 145, 35, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(255, 145, 35, 1)'
-                }]
-            };
-
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 10, // 0-10 scale
-                        ticks: {
-                            display: false // Hide the rating scale
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        angleLines: {
-                            color: 'rgba(255, 255, 255, 0.2)'
-                        },
-                        pointLabels: {
-                            color: '#e5e5e5',
-                            font: {
-                                size: 14
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#e5e5e5',
-                            font: {
-                                size: 14
+            static getChartOptions() {
+                return {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                            pointLabels: {
+                                color: '#e5e5e5',
+                                font: { size: 14 }
                             }
                         }
                     },
-                    tooltip: {
-                        enabled: false, // Disable the default tooltip
-                        external: function(context) {
-                            const { chart, tooltip } = context;
-                            let tooltipEl = document.getElementById('chartjs-tooltip');
-
-                            // Create element on first render
-                            if (!tooltipEl) {
-                                tooltipEl = document.createElement('div');
-                                tooltipEl.id = 'chartjs-tooltip';
-                                tooltipEl.innerHTML = '<table></table>';
-                                document.body.appendChild(tooltipEl);
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e5e5e5',
+                                font: { size: 14 }
                             }
-
-                            // Hide if no tooltip
-                            if (tooltip.opacity === 0) {
-                                tooltipEl.style.opacity = 0;
-                                return;
-                            }
-
-                            // Set styles
-                            tooltipEl.style.opacity = 1;
-                            tooltipEl.style.position = 'absolute';
-                            tooltipEl.style.background = 'rgba(31, 31, 31, 0.9)';
-                            tooltipEl.style.color = '#fff';
-                            tooltipEl.style.borderRadius = '8px';
-                            tooltipEl.style.padding = '10px';
-                            tooltipEl.style.pointerEvents = 'none';
-                            tooltipEl.style.transition = 'all .1s ease';
-                            tooltipEl.style.fontSize = '14px';
-
-                            // Set position
-                            const position = chart.canvas.getBoundingClientRect();
-                            tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px';
-                            tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px';
-
-                            // Populate tooltip
-                            if (tooltip.body) {
-                                const index = tooltip.dataPoints[0].dataIndex;
-                                const category = labels[index];
-                                const average = dataPoints[index].toFixed(1);
-                                const skills = detailedSkills[category] || [];
-
-                                let innerHtml = `<p style="color: #ff9123; font-weight: bold; margin-bottom: 5px;">${category}</p>`;
-                                innerHtml += `<p style="color: #fff; margin-bottom: 10px;">Average: ${average}/10</p>`;
-                                innerHtml += `<div style="max-height: 150px; overflow-y: auto;">`; // Scroll if too many skills
-                                skills.forEach(skill => {
-                                    innerHtml += `<p style="color: #e5e5e5; margin: 0;">${skill.name}: ${skill.value}/10</p>`;
-                                });
-                                innerHtml += `</div>`;
-
-                                tooltipEl.querySelector('table').innerHTML = innerHtml;
-                            }
-                        }
-                    }
-                },
-                animation: {
-                    animateRotate: true,
-                    animateScale: true,
-                    duration: 1200,
-                    easing: 'easeOutBounce'
-                }
-            };
-
-            // Initialize Chart.js Radar Chart
-            new Chart(ctx, {
-                type: 'radar',
-                data: data,
-                options: options
-            });
-        }
-
-        function updateAchievements(ratings) {
-            // Helper function to calculate category average
-            function getCategoryAverage(skills) {
-                const validSkills = skills.filter(skill => ratings[skill]);
-                if (validSkills.length === 0) return 0;
-                return validSkills.reduce((sum, skill) => sum + Number(ratings[skill]), 0) / validSkills.length;
-            }
-
-            // Check original achievements
-            if (document.getElementById('masterHandler')) {
-                const masterHandler = document.getElementById('masterHandler');
-                if (ratings.throwing >= 8) {
-                    masterHandler.classList.remove('achievement-locked');
-                } else {
-                    masterHandler.classList.add('achievement-locked');
-                }
-            }
-
-            if (document.getElementById('speedDemon')) {
-                const speedDemon = document.getElementById('speedDemon');
-                if (ratings.downfield_cutting >= 8) {
-                    speedDemon.classList.remove('achievement-locked');
-                } else {
-                    speedDemon.classList.add('achievement-locked');
-                }
-            }
-
-            if (document.getElementById('strategist')) {
-                const strategist = document.getElementById('strategist');
-                if (ratings.mental_game >= 8) {
-                    strategist.classList.remove('achievement-locked');
-                } else {
-                    strategist.classList.add('achievement-locked');
-                }
-            }
-
-            // Check category achievements
-            const categoryElements = {
-                'cutting_movement_master': 'Cutting & Movement',
-                'defense_master': 'Defense',
-                'athletic_master': 'Athletic Skills'
-            };
-
-            Object.entries(categoryElements).forEach(([elementId, categoryName]) => {
-                const element = document.getElementById(elementId);
-                if (element) {
-                    const categoryAvg = getCategoryAverage(SKILL_CATEGORIES[categoryName]);
-                    if (categoryAvg >= 8) {
-                        element.classList.remove('achievement-locked');
-                    } else {
-                        element.classList.add('achievement-locked');
-                    }
-                }
-            });
-
-            // Check for ultimate mastery (any skill rated 10)
-            const hasPerfectSkill = Object.values(ratings).some(rating => Number(rating) === 10);
-            const ultimateMaster = document.getElementById('ultimate_master');
-            if (ultimateMaster) {
-                if (hasPerfectSkill) {
-                    ultimateMaster.classList.remove('achievement-locked');
-                } else {
-                    ultimateMaster.classList.add('achievement-locked');
-                }
-            }
-        }
-
-        // Updated stats calculation function
-        function updateStats(ratings) {
-            // Find all skills with their values
-            const skillRatings = Object.entries(ratings).map(([skill, value]) => ({
-                name: skill,
-                value: Number(value)
-            }));
-
-            // Sort by value in descending order
-            skillRatings.sort((a, b) => b.value - a.value);
-
-            // Get highest rated skills (including ties)
-            const highestValue = skillRatings[0].value;
-            const highestSkills = skillRatings.filter(skill => skill.value === highestValue);
-
-            // Get lowest rated skills (including ties)
-            const lowestValue = skillRatings[skillRatings.length - 1].value;
-            const lowestSkills = skillRatings.filter(skill => skill.value === lowestValue);
-
-            // Update UI for top skills
-            const topSkillElement = document.getElementById('topSkill');
-            const topSkillRatingElement = document.getElementById('topSkillRating');
-            
-            if (highestSkills.length === 1) {
-                topSkillElement.textContent = utils.formatSkillName(highestSkills[0].name);
-            } else {
-                topSkillElement.textContent = `${highestSkills.length} Skills Tied`;
-            }
-            topSkillRatingElement.textContent = `${highestValue}/10`;
-
-            // Update UI for focus skills
-            const focusSkillElement = document.getElementById('focusSkill');
-            const focusSkillRatingElement = document.getElementById('focusSkillRating');
-            
-            if (lowestSkills.length === 1) {
-                focusSkillElement.textContent = utils.formatSkillName(lowestSkills[0].name);
-            } else {
-                focusSkillElement.textContent = `${lowestSkills.length} Skills Tied`;
-            }
-            focusSkillRatingElement.textContent = `${lowestValue}/10`;
-
-            // Update development path
-            document.getElementById('focusAreaTitle').textContent = lowestSkills.length === 1 
-                ? `Focus on ${utils.formatSkillName(lowestSkills[0].name)}`
-                : 'Focus on Lowest Rated Skills';
-            
-            document.getElementById('focusAreaDesc').textContent = lowestSkills.length === 1
-                ? 'Specific drills and exercises for improvement'
-                : `Work on: ${lowestSkills.map(s => utils.formatSkillName(s.name)).join(', ')}`;
-
-            document.getElementById('maintainTitle').textContent = highestSkills.length === 1
-                ? `Maintain ${utils.formatSkillName(highestSkills[0].name)}`
-                : 'Maintain Top Skills';
-            
-            document.getElementById('maintainDesc').textContent = highestSkills.length === 1
-                ? 'Continue practicing your best skill'
-                : `Keep practicing: ${highestSkills.map(s => utils.formatSkillName(s.name)).join(', ')}`;
-        }
-
-        function populateResults() {
-            const assessmentData = AssessmentDataManager.getAssessmentData();
-            if (!assessmentData) {
-                const resultsDiv = document.getElementById('resultsSummary');
-                if (resultsDiv) {
-                    resultsDiv.innerHTML = `
-                        <div class="assessment-meta">
-                            <div style="color: #ff4444;">Error: Assessment data not found.</div>
-                        </div>
-                    `;
-                }
-                return;
-            }
-
-            // Update UI elements
-            updateAchievements(assessmentData.ratings);
-            updateStats(assessmentData.ratings);
-            updateRatingUI(assessmentData.ratings);
-
-            // Populate results summary
-            const resultsDiv = document.getElementById('resultsSummary');
-            if (resultsDiv) {
-                const metaHtml = `
-                    <div class="assessment-meta">
-                        <div>Name: ${assessmentData.name}</div>
-                        <div>Date: ${assessmentData.date}</div>
-                    </div>
-                `;
-
-                const resultsHtml = Object.entries(SKILL_CATEGORIES)
-                    .map(([category, skills]) => {
-                        const categorySkills = skills
-                            .filter(skill => assessmentData.ratings[skill])
-                            .map(skill => `
-                                <div class="skill-result">
-                                    <span>${utils.formatSkillName(skill)}</span>
-                                    <span class="rating">${assessmentData.ratings[skill]}/10</span>
-                                </div>
-                            `).join('');
-
-                        return categorySkills ? `
-                            <div class="results-group">
-                                <h3>${category}</h3>
-                                ${categorySkills}
-                            </div>
-                        ` : '';
-                    })
-                    .join('');
-
-                resultsDiv.innerHTML = metaHtml + resultsHtml;
-            }
-        }
-
-        function populatePDFTemplate(data) {
-            try {
-                const pdfName = document.getElementById('pdfName');
-                const pdfDate = document.getElementById('pdfDate');
-                const pdfAssessmentDate = document.getElementById('pdfAssessmentDate');
-                const pdfSkillSections = document.getElementById('pdfSkillSections');
-                const pdfSummaryPoints = document.getElementById('pdfSummaryPoints');
-
-                if (!pdfName || !pdfDate || !pdfAssessmentDate || !pdfSkillSections || !pdfSummaryPoints) {
-                    throw new Error('One or more PDF template elements are missing.');
-                }
-
-                pdfName.innerText = data.name;
-                pdfDate.innerText = data.date;
-                pdfAssessmentDate.innerText = data.date;
-
-                // Populate skill sections
-                const skillSections = generateSkillSections(data.ratings);
-                pdfSkillSections.innerHTML = skillSections;
-                console.log('Skill sections populated:', skillSections);
-
-                // Populate summary points
-                const summaryPoints = generateSummaryPoints(data.ratings);
-                pdfSummaryPoints.innerHTML = summaryPoints;
-                console.log('Summary points populated:', summaryPoints);
-
-            } catch (error) {
-                console.error('Error populating PDF template:', error);
-            }
-        }
-
-        function sanitizeFileName(name) {
-            return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        }
-
-        function saveResults() {
-            try {
-                const assessmentData = AssessmentDataManager.getAssessmentData();
-                if (!assessmentData) {
-                    throw new Error('No assessment data found');
-                }
-                console.log('Assessment Data:', assessmentData);
-
-                // Populate the PDF template with data
-                populatePDFTemplate(assessmentData);
-                console.log('PDF template populated.');
-
-                const element = document.getElementById('pdfTemplate');
-                if (!element) {
-                    throw new Error('PDF template element not found.');
-                }
-                console.log('PDF template element found:', element);
-
-                // Make the PDF template visible for html2pdf.js to capture
-                element.classList.add('visible');
-
-                const opt = {
-                    margin:       [10, 20, 20, 20], // Top, Right, Bottom, Left in millimeters
-                    filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak:    { mode: ['css'] }
-                };
-
-                console.log('Starting PDF generation with options:', opt);
-                html2pdf().set(opt).from(element).save().then(() => {
-                    console.log('PDF generation completed.');
-                    // Hide the PDF template after generation
-                    element.classList.remove('visible');
-                });
-
-            } catch (error) {
-                console.error('PDF Generation Error:', error);
-                alert('There was an error generating your PDF. Please try again.');
-            }
-        }
-
-        // Chart.js Radar Chart Implementation
-        function initializeRadarChart() {
-            const ctx = document.getElementById('radarChart').getContext('2d');
-            const assessmentData = AssessmentDataManager.getAssessmentData();
-            if (!assessmentData) return;
-
-            // Prepare data for Chart.js
-            const labels = Object.keys(SKILL_CATEGORIES);
-            detailedSkills = {}; // Reset detailedSkills
-
-            const dataPoints = Object.keys(SKILL_CATEGORIES).map(category => {
-                const skills = SKILL_CATEGORIES[category];
-                const validSkills = skills.filter(skill => assessmentData.ratings[skill]);
-                const average = validSkills.length > 0
-                    ? validSkills.reduce((sum, skill) => sum + assessmentData.ratings[skill], 0) / validSkills.length
-                    : 0;
-                // Populate detailedSkills for tooltips
-                detailedSkills[category] = validSkills.map(skill => ({
-                    name: utils.formatSkillName(skill),
-                    value: assessmentData.ratings[skill]
-                }));
-                return average; // 0-10 scale
-            });
-
-            const data = {
-                labels: labels,
-                datasets: [{
-                    label: 'Skill Ratings',
-                    data: dataPoints,
-                    backgroundColor: 'rgba(122, 31, 191, 0.2)',
-                    borderColor: 'rgba(255, 145, 35, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(255, 145, 35, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(255, 145, 35, 1)'
-                }]
-            };
-
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 10, // 0-10 scale
-                        ticks: {
-                            display: false // Hide the rating scale
                         },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        angleLines: {
-                            color: 'rgba(255, 255, 255, 0.2)'
-                        },
-                        pointLabels: {
-                            color: '#e5e5e5',
-                            font: {
-                                size: 14
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#e5e5e5',
-                            font: {
-                                size: 14
-                            }
+                        tooltip: {
+                            enabled: false,
+                            external: this.handleChartTooltip.bind(this)
                         }
                     },
-                    tooltip: {
-                        enabled: false, // Disable the default tooltip
-                        external: function(context) {
-                            const { chart, tooltip } = context;
-                            let tooltipEl = document.getElementById('chartjs-tooltip');
-
-                            // Create element on first render
-                            if (!tooltipEl) {
-                                tooltipEl = document.createElement('div');
-                                tooltipEl.id = 'chartjs-tooltip';
-                                tooltipEl.innerHTML = '<table></table>';
-                                document.body.appendChild(tooltipEl);
-                            }
-
-                            // Hide if no tooltip
-                            if (tooltip.opacity === 0) {
-                                tooltipEl.style.opacity = 0;
-                                return;
-                            }
-
-                            // Set styles
-                            tooltipEl.style.opacity = 1;
-                            tooltipEl.style.position = 'absolute';
-                            tooltipEl.style.background = 'rgba(31, 31, 31, 0.9)';
-                            tooltipEl.style.color = '#fff';
-                            tooltipEl.style.borderRadius = '8px';
-                            tooltipEl.style.padding = '10px';
-                            tooltipEl.style.pointerEvents = 'none';
-                            tooltipEl.style.transition = 'all .1s ease';
-                            tooltipEl.style.fontSize = '14px';
-
-                            // Set position
-                            const position = chart.canvas.getBoundingClientRect();
-                            tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px';
-                            tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px';
-
-                            // Populate tooltip
-                            if (tooltip.body) {
-                                const index = tooltip.dataPoints[0].dataIndex;
-                                const category = labels[index];
-                                const average = dataPoints[index].toFixed(1);
-                                const skills = detailedSkills[category] || [];
-
-                                let innerHtml = `<p style="color: #ff9123; font-weight: bold; margin-bottom: 5px;">${category}</p>`;
-                                innerHtml += `<p style="color: #fff; margin-bottom: 10px;">Average: ${average}/10</p>`;
-                                innerHtml += `<div style="max-height: 150px; overflow-y: auto;">`; // Scroll if too many skills
-                                skills.forEach(skill => {
-                                    innerHtml += `<p style="color: #e5e5e5; margin: 0;">${skill.name}: ${skill.value}/10</p>`;
-                                });
-                                innerHtml += `</div>`;
-
-                                tooltipEl.querySelector('table').innerHTML = innerHtml;
-                            }
-                        }
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1200,
+                        easing: 'easeOutBounce'
                     }
-                },
-                animation: {
-                    animateRotate: true,
-                    animateScale: true,
-                    duration: 1200,
-                    easing: 'easeOutBounce'
+                };
+            }
+
+            static handleChartTooltip(context) {
+                const { chart, tooltip } = context;
+                let tooltipEl = document.getElementById('chartjs-tooltip');
+
+                if (!tooltipEl) {
+                    tooltipEl = document.createElement('div');
+                    tooltipEl.id = 'chartjs-tooltip';
+                    tooltipEl.innerHTML = '<table></table>';
+                    document.body.appendChild(tooltipEl);
                 }
-            };
 
-            // Initialize Chart.js Radar Chart
-            new Chart(ctx, {
-                type: 'radar',
-                data: data,
-                options: options
-            });
-        }
-
-        function updateAchievements(ratings) {
-            // Helper function to calculate category average
-            function getCategoryAverage(skills) {
-                const validSkills = skills.filter(skill => ratings[skill]);
-                if (validSkills.length === 0) return 0;
-                return validSkills.reduce((sum, skill) => sum + Number(ratings[skill]), 0) / validSkills.length;
-            }
-
-            // Check original achievements
-            if (document.getElementById('masterHandler')) {
-                const masterHandler = document.getElementById('masterHandler');
-                if (ratings.throwing >= 8) {
-                    masterHandler.classList.remove('achievement-locked');
-                } else {
-                    masterHandler.classList.add('achievement-locked');
+                if (tooltip.opacity === 0) {
+                    tooltipEl.style.opacity = 0;
+                    return;
                 }
-            }
 
-            if (document.getElementById('speedDemon')) {
-                const speedDemon = document.getElementById('speedDemon');
-                if (ratings.downfield_cutting >= 8) {
-                    speedDemon.classList.remove('achievement-locked');
-                } else {
-                    speedDemon.classList.add('achievement-locked');
-                }
-            }
+                tooltipEl.style.opacity = 1;
+                tooltipEl.style.position = 'absolute';
+                tooltipEl.style.background = 'rgba(31, 31, 31, 0.9)';
+                tooltipEl.style.color = '#fff';
+                tooltipEl.style.borderRadius = '8px';
+                tooltipEl.style.padding = '10px';
+                tooltipEl.style.pointerEvents = 'none';
+                tooltipEl.style.transition = 'all .1s ease';
+                tooltipEl.style.fontSize = '14px';
 
-            if (document.getElementById('strategist')) {
-                const strategist = document.getElementById('strategist');
-                if (ratings.mental_game >= 8) {
-                    strategist.classList.remove('achievement-locked');
-                } else {
-                    strategist.classList.add('achievement-locked');
-                }
-            }
+                const position = chart.canvas.getBoundingClientRect();
+                tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px';
+                tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px';
 
-            // Check category achievements
-            const categoryElements = {
-                'cutting_movement_master': 'Cutting & Movement',
-                'defense_master': 'Defense',
-                'athletic_master': 'Athletic Skills'
-            };
+                if (tooltip.body) {
+                    const index = tooltip.dataPoints[0].dataIndex;
+                    const category = chart.data.labels[index];
+                    const average = chart.data.datasets[0].data[index].toFixed(1);
+                    const skills = window.detailedSkills[category] || [];
 
-            Object.entries(categoryElements).forEach(([elementId, categoryName]) => {
-                const element = document.getElementById(elementId);
-                if (element) {
-                    const categoryAvg = getCategoryAverage(SKILL_CATEGORIES[categoryName]);
-                    if (categoryAvg >= 8) {
-                        element.classList.remove('achievement-locked');
-                    } else {
-                        element.classList.add('achievement-locked');
-                    }
-                }
-            });
-
-            // Check for ultimate mastery (any skill rated 10)
-            const hasPerfectSkill = Object.values(ratings).some(rating => Number(rating) === 10);
-            const ultimateMaster = document.getElementById('ultimate_master');
-            if (ultimateMaster) {
-                if (hasPerfectSkill) {
-                    ultimateMaster.classList.remove('achievement-locked');
-                } else {
-                    ultimateMaster.classList.add('achievement-locked');
-                }
-            }
-        }
-
-        // Updated stats calculation function
-        function updateStats(ratings) {
-            // Find all skills with their values
-            const skillRatings = Object.entries(ratings).map(([skill, value]) => ({
-                name: skill,
-                value: Number(value)
-            }));
-
-            // Sort by value in descending order
-            skillRatings.sort((a, b) => b.value - a.value);
-
-            // Get highest rated skills (including ties)
-            const highestValue = skillRatings[0].value;
-            const highestSkills = skillRatings.filter(skill => skill.value === highestValue);
-
-            // Get lowest rated skills (including ties)
-            const lowestValue = skillRatings[skillRatings.length - 1].value;
-            const lowestSkills = skillRatings.filter(skill => skill.value === lowestValue);
-
-            // Update UI for top skills
-            const topSkillElement = document.getElementById('topSkill');
-            const topSkillRatingElement = document.getElementById('topSkillRating');
-            
-            if (highestSkills.length === 1) {
-                topSkillElement.textContent = utils.formatSkillName(highestSkills[0].name);
-            } else {
-                topSkillElement.textContent = `${highestSkills.length} Skills Tied`;
-            }
-            topSkillRatingElement.textContent = `${highestValue}/10`;
-
-            // Update UI for focus skills
-            const focusSkillElement = document.getElementById('focusSkill');
-            const focusSkillRatingElement = document.getElementById('focusSkillRating');
-            
-            if (lowestSkills.length === 1) {
-                focusSkillElement.textContent = utils.formatSkillName(lowestSkills[0].name);
-            } else {
-                focusSkillElement.textContent = `${lowestSkills.length} Skills Tied`;
-            }
-            focusSkillRatingElement.textContent = `${lowestValue}/10`;
-
-            // Update development path
-            document.getElementById('focusAreaTitle').textContent = lowestSkills.length === 1 
-                ? `Focus on ${utils.formatSkillName(lowestSkills[0].name)}`
-                : 'Focus on Lowest Rated Skills';
-            
-            document.getElementById('focusAreaDesc').textContent = lowestSkills.length === 1
-                ? 'Specific drills and exercises for improvement'
-                : `Work on: ${lowestSkills.map(s => utils.formatSkillName(s.name)).join(', ')}`;
-
-            document.getElementById('maintainTitle').textContent = highestSkills.length === 1
-                ? `Maintain ${utils.formatSkillName(highestSkills[0].name)}`
-                : 'Maintain Top Skills';
-            
-            document.getElementById('maintainDesc').textContent = highestSkills.length === 1
-                ? 'Continue practicing your best skill'
-                : `Keep practicing: ${highestSkills.map(s => utils.formatSkillName(s.name)).join(', ')}`;
-        }
-
-        function populateResults() {
-            const assessmentData = AssessmentDataManager.getAssessmentData();
-            if (!assessmentData) {
-                const resultsDiv = document.getElementById('resultsSummary');
-                if (resultsDiv) {
-                    resultsDiv.innerHTML = `
-                        <div class="assessment-meta">
-                            <div style="color: #ff4444;">Error: Assessment data not found.</div>
+                    let innerHtml = `
+                        <p style="color: #ff9123; font-weight: bold; margin-bottom: 5px;">${category}</p>
+                        <p style="color: #fff; margin-bottom: 10px;">Average: ${average}/10</p>
+                        <div style="max-height: 150px; overflow-y: auto;">
+                            ${skills.map(skill => 
+                                `<p style="color: #e5e5e5; margin: 0;">${skill.name}: ${skill.value}/10</p>`
+                            ).join('')}
                         </div>
                     `;
+
+                    tooltipEl.querySelector('table').innerHTML = innerHtml;
                 }
-                return;
-            }
-
-            // Update UI elements
-            updateAchievements(assessmentData.ratings);
-            updateStats(assessmentData.ratings);
-            updateRatingUI(assessmentData.ratings);
-
-            // Populate results summary
-            const resultsDiv = document.getElementById('resultsSummary');
-            if (resultsDiv) {
-                const metaHtml = `
-                    <div class="assessment-meta">
-                        <div>Name: ${assessmentData.name}</div>
-                        <div>Date: ${assessmentData.date}</div>
-                    </div>
-                `;
-
-                const resultsHtml = Object.entries(SKILL_CATEGORIES)
-                    .map(([category, skills]) => {
-                        const categorySkills = skills
-                            .filter(skill => assessmentData.ratings[skill])
-                            .map(skill => `
-                                <div class="skill-result">
-                                    <span>${utils.formatSkillName(skill)}</span>
-                                    <span class="rating">${assessmentData.ratings[skill]}/10</span>
-                                </div>
-                            `).join('');
-
-                        return categorySkills ? `
-                            <div class="results-group">
-                                <h3>${category}</h3>
-                                ${categorySkills}
-                            </div>
-                        ` : '';
-                    })
-                    .join('');
-
-                resultsDiv.innerHTML = metaHtml + resultsHtml;
             }
         }
 
-        function populatePDFTemplate(data) {
-            try {
-                const pdfName = document.getElementById('pdfName');
-                const pdfDate = document.getElementById('pdfDate');
-                const pdfAssessmentDate = document.getElementById('pdfAssessmentDate');
-                const pdfSkillSections = document.getElementById('pdfSkillSections');
-                const pdfSummaryPoints = document.getElementById('pdfSummaryPoints');
-
-                if (!pdfName || !pdfDate || !pdfAssessmentDate || !pdfSkillSections || !pdfSummaryPoints) {
-                    throw new Error('One or more PDF template elements are missing.');
-                }
-
-                pdfName.innerText = data.name;
-                pdfDate.innerText = data.date;
-                pdfAssessmentDate.innerText = data.date;
-
-                // Populate skill sections
-                const skillSections = generateSkillSections(data.ratings);
-                pdfSkillSections.innerHTML = skillSections;
-                console.log('Skill sections populated:', skillSections);
-
-                // Populate summary points
-                const summaryPoints = generateSummaryPoints(data.ratings);
-                pdfSummaryPoints.innerHTML = summaryPoints;
-                console.log('Summary points populated:', summaryPoints);
-
-            } catch (error) {
-                console.error('Error populating PDF template:', error);
-            }
-        }
-
-        function sanitizeFileName(name) {
-            return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        }
-
-        function saveResults() {
-            try {
-                const assessmentData = AssessmentDataManager.getAssessmentData();
-                if (!assessmentData) {
-                    throw new Error('No assessment data found');
-                }
-                console.log('Assessment Data:', assessmentData);
-
-                // Populate the PDF template with data
-                populatePDFTemplate(assessmentData);
-                console.log('PDF template populated.');
-
-                const element = document.getElementById('pdfTemplate');
-                if (!element) {
-                    throw new Error('PDF template element not found.');
-                }
-                console.log('PDF template element found:', element);
-
-                // Make the PDF template visible for html2pdf.js to capture
-                element.classList.add('visible');
-
-                const opt = {
-                    margin:       [10, 20, 20, 20], // Top, Right, Bottom, Left in millimeters
-                    filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak:    { mode: ['css'] }
-                };
-
-                console.log('Starting PDF generation with options:', opt);
-                html2pdf().set(opt).from(element).save().then(() => {
-                    console.log('PDF generation completed.');
-                    // Hide the PDF template after generation
-                    element.classList.remove('visible');
-                });
-
-            } catch (error) {
-                console.error('PDF Generation Error:', error);
-                alert('There was an error generating your PDF. Please try again.');
-            }
-        }
-        // Update the level title with name and date
-        function updateLevelTitle(name) {
-            const levelTitle = document.getElementById('levelTitle');
-            if (levelTitle) {
-                const today = new Date().toLocaleDateString();
-                levelTitle.textContent = `${name} - ${today}`;
-            }
-        }
-
-        // Remove average rating card and results table
-        function removeUnwantedElements() {
-            // Remove average rating card
-            const avgRatingCard = document.querySelector('.stat-card:nth-child(3)');
-            if (avgRatingCard) {
-                avgRatingCard.remove();
-            }
-
-            // Remove results table
-            const resultsTable = document.getElementById('resultsSummary');
-            if (resultsTable) {
-                resultsTable.remove();
-            }
-        }
-        const originalPopulateResults = populateResults;
-        populateResults = function() {
-            const assessmentData = AssessmentDataManager.getAssessmentData();
-            if (!assessmentData) return;
-
-            updateLevelTitle(assessmentData.name);
-            removeUnwantedElements();
-            
-            // Call other necessary updates
-            updateAchievements(assessmentData.ratings);
-            updateStats(assessmentData.ratings);
-            updateRatingUI(assessmentData.ratings);
-        }
-        // Event Listeners
+        // Initialize application
         window.addEventListener('load', () => {
-            populateResults();
-            initializeRadarChart();
+            UIManager.init();
+            if (window.location.hostname.includes('netlify.app')) {
+                const meta = document.createElement('meta');
+                meta.httpEquiv = 'Content-Security-Policy';
+                meta.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.netlify.app https://cdnjs.cloudflare.com";
+                document.head.appendChild(meta);
+            }
         });
-        window.addEventListener('error', function(e) {
+
+        window.addEventListener('error', (e) => {
             if (e.message.includes('html2pdf') || e.message.includes('jsPDF')) {
-                console.error('PDF Generation Error:', e);
-                alert('There was an error generating the PDF. Please try again.');
+                ErrorHandler.handleError(new Error(e.message), 'pdf-generation');
             }
         }, true);
-        const isNetlify = window.location.hostname.includes('netlify.app');
-        if (isNetlify) {
-            // Add specific Netlify headers for PDF generation
-            const meta = document.createElement('meta');
-            meta.httpEquiv = 'Content-Security-Policy';
-            meta.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.netlify.app https://cdnjs.cloudflare.com";
-            document.head.appendChild(meta);
+
+        // Export for testing
+        if (typeof module !== 'undefined') {
+            module.exports = {
+                Utils,
+                AssessmentDataManager,
+                SkillsAnalyzer,
+                UIManager,
+                PDFManager,
+                ChartManager,
+                ErrorHandler
+            };
         }
-        window.addEventListener('load', populateResults);
     </script>
 </body>
 </html>
