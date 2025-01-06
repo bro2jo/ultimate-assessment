@@ -230,9 +230,9 @@
 
         /* PDF Template Styles */
         .pdf-template {
-            width: 170mm; /* Adjusted to fit within margins */
+            width: 170mm; /* Fits within the 20mm left and right margins of A4 */
             min-height: 297mm;
-            padding: 20mm;
+            padding: 0mm 15mm 15mm 15mm; /* Reduced top padding to 5mm */
             margin: 0 auto;
             background-color: #ffffff;
             color: #333333;
@@ -250,6 +250,7 @@
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 2px solid #ff9123;
+            /* No top margin */
         }
 
         .pdf-header h1 {
@@ -285,7 +286,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
-            width: 100%; /* Ensure it doesn't exceed parent width */
+            width: 100%; /* Ensures it doesn't exceed parent width */
         }
 
         .pdf-skill-item {
@@ -295,7 +296,7 @@
             padding: 10px;
             background: #f9f9f9;
             border-radius: 4px;
-            width: 100%; /* Ensure it fits within the parent */
+            width: 100%; /* Ensures it fits within the parent */
         }
 
         .pdf-skill-name {
@@ -725,7 +726,7 @@
                 element.classList.add('visible');
 
                 const opt = {
-                    margin:       20, // in millimeters
+                    margin:       [10, 20, 20, 20], // Top, Right, Bottom, Left in millimeters
                     filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2, useCORS: true },
