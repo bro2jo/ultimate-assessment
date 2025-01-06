@@ -588,11 +588,11 @@
             <div class="level-card">
                 <div class="level-header">
                     <div class="level-info">
-                        <h2>Level <span id="playerLevel">Beginner</span></h2>
-                        <p id="levelTitle">Starting Your Ultimate Journey</p>
+                        <h2>Current Rating: <span id="playerRating">0</span></h2>
+                        <p id="levelTitle">Ultimate Skills Assessment</p>
                     </div>
                     <div class="level-icon" id="levelIcon">
-                        <i class="fas fa-seedling"></i>
+                        <i class="fas fa-star"></i>
                     </div>
                 </div>
                 <div class="progress-track">
@@ -600,7 +600,7 @@
                 </div>
                 <div class="progress-labels">
                     <span id="progressPercent">0</span>
-                    <span id="nextMilestone">Next Level</span>
+                    <span>Maximum Rating: 100</span>
                 </div>
             </div>
         
@@ -923,6 +923,21 @@
         }
 
         // Core Assessment Functions
+        function calculateRating(ratings) {
+            const values = Object.values(ratings);
+            const avgRating = (values.reduce((a, b) => a + b, 0) / values.length) * 10;
+            return Math.round(avgRating);
+        }
+        function updateRatingUI(ratings) {
+            const rating = calculateRating(ratings);
+            
+            // Update rating display
+            document.getElementById('playerRating').textContent = rating;
+            
+            // Update progress bar
+            document.getElementById('levelProgress').style.width = `${rating}%`;
+            document.getElementById('progressPercent').textContent = rating;
+        }
         function calculateSkillSummary(ratings) {
             const summary = {
                 strongestCategory: '',
@@ -1157,6 +1172,7 @@
             originalPopulateResults();
 
             // Update new UI elements
+            updateRatingUI(assessmentData.ratings);
             updateLevelUI(assessmentData.ratings);
             const level = calculateLevel(assessmentData.ratings);
             const progress = calculateProgress(assessmentData.ratings);
