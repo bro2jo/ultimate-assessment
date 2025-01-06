@@ -591,6 +591,31 @@
             <h1>Assessment Submitted Successfully!</h1>
             <p class="subtitle">Thank you for completing your Ultimate skills self-assessment.</p>
         </header>
+        
+        <!-- Next Steps Section -->
+        <section class="next-steps">
+            <h2><i class="fas fa-forward" aria-hidden="true"></i> Next Steps</h2>
+            <ul class="steps-list">
+                <li>
+                    <i class="fas fa-bullseye" aria-hidden="true"></i>
+                    <div>Review your results against your personal goals and team's strategic needs. Consider which skills most impact your role and playing style.</div>
+                </li>
+                <li>
+                    <i class="fas fa-route" aria-hidden="true"></i>
+                    <div>Make a focused decision: either master your strengths further (becoming exceptional in key areas) or develop specific weaker skills that align with your goals.</div>
+                </li>
+                <li>
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                    <div>Create a specific training plan with measurable targets. Focus on quality practice in 2-3 key areas rather than trying to improve everything at once.</div>
+                </li>
+            </ul>
+        </section>
+        <aside class="reminder-box" role="note">
+            <i class="fas fa-bell reminder-icon" aria-hidden="true"></i>
+            <div class="reminder-text">
+                <strong>Pro Tip:</strong> Take photos or videos of your practice sessions. They're great for tracking progress and getting feedback.
+            </div>
+        </aside>
     
         <!-- Assessment Results Section -->
         <section class="assessment-results">
@@ -703,31 +728,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Next Steps Section -->
-        <section class="next-steps">
-            <h2><i class="fas fa-forward" aria-hidden="true"></i> Next Steps</h2>
-            <ul class="steps-list">
-                <li>
-                    <i class="fas fa-bullseye" aria-hidden="true"></i>
-                    <div>Review your results against your personal goals and team's strategic needs. Consider which skills most impact your role and playing style.</div>
-                </li>
-                <li>
-                    <i class="fas fa-route" aria-hidden="true"></i>
-                    <div>Make a focused decision: either master your strengths further (becoming exceptional in key areas) or develop specific weaker skills that align with your goals.</div>
-                </li>
-                <li>
-                    <i class="fas fa-tasks" aria-hidden="true"></i>
-                    <div>Create a specific training plan with measurable targets. Focus on quality practice in 2-3 key areas rather than trying to improve everything at once.</div>
-                </li>
-            </ul>
-        </section>
-        <aside class="reminder-box" role="note">
-            <i class="fas fa-bell reminder-icon" aria-hidden="true"></i>
-            <div class="reminder-text">
-                <strong>Pro Tip:</strong> Take photos or videos of your practice sessions. They're great for tracking progress and getting feedback.
-            </div>
-        </aside>
     
         <div class="action-buttons">
             <a href="/" class="button" role="button">
@@ -1329,49 +1329,101 @@
                 const { chart, tooltip } = context;
                 let tooltipEl = document.getElementById('chartjs-tooltip');
 
+                // Create or get tooltip element
                 if (!tooltipEl) {
                     tooltipEl = document.createElement('div');
                     tooltipEl.id = 'chartjs-tooltip';
-                    tooltipEl.innerHTML = '<table></table>';
                     document.body.appendChild(tooltipEl);
                 }
 
+                // Handle hide state
                 if (tooltip.opacity === 0) {
                     tooltipEl.style.opacity = 0;
                     return;
                 }
 
-                tooltipEl.style.opacity = 1;
-                tooltipEl.style.position = 'absolute';
-                tooltipEl.style.background = 'rgba(31, 31, 31, 0.9)';
-                tooltipEl.style.color = '#fff';
-                tooltipEl.style.borderRadius = '8px';
-                tooltipEl.style.padding = '10px';
-                tooltipEl.style.pointerEvents = 'none';
-                tooltipEl.style.transition = 'all .1s ease';
-                tooltipEl.style.fontSize = '14px';
+                // Enhanced tooltip styling
+                tooltipEl.innerHTML = `
+                    <div class="tooltip-content">
+                        <div class="tooltip-header"></div>
+                        <div class="tooltip-body"></div>
+                    </div>
+                `;
 
+                // Style improvements
+                Object.assign(tooltipEl.style, {
+                    opacity: 1,
+                    position: 'absolute',
+                    background: 'rgba(45, 45, 45, 0.95)',
+                    color: '#fff',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    pointerEvents: 'none',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    transition: 'all .1s ease',
+                    fontSize: '14px',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    minWidth: '200px',
+                    maxWidth: '280px'
+                });
+
+                // Position the tooltip
                 const position = chart.canvas.getBoundingClientRect();
                 tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px';
                 tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px';
 
+                // Populate tooltip content
                 if (tooltip.body) {
                     const index = tooltip.dataPoints[0].dataIndex;
                     const category = chart.data.labels[index];
                     const average = chart.data.datasets[0].data[index].toFixed(1);
-                    const skills = this.detailedSkills[category] || [];  // Use class property instead of window
+                    const skills = this.detailedSkills[category] || [];
 
-                    let innerHtml = `
-                        <p style="color: #ff9123; font-weight: bold; margin-bottom: 5px;">${category}</p>
-                        <p style="color: #fff; margin-bottom: 10px;">Average: ${average}/10</p>
-                        <div style="max-height: 150px; overflow-y: auto;">
-                            ${skills.map(skill => 
-                                `<p style="color: #e5e5e5; margin: 0;">${skill.name}: ${skill.value}/10</p>`
-                            ).join('')}
+                    const headerContent = tooltipEl.querySelector('.tooltip-header');
+                    const bodyContent = tooltipEl.querySelector('.tooltip-body');
+
+                    // Enhanced header styling
+                    headerContent.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                    headerContent.style.marginBottom = '8px';
+                    headerContent.style.paddingBottom = '8px';
+                    headerContent.innerHTML = `
+                        <div style="font-weight: 600; font-size: 16px; color: #ff9123; margin-bottom: 4px;">
+                            ${category}
+                        </div>
+                        <div style="font-size: 14px; color: rgba(255,255,255,0.9);">
+                            Average: ${average}/10
                         </div>
                     `;
 
-                    tooltipEl.querySelector('table').innerHTML = innerHtml;
+                    // Enhanced skills list
+                    bodyContent.innerHTML = skills.map(skill => `
+                        <div style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 4px 0;
+                            border-bottom: 1px solid rgba(255,255,255,0.05);
+                        ">
+                            <span style="color: rgba(255,255,255,0.9);">${skill.name}</span>
+                            <span style="
+                                background: rgba(255,145,35,0.2);
+                                padding: 2px 8px;
+                                border-radius: 4px;
+                                color: #ff9123;
+                                font-weight: 600;
+                            ">${skill.value}/10</span>
+                        </div>
+                    `).join('');
+
+                    // Add scroll if too many items
+                    if (skills.length > 5) {
+                        Object.assign(bodyContent.style, {
+                            maxHeight: '200px',
+                            overflowY: 'auto',
+                            marginRight: '-6px',  // Compensate for scrollbar
+                            paddingRight: '6px'
+                        });
+                    }
                 }
             }
         }
