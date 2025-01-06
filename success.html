@@ -608,7 +608,7 @@
                 <div class="level-header">
                     <div class="level-info">
                         <h2>Current Rating: <span id="playerRating">0</span></h2>
-                        <p id="levelTitle">${assessmentData.name} - ${assessmentData.date}</p>
+                        <p id="levelTitle">Ultimate Skills Assessment</p>
                     </div>
                     <div class="level-icon" id="levelIcon">
                         <i class="fas fa-star"></i>
@@ -715,6 +715,39 @@
                     </div>
                     <div class="stat-value" id="focusSkill">-</div>
                     <div class="stat-label" id="focusSkillRating">0/10</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Average Rating</span>
+                    </div>
+                    <div class="stat-value" id="avgRating">0.0</div>
+                    <div class="stat-label">Across all skills</div>
+                </div>
+            </div>
+        
+            <div class="development-path">
+                <h3 class="section-title">Development Path</h3>
+                <div class="path-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4 id="focusAreaTitle">Focus on Primary Skill</h4>
+                        <p id="focusAreaDesc">Specific drills and exercises for improvement</p>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4 id="maintainTitle">Maintain Strengths</h4>
+                        <p id="maintainDesc">Continue practicing your best skills</p>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Set New Goals</h4>
+                        <p>Define specific targets for your next assessment</p>
+                    </div>
                 </div>
             </div>
         
@@ -2117,7 +2150,42 @@
                 alert('There was an error generating your PDF. Please try again.');
             }
         }
+        // Update the level title with name and date
+        function updateLevelTitle(name) {
+            const levelTitle = document.getElementById('levelTitle');
+            if (levelTitle) {
+                const today = new Date().toLocaleDateString();
+                levelTitle.textContent = `${name} - ${today}`;
+            }
+        }
 
+        // Remove average rating card and results table
+        function removeUnwantedElements() {
+            // Remove average rating card
+            const avgRatingCard = document.querySelector('.stat-card:nth-child(3)');
+            if (avgRatingCard) {
+                avgRatingCard.remove();
+            }
+
+            // Remove results table
+            const resultsTable = document.getElementById('resultsSummary');
+            if (resultsTable) {
+                resultsTable.remove();
+            }
+        }
+        const originalPopulateResults = populateResults;
+        populateResults = function() {
+            const assessmentData = AssessmentDataManager.getAssessmentData();
+            if (!assessmentData) return;
+
+            updateLevelTitle(assessmentData.name);
+            removeUnwantedElements();
+            
+            // Call other necessary updates
+            updateAchievements(assessmentData.ratings);
+            updateStats(assessmentData.ratings);
+            updateRatingUI(assessmentData.ratings);
+        }
         // Event Listeners
         window.addEventListener('load', () => {
             populateResults();
@@ -2137,6 +2205,7 @@
             meta.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.netlify.app https://cdnjs.cloudflare.com";
             document.head.appendChild(meta);
         }
+        window.addEventListener('load', populateResults);
     </script>
 </body>
 </html>
