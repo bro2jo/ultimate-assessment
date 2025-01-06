@@ -671,6 +671,29 @@
         }
 
         function populatePDFTemplate(data) {
+        // Uncomment below to use sample data for testing
+        data = {
+            name: 'John Doe',
+            date: 'January 1, 2025',
+            ratings: {
+                downfield_cutting: 8,
+                handler_cutting: 7,
+                throwing: 9,
+                disc_moves: 6,
+                marking: 5,
+                downfield_defense: 4,
+                handler_defense: 7,
+                skying: 6,
+                laying_out: 5,
+                defensive_strategy: 8,
+                offensive_strategy: 7,
+                mental_game: 9,
+                fitness: 8
+            }
+        };
+        /*
+        // ... existing code ...
+        }
             try {
                 const pdfName = document.getElementById('pdfName');
                 const pdfDate = document.getElementById('pdfDate');
@@ -759,6 +782,7 @@
             meta.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.netlify.app https://cdnjs.cloudflare.com";
             document.head.appendChild(meta);
         }
+            */}
     </script>
 </body>
 </html>
