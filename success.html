@@ -557,6 +557,72 @@ function getAssessmentData() {
 }
 
 // Core Assessment Functions
+function calculateSkillSummary(ratings) {
+    const summary = {
+        strongestCategory: '',
+        strongestScore: 0,
+        weakestCategory: '',
+        weakestScore: 10,
+        topSkills: [],
+        improvementAreas: []
+    };
+
+    for (const [category, skills] of Object.entries(SKILL_CATEGORIES)) {
+        const validSkills = skills.filter(skill => ratings[skill]);
+        if (validSkills.length === 0) continue;
+
+        const categoryAvg = validSkills.reduce((sum, skill) => 
+            sum + Number(ratings[skill]), 0) / validSkills.length;
+
+        if (categoryAvg > summary.strongestScore) {
+            summary.strongestScore = categoryAvg;
+            summary.strongestCategory = category;
+        }
+        if (categoryAvg < summary.weakestScore) {
+            summary.weakestScore = categoryAvg;
+            summary.weakestCategory = category;
+        }
+
+        validSkills.forEach(skill => {
+            const rating = Number(ratings[skill]);
+            if (rating >= 8) summary.topSkills.push({ name: skill, rating });
+            if (rating <= 4) summary.improvementAreas.push({ name: skill, rating });
+        });
+    }
+
+    return summary;
+}
+
+function generateSkillSections(ratings) {
+    return Object.entries(SKILL_CATEGORIES)
+        .map(([category, skills]) => {
+            const validSkills = skills.filter(skill => ratings[skill]);
+            if (validSkills.length === 0) return '';
+
+            const skillsList = validSkills.map(skill => `
+                <div class="pdf-skill-item">
+                    <span class="pdf-skill-name">${formatSkillName(skill)}</span>
+                    <div style="display: flex; align-items: center;">
+                        <span class="pdf-rating-value">${ratings[skill]}/10</span>
+                        <div class="pdf-rating-bar">
+                            <div class="pdf-rating-fill" style="width: ${ratings[skill] * 10}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="pdf-section">
+                    <h2>${category}</h2>
+                    <div class="pdf-skill-grid">
+                        ${skillsList}
+                    </div>
+                </div>
+            `;
+        })
+        .join('');
+}
+
 function generateSkillPairHTML(pair, ratings) {
     return `
         <div class="pdf-skill-row">
@@ -579,6 +645,61 @@ function generateSkillPairHTML(pair, ratings) {
 }
 
 // Main Functions
+function populateResults() {
+    const assessmentData = getAssessmentData();
+    const resultsDiv = document.getElementById('resultsSummary');
+
+    if (!assessmentData) {
+        resultsDiv.innerHTML = `
+            <div class="assessment-meta">
+                <div style="color: #ff4444;">Error: Assessment data not found.</div>
+            </div>
+        `;
+        return;
+    }
+
+    const metaHtml = `
+        <div class="assessment-meta">
+            <div>Name: ${assessmentData.name}</div>
+            <div>Date: ${assessmentData.date}</div>
+        </div>
+    `;
+
+    const resultsHtml = Object.entries(SKILL_CATEGORIES)
+        .map(([category, skills]) => {
+            const categorySkills = skills
+                .filter(skill => assessmentData.ratings[skill])
+                .map(skill => `
+                    <div class="skill-result">
+                        <span>${formatSkillName(skill)}</span>
+                        <span class="rating">${assessmentData.ratings[skill]}/10</span>
+                    </div>
+                `).join('');
+
+            return categorySkills ? `
+                <div class="results-group">
+                    <h3>${category}</h3>
+                    ${categorySkills}
+                </div>
+            ` : '';
+        })
+        .join('');
+
+    resultsDiv.innerHTML = metaHtml + resultsHtml;
+}
+
+function generateSummaryPoints(ratings) {
+    const summary = calculateSkillSummary(ratings);
+    const points = [
+        `Strongest Category: ${summary.strongestCategory} (Avg: ${summary.strongestScore.toFixed(1)})`,
+        `Areas for Development: ${summary.weakestCategory} (Avg: ${summary.weakestScore.toFixed(1)})`,
+        summary.topSkills.length > 0 ? `Top Skills: ${summary.topSkills.map(s => formatSkillName(s.name)).join(', ')}` : null,
+        summary.improvementAreas.length > 0 ? `Focus Areas: ${summary.improvementAreas.map(s => formatSkillName(s.name)).join(', ')}` : null
+    ].filter(Boolean);
+
+    return points.map(point => `<li>${point}</li>`).join('');
+}
+
 class PDFGenerator {
     constructor(assessmentData) {
         this.assessmentData = assessmentData;
@@ -763,6 +884,23 @@ class PDFGenerator {
 
         // Save the PDF
         this.pdf.save(`ultimate-skills-assessment-${this.assessmentData.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.pdf`);
+    }
+}
+
+// Usage
+async function saveResults() {
+    try {
+        const assessmentData = AssessmentDataManager.getAssessmentData();
+        if (!assessmentData) {
+            throw new Error('No assessment data found');
+        }
+
+        const pdfGenerator = new PDFGenerator(assessmentData);
+        await pdfGenerator.generatePDF();
+
+    } catch (error) {
+        console.error('PDF Generation Error:', error);
+        alert('There was an error generating your PDF. Please try again.\n' + error.message);
     }
 }
 
