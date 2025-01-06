@@ -702,7 +702,7 @@
 
     <script>
         const interactedFields = new Set();
-
+    
         // Progress tracking
         function updateProgress() {
             const totalFields = document.querySelectorAll('.skill-range').length;
@@ -714,10 +714,10 @@
             
             progressFill.style.width = `${progress}%`;
             progressText.textContent = `${Math.round(progress)}%`;
-
+    
             return progress;
         }
-
+    
         // Handle slider changes
         document.querySelectorAll('.skill-range').forEach(range => {
             range.addEventListener('input', function() {
@@ -741,21 +741,12 @@
                 setTimeout(() => {
                     valueDisplay.classList.remove('value-changed');
                 }, 300);
-
+    
                 // Update progress
                 updateProgress();
             });
         });
-
-        // Handle form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const progress = updateProgress();
-            if (progress === 0) {
-                e.preventDefault();
-                alert('Please rate at least one skill before submitting.');
-            }
-        });
-
+    
         // Initialize floating labels
         document.querySelectorAll('.input-group input').forEach(input => {
             input.addEventListener('focus', function() {
@@ -766,7 +757,7 @@
                 this.parentElement.classList.remove('focused');
             });
         });
-
+    
         // Scale point interaction
         document.querySelectorAll('.scale-point').forEach(point => {
             point.addEventListener('click', function() {
@@ -778,29 +769,39 @@
                 // });
             });
         });
+    
+        // Handle form submission
         document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+            e.preventDefault(); // Prevent default form submission
+    
+            // Optional: Check if at least one skill has been rated
+            // If you want to ensure at least one slider is interacted with
+            // Uncomment the following lines:
+            /*
+            const progress = updateProgress();
+            if (progress === 0) {
+                alert('Please rate at least one skill before submitting.');
+                return;
+            }
+            */
+    
             // Gather all form data
             const formData = new FormData(this);
-            const skillRatings = {};
             const assessmentData = {
                 name: formData.get('name'),
                 email: formData.get('email'),
                 ratings: {},
                 date: new Date().toLocaleDateString()
             };
-
-            // Collect all skill ratings
+    
+            // Collect all skill ratings, regardless of interaction
             document.querySelectorAll('.skill-range').forEach(range => {
-                if (range.value !== '5') { // Only include changed values
-                    assessmentData.ratings[range.name] = range.value;
-                }
+                assessmentData.ratings[range.name] = range.value;
             });
-
+    
             // Store in localStorage
             localStorage.setItem('skillAssessment', JSON.stringify(assessmentData));
-
+    
             // Create URL parameters for all the data
             const params = new URLSearchParams();
             params.append('name', assessmentData.name);
@@ -810,10 +811,10 @@
             Object.entries(assessmentData.ratings).forEach(([key, value]) => {
                 params.append(key, value);
             });
-
+    
             // Redirect to success page with parameters
             window.location.href = `/success?${params.toString()}`;
         });
-    </script>
+    </script>    
 </body>
 </html>
