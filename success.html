@@ -348,7 +348,6 @@
         }
 
         .achievement-locked {
-            display: none;  /* This will completely hide locked achievements */
             opacity: 0.5;
             filter: grayscale(1);
         }
@@ -445,7 +444,7 @@
             pointer-events: none;
             opacity: 0;
             transition: all .1s ease;
-            background: rgba(31, 31, 31, 0.9);
+            background: rgba(45, 45, 45, 0.95);
             border-radius: 8px;
             color: #fff;
             padding: 10px;
@@ -664,7 +663,16 @@
                 'catching',
                 'zone_offense',
                 'reading_the_disc',
-                'handler_cutting'
+                'handler_movement' // Renamed from 'handler_cutting'
+            ],
+            'Handling': [ // Added new category
+                'poise_with_disc',
+                'breaking_the_mark',
+                'resetting_from_trap_sideline',
+                'decision_making_vision',
+                'flow_awareness',
+                'throw_and_go',
+                'offensive_pattern_recognition'
             ],
             'Throwing Skills': ['throwing', 'disc_moves'],
             'Defending': [ // Renamed from 'Defense' to 'Defending' and updated skills
@@ -713,7 +721,7 @@
                 'catching',
                 'zone_offense',
                 'reading_the_disc'
-            ], threshold: 8 }, // Updated to multiple skills
+            ], threshold: 8 },
             strategist: { skill: 'mental_game', threshold: 8 },
             athleticExcellence: { category: 'Fitness & Athleticism', threshold: 8 },
             movementMaster: { skills: [
@@ -726,7 +734,7 @@
                 'catching',
                 'zone_offense',
                 'reading_the_disc'
-            ], threshold: 9 }, // New achievement based on detailed cutting skills
+            ], threshold: 9 },
             defenseMaster: { // Newly added achievement for Defending
                 skills: [
                     'normal_marking',
@@ -740,6 +748,23 @@
                     'defensive_mental_fortitude'
                 ],
                 threshold: 8
+            },
+            // Added new achievement for Handling
+            handlingExcellence: { 
+                skills: [
+                    'poise_with_disc',
+                    'breaking_the_mark',
+                    'resetting_from_trap_sideline',
+                    'decision_making_vision',
+                    'flow_awareness',
+                    'throw_and_go',
+                    'offensive_pattern_recognition'
+                ],
+                threshold: 8
+            },
+            ultimate_master: { // Added missing 'ultimate_master' achievement
+                skills: ['poise_with_disc', 'breaking_the_mark', 'handler_movement', 'speed_explosiveness', 'throwing', 'mental_game', 'defensive_pattern_recognition', 'flow_awareness'],
+                threshold: 10
             }
             // (Optional) Add new achievement thresholds here if needed
             // e.g., feedbackImplementation: { skill: 'feedback_implementation', threshold: 8 }

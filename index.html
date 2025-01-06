@@ -1062,13 +1062,14 @@
                 <i class="fas fa-handshake"></i> Handling
             </div>
 
-            <div class="form-group" data-skill="handler_cutting">
+            <!-- 1. Handler Movement (Renamed from Handler Cutting) -->
+            <div class="form-group" data-skill="handler_movement">
                 <div class="skill-category">
-                    <span class="skill-name">Handler Cutting</span>
+                    <span class="skill-name">Handler Movement</span>
                     <span class="skill-value">5</span>
                 </div>
                 <div class="skill-slider">
-                    <input type="range" min="1" max="10" value="5" name="handler_cutting" class="skill-range">
+                    <input type="range" min="1" max="10" value="5" name="handler_movement" class="skill-range">
                     <div class="rating-labels">
                         <span>Bad</span>
                         <span>Great</span>
@@ -1076,9 +1077,143 @@
                 </div>
                 <div class="skill-description">
                     <i class="fas fa-info-circle"></i>
-                    Effectiveness in creating throwing opportunities and maintaining handler spacing.
+                    Coordinating resets with proper spacing and movement to create space for yourself and others.
                 </div>
             </div>
+
+            <!-- 2. Poise with the Disc -->
+            <div class="form-group" data-skill="poise_with_disc">
+                <div class="skill-category">
+                    <span class="skill-name">Poise with the Disc</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="poise_with_disc" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Staying calm, balanced, and controlled under pressure.
+                </div>
+            </div>
+
+            <!-- 3. Breaking the Mark -->
+            <div class="form-group" data-skill="breaking_the_mark">
+                <div class="skill-category">
+                    <span class="skill-name">Breaking the Mark</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="breaking_the_mark" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Attacks and counter-attacks with fakes, pivots, and deception to create throwing windows.
+                </div>
+            </div>
+
+            <!-- 4. Resetting from Trap Sideline -->
+            <div class="form-group" data-skill="resetting_from_trap_sideline">
+                <div class="skill-category">
+                    <span class="skill-name">Resetting from Trap Sideline</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="resetting_from_trap_sideline" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Comfort in re-centering the disc to maintain offensive flow.
+                </div>
+            </div>
+
+            <!-- 5. Decision Making & Vision -->
+            <div class="form-group" data-skill="decision_making_vision">
+                <div class="skill-category">
+                    <span class="skill-name">Decision Making & Vision</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="decision_making_vision" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Seeing the field and choosing the best option quickly under pressure.
+                </div>
+            </div>
+
+            <!-- 6. Flow Awareness -->
+            <div class="form-group" data-skill="flow_awareness">
+                <div class="skill-category">
+                    <span class="skill-name">Flow Awareness</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="flow_awareness" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Managing stall counts and maintaining offensive rhythm.
+                </div>
+            </div>
+
+            <!-- 7. Throw-and-Go -->
+            <div class="form-group" data-skill="throw_and_go">
+                <div class="skill-category">
+                    <span class="skill-name">Throw-and-Go</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="throw_and_go" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Passing and immediately cutting to continue movement.
+                </div>
+            </div>
+
+            <!-- 8. Offensive Pattern Recognition -->
+            <div class="form-group" data-skill="offensive_pattern_recognition">
+                <div class="skill-category">
+                    <span class="skill-name">Offensive Pattern Recognition</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="offensive_pattern_recognition" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Identifying defensive tendencies to exploit weaknesses.
+                </div>
+            </div>
+            <!-- Handling Skills Added End Here -->
 
             <!-- 6. Throwing -->
             <div class="section-title">
