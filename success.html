@@ -1561,6 +1561,22 @@
                 DOMHelper.setContent('levelTitle', `${name} - ${new Date().toLocaleDateString()}`);
             }
 
+            static getCategoryForSkill(skill, categories = SKILL_CATEGORIES) {
+                for (const [category, skillsOrSubcategories] of Object.entries(categories)) {
+                    if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                        // Handle nested subcategories (like Throwing Skills)
+                        for (const [subCategory, subSkills] of Object.entries(skillsOrSubcategories)) {
+                            if (subSkills.includes(skill)) {
+                                return `${category} - ${subCategory}`;
+                            }
+                        }
+                    } else if (skillsOrSubcategories.includes(skill)) {
+                        return category;
+                    }
+                }
+                return 'Other';
+            }
+
             static updateResults(data) {
                 try {
                     let resultsDiv = document.getElementById('resultsSummary');
@@ -1578,21 +1594,37 @@
                         return 'low';
                     };
 
-                    // Process skills
+                    // Process and group skills
                     const processedSkills = Object.entries(data.ratings)
                         .filter(([, rating]) => rating !== null && rating !== undefined)
                         .map(([skill, rating]) => ({
-                            name: Utils.formatSkillName(skill),
+                            name: skill,
+                            displayName: Utils.formatSkillName(skill),
                             rating: Number(rating),
-                            tier: getSkillTier(rating)
+                            tier: getSkillTier(rating),
+                            category: this.getCategoryForSkill(skill)
                         }));
 
-                    // Group skills by tier
-                    const skillsByTier = {
-                        high: processedSkills.filter(s => s.tier === 'high').sort((a, b) => b.rating - a.rating),
-                        mid: processedSkills.filter(s => s.tier === 'mid').sort((a, b) => b.rating - a.rating),
-                        low: processedSkills.filter(s => s.tier === 'low').sort((a, b) => b.rating - a.rating)
+                    // Group by tier and then by category
+                    const skillsByTierAndCategory = {
+                        high: {},
+                        mid: {},
+                        low: {}
                     };
+
+                    processedSkills.forEach(skill => {
+                        if (!skillsByTierAndCategory[skill.tier][skill.category]) {
+                            skillsByTierAndCategory[skill.tier][skill.category] = [];
+                        }
+                        skillsByTierAndCategory[skill.tier][skill.category].push(skill);
+                    });
+
+                    // Sort skills within each category by rating
+                    Object.values(skillsByTierAndCategory).forEach(tierGroup => {
+                        Object.values(tierGroup).forEach(categoryGroup => {
+                            categoryGroup.sort((a, b) => b.rating - a.rating);
+                        });
+                    });
 
                     // Generate skill bar HTML
                     const generateSkillBar = (skill, isHighlight) => `
@@ -1605,7 +1637,7 @@
                                         'fa-trending-down'
                                     }"></i>
                                 </span>
-                                <span class="skill-name">${skill.name}</span>
+                                <span class="skill-name">${skill.displayName}</span>
                             </div>
                             <div class="skill-rating">
                                 <div class="rating-bar">
@@ -1616,9 +1648,31 @@
                         </div>
                     `;
 
+                    // Generate category group HTML
+                    const generateCategoryGroup = (skills, category) => {
+                        if (!skills || skills.length === 0) return '';
+                        const categoryAvg = Utils.calculateAverage(skills.map(s => s.rating)).toFixed(1);
+                        return `
+                            <div class="category-group">
+                                <div class="category-header">
+                                    <span class="category-name">${category}</span>
+                                    <span class="category-avg">${categoryAvg}/10</span>
+                                </div>
+                                <div class="category-skills">
+                                    ${skills.map((skill, index) => generateSkillBar(skill, index === 0)).join('')}
+                                </div>
+                            </div>
+                        `;
+                    };
+
                     // Generate skill section HTML
-                    const generateSkillSection = (title, skills, icon, description) => {
-                        if (!skills.length) return '';
+                    const generateSkillSection = (tier, categorizedSkills, title, icon, description) => {
+                        if (Object.keys(categorizedSkills).length === 0) return '';
+                        
+                        const categoryGroups = Object.entries(categorizedSkills)
+                            .map(([category, skills]) => generateCategoryGroup(skills, category))
+                            .join('');
+
                         return `
                             <div class="skill-section">
                                 <div class="section-header">
@@ -1630,14 +1684,52 @@
                                     </div>
                                 </div>
                                 <div class="skill-list">
-                                    ${skills.map((skill, index) => generateSkillBar(skill, index === 0)).join('')}
+                                    ${categoryGroups}
                                 </div>
                             </div>
                         `;
                     };
 
+                    // Additional styles for category groups
+                    const additionalStyles = `
+                        <style>
+                            .category-group {
+                                background: rgba(255, 255, 255, 0.03);
+                                border-radius: 8px;
+                                padding: 16px;
+                                margin-bottom: 16px;
+                            }
+                            .category-header {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin-bottom: 12px;
+                                padding-bottom: 8px;
+                                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                            }
+                            .category-name {
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: var(--primary-color);
+                            }
+                            .category-avg {
+                                font-size: 14px;
+                                color: var(--text-muted);
+                            }
+                            .category-skills {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 8px;
+                            }
+                            .skill-section + .skill-section {
+                                margin-top: 32px;
+                            }
+                        </style>
+                    `;
+
                     // Main content
                     const content = `
+                        ${additionalStyles}
                         <div class="skill-analysis">
                             <div class="analysis-header">
                                 <h2>Skill Analysis</h2>
@@ -1645,22 +1737,25 @@
                             </div>
 
                             ${generateSkillSection(
+                                'high',
+                                skillsByTierAndCategory.high,
                                 'Master Skills',
-                                skillsByTier.high,
                                 'fa-trophy',
                                 'Skills rated 8-10: These are your standout abilities that set you apart'
                             )}
 
                             ${generateSkillSection(
+                                'mid',
+                                skillsByTierAndCategory.mid,
                                 'Developing Skills',
-                                skillsByTier.mid,
                                 'fa-arrow-trend-up',
                                 'Skills rated 5-7: Solid foundation with room for improvement'
                             )}
 
                             ${generateSkillSection(
+                                'low',
+                                skillsByTierAndCategory.low,
                                 'Growth Opportunities',
-                                skillsByTier.low,
                                 'fa-seedling',
                                 'Skills rated 1-4: Areas to focus on for significant improvement'
                             )}
