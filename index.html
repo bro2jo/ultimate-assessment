@@ -169,7 +169,7 @@
 
         .scale-point span {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
         }
 
@@ -618,7 +618,7 @@
                     Strengthening and habits to avoid overuse or acute injuries.
                 </div>
             </div>
-            <!-- New Skills End Here -->
+            <!-- Existing Skills End Here -->
 
             <!-- 2. Strategy & Game IQ -->
             <div class="section-title">
@@ -1214,19 +1214,18 @@
                 </div>
             </div>
             <!-- Handling Skills Added End Here -->
-
             <!-- 6. Throwing -->
             <div class="section-title">
                 <i class="fas fa-bullseye"></i> Throwing
             </div>
-
-            <div class="form-group" data-skill="throwing">
+            <!-- Backhand Skills -->
+            <div class="form-group" data-skill="backhand_power">
                 <div class="skill-category">
-                    <span class="skill-name">Throwing (General)</span>
+                    <span class="skill-name">Backhand Power</span>
                     <span class="skill-value">5</span>
                 </div>
                 <div class="skill-slider">
-                    <input type="range" min="1" max="10" value="5" name="throwing" class="skill-range">
+                    <input type="range" min="1" max="10" value="5" name="backhand_power" class="skill-range">
                     <div class="rating-labels">
                         <span>Bad</span>
                         <span>Great</span>
@@ -1234,17 +1233,17 @@
                 </div>
                 <div class="skill-description">
                     <i class="fas fa-info-circle"></i>
-                    Overall throwing ability including hucks, break throws, and touch passes.
+                    Delivering long-distance hucks with consistent strength.
                 </div>
             </div>
 
-            <div class="form-group" data-skill="disc_moves">
+            <div class="form-group" data-skill="backhand_accuracy">
                 <div class="skill-category">
-                    <span class="skill-name">With-Disc Moves</span>
+                    <span class="skill-name">Backhand Accuracy</span>
                     <span class="skill-value">5</span>
                 </div>
                 <div class="skill-slider">
-                    <input type="range" min="1" max="10" value="5" name="disc_moves" class="skill-range">
+                    <input type="range" min="1" max="10" value="5" name="backhand_accuracy" class="skill-range">
                     <div class="rating-labels">
                         <span>Bad</span>
                         <span>Great</span>
@@ -1252,9 +1251,431 @@
                 </div>
                 <div class="skill-description">
                     <i class="fas fa-info-circle"></i>
-                    Pivoting skills, faking ability, and effectiveness in manipulating the mark.
+                    Placing throws precisely to hit targets in stride.
                 </div>
             </div>
+
+            <div class="form-group" data-skill="backhand_quick_release">
+                <div class="skill-category">
+                    <span class="skill-name">Backhand Quick Release</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="backhand_quick_release" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Releasing swiftly to exploit small defensive gaps.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="backhand_release_variations">
+                <div class="skill-category">
+                    <span class="skill-name">Backhand Release Variations</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="backhand_release_variations" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Adapting release points to navigate defenders.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="backhand_against_wind">
+                <div class="skill-category">
+                    <span class="skill-name">Backhand Against Wind</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="backhand_against_wind" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Controlling spin and power for challenging conditions.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="backhand_against_difficult_marks">
+                <div class="skill-category">
+                    <span class="skill-name">Backhand Against Difficult Marks</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="backhand_against_difficult_marks" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Overcoming tight marks with technique and angles.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="backhand_tempo_control">
+                <div class="skill-category">
+                    <span class="skill-name">Backhand Tempo Control</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="backhand_tempo_control" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Adjusting throwing speed to suit offensive flow.
+                </div>
+            </div>
+
+            <!-- Forehand Skills -->
+            <div class="form-group" data-skill="forehand_power">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Power</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_power" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Generating long-distance throws with precision and spin.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="forehand_accuracy">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Accuracy</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_accuracy" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Delivering pinpoint forehands under pressure.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="forehand_quick_release">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Quick Release</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_quick_release" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Executing fast releases for tight windows.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="forehand_release_variations">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Release Variations</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_release_variations" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Shifting release angles to beat defensive marks.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="forehand_against_wind">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Against Wind</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_against_wind" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Adjusting mechanics to throw effectively in wind.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="forehand_against_difficult_marks">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Against Difficult Marks</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_against_difficult_marks" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Navigating tight defense with forehand technique.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="forehand_tempo_control">
+                <div class="skill-category">
+                    <span class="skill-name">Forehand Tempo Control</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="forehand_tempo_control" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Varying throw speed to optimize offensive timing.
+                </div>
+            </div>
+
+            <!-- Specialty Skills -->
+            <div class="form-group" data-skill="specialty_power">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Power</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_power" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Throwing with distance and control with unconventional throws (eg., scoobers, hammers, off-hand, push passes).
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="specialty_accuracy">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Accuracy</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_accuracy" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Delivering precise specialty throws under pressure.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="specialty_quick_release">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Quick Release</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_quick_release" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Releasing unconventional throws swiftly for impact.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="specialty_release_variations">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Release Variations</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_release_variations" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Adjusting mechanics to counter tough defenses.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="specialty_against_wind">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Against Wind</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_against_wind" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Managing spin and technique in challenging conditions.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="specialty_against_difficult_marks">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Against Difficult Marks</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_against_difficult_marks" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Employing creativity to overcome tight defense.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="specialty_tempo_control">
+                <div class="skill-category">
+                    <span class="skill-name">Specialty Tempo Control</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="specialty_tempo_control" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Maintaining rhythm with well-timed specialty throws.
+                </div>
+            </div>
+
+            <!-- Specialty Skills End Here -->
+
+            <!-- Hucking Skills -->
+            <div class="form-group" data-skill="hucking_confidence">
+                <div class="skill-category">
+                    <span class="skill-name">Hucking Confidence</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="hucking_confidence" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Throwing assertively to capitalize on scoring opportunities.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="hucking_shape_control">
+                <div class="skill-category">
+                    <span class="skill-name">Hucking Shape Control</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="hucking_shape_control" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Curving throws effectively to avoid defenders.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="hucking_tempo_control">
+                <div class="skill-category">
+                    <span class="skill-name">Hucking Tempo Control</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="hucking_tempo_control" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Timing hucks to align with offensive flow.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="hucking_placement">
+                <div class="skill-category">
+                    <span class="skill-name">Hucking Placement</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="hucking_placement" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Precision in landing throws to maximize receiver success.
+                </div>
+            </div>
+            <!-- Hucking Skills End Here -->
+
+            <!-- New Throwing Skills End Here -->
 
             <button type="submit">Submit Assessment</button>
         </form>

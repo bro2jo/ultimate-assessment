@@ -348,6 +348,7 @@
         }
 
         .achievement-locked {
+            display: none;
             opacity: 0.5;
             filter: grayscale(1);
         }
@@ -517,15 +518,7 @@
     
             <div class="achievements-grid" role="list">
                 <!-- Achievement Cards -->
-                <div class="achievement-card achievement-locked" id="masterHandler" role="listitem">
-                    <div class="achievement-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);" aria-hidden="true">
-                        <i class="fas fa-crown"></i>
-                    </div>
-                    <div>
-                        <h3>Master Handler</h3>
-                        <p class="text-muted">Exceptional throwing skills</p>
-                    </div>
-                </div>
+                <!-- Removed the Master Handler Achievement Card as it's based on old 'throwing' skill -->
                 <div class="achievement-card achievement-locked" id="speedDemon" role="listitem">
                     <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);" aria-hidden="true">
                         <i class="fas fa-bolt"></i>
@@ -588,6 +581,16 @@
                     <div>
                         <h3>Handling Excellence</h3>
                         <p class="text-muted">Exceptional handling skills</p>
+                    </div>
+                </div>
+                <!-- Added Master Thrower Achievement Card -->
+                <div class="achievement-card achievement-locked" id="masterThrower" role="listitem">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #ff9123, #7a1fbf);" aria-hidden="true">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <h3>Master Thrower</h3>
+                        <p class="text-muted">Exceptional throwing skills</p>
                     </div>
                 </div>
                 <!-- (Optional) Add new achievement card here if needed -->
@@ -672,8 +675,7 @@
                 'decisiveness',
                 'catching',
                 'zone_offense',
-                'reading_the_disc',
-                'handler_movement' // Renamed from 'handler_cutting'
+                'reading_the_disc'
             ],
             'Handling': [ // Added new category
                 'poise_with_disc',
@@ -684,12 +686,42 @@
                 'throw_and_go',
                 'offensive_pattern_recognition'
             ],
-            'Throwing Skills': ['throwing', 'disc_moves'],
+            'Throwing Skills': [ // Updated Throwing Skills
+                // Backhand Skills
+                'backhand_power',
+                'backhand_accuracy',
+                'backhand_quick_release',
+                'backhand_release_variations',
+                'backhand_against_wind',
+                'backhand_against_difficult_marks',
+                'backhand_tempo_control',
+                // Forehand Skills
+                'forehand_power',
+                'forehand_accuracy',
+                'forehand_quick_release',
+                'forehand_release_variations',
+                'forehand_against_wind',
+                'forehand_against_difficult_marks',
+                'forehand_tempo_control',
+                // Specialty Skills
+                'specialty_power',
+                'specialty_accuracy',
+                'specialty_quick_release',
+                'specialty_release_variations',
+                'specialty_against_wind',
+                'specialty_against_difficult_marks',
+                'specialty_tempo_control',
+                // Hucking Skills
+                'hucking_confidence',
+                'hucking_shape_control',
+                'hucking_tempo_control',
+                'hucking_placement'
+            ],
             'Defending': [ // Renamed from 'Defense' to 'Defending' and updated skills
-                'normal_marking', // Renamed from 'marking'
+                'normal_marking',
                 'sideline_trap_marking',
-                'downfield_defending', // Renamed from 'downfield_defense'
-                'handler_defending', // Renamed from 'handler_defense'
+                'downfield_defending',
+                'handler_defending',
                 'defensive_pattern_recognition',
                 'help_defense',
                 'switching_on_defense',
@@ -707,7 +739,7 @@
                 'flexibility_mobility',
                 'injury_prevention'
             ],
-            'Strategy & Game IQ': ['defensive_strategy', 'offensive_strategy', 'mental_game', 'feedback_implementation'] // Added 'feedback_implementation'
+            'Strategy & Game IQ': ['defensive_strategy', 'offensive_strategy', 'mental_game', 'feedback_implementation']
         };
 
         const LEVEL_CONFIG = {
@@ -720,7 +752,7 @@
         };
 
         const ACHIEVEMENT_THRESHOLDS = {
-            masterHandler: { skill: 'throwing', threshold: 8 },
+            // Removed masterHandler as it's based on old 'throwing' skill
             speedDemon: { skills: [
                 'isolation_cutting',
                 'continuation_cutting',
@@ -759,7 +791,6 @@
                 ],
                 threshold: 8
             },
-            // Added new achievement for Handling
             handlingExcellence: { 
                 skills: [
                     'poise_with_disc',
@@ -772,8 +803,48 @@
                 ],
                 threshold: 8
             },
+            masterThrower: { // New achievement based on new Throwing Skills
+                skills: [
+                    'backhand_power',
+                    'backhand_accuracy',
+                    'backhand_quick_release',
+                    'backhand_release_variations',
+                    'backhand_against_wind',
+                    'backhand_against_difficult_marks',
+                    'backhand_tempo_control',
+                    'forehand_power',
+                    'forehand_accuracy',
+                    'forehand_quick_release',
+                    'forehand_release_variations',
+                    'forehand_against_wind',
+                    'forehand_against_difficult_marks',
+                    'forehand_tempo_control',
+                    'specialty_power',
+                    'specialty_accuracy',
+                    'specialty_quick_release',
+                    'specialty_release_variations',
+                    'specialty_against_wind',
+                    'specialty_against_difficult_marks',
+                    'specialty_tempo_control',
+                    'hucking_confidence',
+                    'hucking_shape_control',
+                    'hucking_tempo_control',
+                    'hucking_placement'
+                ],
+                threshold: 8
+            },
             ultimate_master: { // Added missing 'ultimate_master' achievement
-                skills: ['poise_with_disc', 'breaking_the_mark', 'handler_movement', 'speed_explosiveness', 'throwing', 'mental_game', 'defensive_pattern_recognition', 'flow_awareness'],
+                skills: [
+                    'poise_with_disc',
+                    'breaking_the_mark',
+                    'handler_movement',
+                    'speed_explosiveness',
+                    'backhand_power',
+                    'forehand_power',
+                    'mental_game',
+                    'defensive_pattern_recognition',
+                    'flow_awareness'
+                ],
                 threshold: 10
             }
             // (Optional) Add new achievement thresholds here if needed
