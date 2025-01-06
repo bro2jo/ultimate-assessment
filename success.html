@@ -457,6 +457,14 @@
             box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
             transform: translate(-50%, 0);
             z-index: 1000;
+            /* Allow tooltip to adjust height based on content */
+            max-height: 300px;  /* Increase as needed */
+            overflow: hidden;    /* Hide overflow, scroll handled in JS */
+        }
+
+        /* Optional: Smooth scroll within tooltip */
+        #chartjs-tooltip .tooltip-body {
+            overflow-y: auto;
         }
         .sub-category {
             margin-top: 30px;
@@ -1572,6 +1580,10 @@
         class ChartManager {
             static detailedSkills = {};  // Stores skills data per category and subcategory
 
+            /**
+             * Initializes the radar chart with the provided assessment data.
+             * @param {Object} data - The assessment data containing skill ratings.
+             */
             static initializeRadarChart(data) {
                 try {
                     const ctx = DOMHelper.getElement('radarChart').getContext('2d');
@@ -1587,6 +1599,12 @@
                 }
             }
 
+            /**
+             * Prepares the data for the radar chart by calculating averages.
+             * Aggregates "Throwing" subcategories into a single average.
+             * @param {Object} data - The assessment data containing skill ratings.
+             * @returns {Object} - The data structure required by Chart.js.
+             */
             static prepareChartData(data) {
                 let labels = [];
                 let dataPoints = [];
@@ -1594,24 +1612,34 @@
 
                 Object.entries(SKILL_CATEGORIES).forEach(([category, skillsOrSubcategories]) => {
                     if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
-                        // Handle subcategories
-                        Object.entries(skillsOrSubcategories).forEach(([subCategory, skills]) => {
-                            const validSkills = skills.filter(skill => data.ratings[skill]);
+                        // Handle categories with subcategories
+                        if (category === 'Throwing Skills') {
+                            // Aggregate "Throwing" subcategories into a single average
+                            const throwingSkills = skillsOrSubcategories;
+                            const allThrowingSkills = Object.values(throwingSkills).flat();
+                            const validSkills = allThrowingSkills.filter(skill => data.ratings[skill]);
                             const average = validSkills.length > 0
                                 ? Utils.calculateAverage(validSkills.map(skill => data.ratings[skill]))
                                 : 0;
 
-                            labels.push(`${category} - ${subCategory}`);
+                            labels.push('Throwing');  // Label for the radar chart
                             dataPoints.push(average.toFixed(1));
 
-                            // Store detailed skills for tooltips
-                            this.detailedSkills[`${category} - ${subCategory}`] = validSkills.map(skill => ({
-                                name: Utils.formatSkillName(skill),
-                                value: data.ratings[skill]
+                            // Store detailed subcategories for tooltip
+                            this.detailedSkills['Throwing'] = Object.entries(throwingSkills).map(([subCategory, skills]) => ({
+                                name: subCategory,
+                                average: Utils.calculateAverage(skills.map(skill => data.ratings[skill])).toFixed(1),
+                                skills: skills.filter(skill => data.ratings[skill]).map(skill => ({
+                                    name: Utils.formatSkillName(skill),
+                                    rating: data.ratings[skill]
+                                }))
                             }));
-                        });
+                        }
+                        // If there are other categories with subcategories, handle them here
+                        // Example:
+                        // else if (category === 'Another Category') { ... }
                     } else {
-                        // Handle regular categories
+                        // Handle regular categories without subcategories
                         const skills = skillsOrSubcategories;
                         const validSkills = skills.filter(skill => data.ratings[skill]);
                         const average = validSkills.length > 0
@@ -1621,7 +1649,7 @@
                         labels.push(category);
                         dataPoints.push(average.toFixed(1));
 
-                        // Store detailed skills for tooltips
+                        // Store detailed skills for tooltip
                         this.detailedSkills[category] = validSkills.map(skill => ({
                             name: Utils.formatSkillName(skill),
                             value: data.ratings[skill]
@@ -1645,6 +1673,10 @@
                 };
             }
 
+            /**
+             * Configures the radar chart options.
+             * @returns {Object} - The configuration options for Chart.js.
+             */
             static getChartOptions() {
                 return {
                     responsive: true,
@@ -1667,7 +1699,7 @@
                             display: false
                         },
                         tooltip: {
-                            enabled: false,
+                            enabled: false,  // Disable the default tooltip
                             external: function(context) {
                                 ChartManager.handleChartTooltip(context);
                             }
@@ -1682,24 +1714,29 @@
                 };
             }
 
+            /**
+             * Handles the creation and display of custom tooltips.
+             * Shows subcategories for "Throwing" and individual skills for other categories.
+             * @param {Object} context - The context provided by Chart.js tooltip.
+             */
             static handleChartTooltip(context) {
                 const { chart, tooltip } = context;
                 let tooltipEl = document.getElementById('chartjs-tooltip');
 
-                // Create or get tooltip element
+                // Create the tooltip element if it doesn't exist
                 if (!tooltipEl) {
                     tooltipEl = document.createElement('div');
                     tooltipEl.id = 'chartjs-tooltip';
                     document.body.appendChild(tooltipEl);
                 }
 
-                // Handle hide state
+                // Hide the tooltip if it's not visible
                 if (tooltip.opacity === 0) {
                     tooltipEl.style.opacity = 0;
                     return;
                 }
 
-                // Enhanced tooltip styling
+                // Set the tooltip's HTML content
                 tooltipEl.innerHTML = `
                     <div class="tooltip-content">
                         <div class="tooltip-header"></div>
@@ -1707,7 +1744,7 @@
                     </div>
                 `;
 
-                // Style improvements
+                // Apply styling to the tooltip
                 Object.assign(tooltipEl.style, {
                     opacity: 1,
                     position: 'absolute',
@@ -1724,12 +1761,12 @@
                     maxWidth: '280px'
                 });
 
-                // Position the tooltip
+                // Position the tooltip near the cursor
                 const position = chart.canvas.getBoundingClientRect();
                 tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px';
                 tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px';
 
-                // Populate tooltip content
+                // Populate the tooltip content based on the hovered label
                 if (tooltip.body) {
                     const index = tooltip.dataPoints[0].dataIndex;
                     const label = chart.data.labels[index];
@@ -1739,7 +1776,7 @@
                     const headerContent = tooltipEl.querySelector('.tooltip-header');
                     const bodyContent = tooltipEl.querySelector('.tooltip-body');
 
-                    // Enhanced header styling
+                    // Set header information
                     headerContent.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
                     headerContent.style.marginBottom = '8px';
                     headerContent.style.paddingBottom = '8px';
@@ -1752,28 +1789,56 @@
                         </div>
                     `;
 
-                    // Enhanced skills list
-                    bodyContent.innerHTML = skills.map(skill => `
-                        <div style="
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                            padding: 4px 0;
-                            border-bottom: 1px solid rgba(255,255,255,0.05);
-                        ">
-                            <span style="color: rgba(255,255,255,0.9);">${skill.name}</span>
-                            <span style="
-                                background: rgba(255,145,35,0.2);
-                                padding: 2px 8px;
-                                border-radius: 4px;
-                                color: #ff9123;
-                                font-weight: 600;
-                            ">${skill.value}/10</span>
-                        </div>
-                    `).join('');
+                    if (label === 'Throwing') {
+                        // Display subcategories with their averages and individual skills
+                        bodyContent.innerHTML = skills.map(subCat => `
+                            <div style="margin-bottom: 10px;">
+                                <strong>${subCat.name}:</strong> Average ${subCat.average}/10
+                                <div style="padding-left: 10px;">
+                                    ${subCat.skills.map(skill => `
+                                        <div style="
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                            padding: 2px 0;
+                                        ">
+                                            <span style="color: rgba(255,255,255,0.9);">${skill.name}</span>
+                                            <span style="
+                                                background: rgba(255,145,35,0.2);
+                                                padding: 2px 8px;
+                                                border-radius: 4px;
+                                                color: #ff9123;
+                                                font-weight: 600;
+                                            ">${skill.rating}/10</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        // Display individual skills for other categories
+                        bodyContent.innerHTML = skills.map(skill => `
+                            <div style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 4px 0;
+                                border-bottom: 1px solid rgba(255,255,255,0.05);
+                            ">
+                                <span style="color: rgba(255,255,255,0.9);">${skill.name}</span>
+                                <span style="
+                                    background: rgba(255,145,35,0.2);
+                                    padding: 2px 8px;
+                                    border-radius: 4px;
+                                    color: #ff9123;
+                                    font-weight: 600;
+                                ">${skill.value}/10</span>
+                            </div>
+                        `).join('');
+                    }
 
-                    // Add scroll if too many items
-                    if (skills.length > 5) {
+                    // Add scroll if the content is too long
+                    if (skills.length > 5 || (label === 'Throwing' && this.detailedSkills[label].some(subCat => subCat.skills.length > 5))) {
                         Object.assign(bodyContent.style, {
                             maxHeight: '200px',
                             overflowY: 'auto',
@@ -1784,6 +1849,7 @@
                 }
             }
         }
+
 
         // Initialize application
         window.addEventListener('load', () => {
