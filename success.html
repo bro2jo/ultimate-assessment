@@ -1301,6 +1301,8 @@
         }
 
         class ChartManager {
+            static detailedSkills = {};  // Add static class property to store skills data
+
             static initializeRadarChart(data) {
                 try {
                     const ctx = DOMHelper.getElement('radarChart').getContext('2d');
@@ -1318,7 +1320,7 @@
 
             static prepareChartData(data) {
                 const labels = Object.keys(SKILL_CATEGORIES);
-                const detailedSkills = {};
+                this.detailedSkills = {};  // Reset detailed skills before populating
 
                 const dataPoints = labels.map(category => {
                     const skills = SKILL_CATEGORIES[category];
@@ -1327,7 +1329,7 @@
                         ? Utils.calculateAverage(validSkills.map(skill => data.ratings[skill]))
                         : 0;
 
-                    detailedSkills[category] = validSkills.map(skill => ({
+                    this.detailedSkills[category] = validSkills.map(skill => ({
                         name: Utils.formatSkillName(skill),
                         value: data.ratings[skill]
                     }));
@@ -1348,44 +1350,6 @@
                         pointHoverBackgroundColor: '#fff',
                         pointHoverBorderColor: 'rgba(255, 145, 35, 1)'
                     }]
-                };
-            }
-
-            static getChartOptions() {
-                return {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 10,
-                            ticks: { display: false },
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
-                            pointLabels: {
-                                color: '#e5e5e5',
-                                font: { size: 14 }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#e5e5e5',
-                                font: { size: 14 }
-                            }
-                        },
-                        tooltip: {
-                            enabled: false,
-                            external: this.handleChartTooltip.bind(this)
-                        }
-                    },
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true,
-                        duration: 1200,
-                        easing: 'easeOutBounce'
-                    }
                 };
             }
 
@@ -1423,7 +1387,7 @@
                     const index = tooltip.dataPoints[0].dataIndex;
                     const category = chart.data.labels[index];
                     const average = chart.data.datasets[0].data[index].toFixed(1);
-                    const skills = window.detailedSkills[category] || [];
+                    const skills = this.detailedSkills[category] || [];  // Use class property instead of window
 
                     let innerHtml = `
                         <p style="color: #ff9123; font-weight: bold; margin-bottom: 5px;">${category}</p>
@@ -1439,7 +1403,6 @@
                 }
             }
         }
-
         // Initialize application
         window.addEventListener('load', () => {
             UIManager.init();
