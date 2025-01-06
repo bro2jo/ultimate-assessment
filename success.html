@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <style>
         /* CSS Reset and Base Styles */
         * {
@@ -984,21 +985,52 @@ class PDFGenerator {
 }
 
 // Usage
-async function saveResults() {
+function saveResults() {
     try {
         const assessmentData = AssessmentDataManager.getAssessmentData();
         if (!assessmentData) {
             throw new Error('No assessment data found');
         }
 
-        const pdfGenerator = new PDFGenerator(assessmentData);
-        await pdfGenerator.generatePDF();
+        // Populate the PDF template with data
+        populatePDFTemplate(assessmentData);
+
+        const element = document.getElementById('pdfTemplate');
+        const opt = {
+            margin:       20,
+            filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['css', 'legacy'] }
+        };
+
+        html2pdf().set(opt).from(element).save();
 
     } catch (error) {
         console.error('PDF Generation Error:', error);
-        alert('There was an error generating your PDF. Please try again.\n' + error.message);
+        alert('There was an error generating your PDF. Please try again.');
     }
 }
+
+function sanitizeFileName(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+}
+
+function populatePDFTemplate(data) {
+    document.getElementById('pdfName').innerText = data.name;
+    document.getElementById('pdfDate').innerText = data.date;
+    document.getElementById('pdfAssessmentDate').innerText = data.date;
+
+    // Populate skill sections
+    const skillSections = generateSkillSections(data.ratings);
+    document.getElementById('pdfSkillSections').innerHTML = skillSections;
+
+    // Populate summary points
+    const summaryPoints = generateSummaryPoints(data.ratings);
+    document.getElementById('pdfSummaryPoints').innerHTML = summaryPoints;
+}
+
 
 // Event Listeners
 window.addEventListener('load', populateResults);
