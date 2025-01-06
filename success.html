@@ -353,6 +353,7 @@
         }
 
         .achievement-locked {
+            display: none;
             opacity: 0.5;
             filter: grayscale(1);
         }
@@ -931,18 +932,18 @@
                 <div class="stat-card">
                     <div class="stat-header">
                         <i class="fas fa-trophy" aria-hidden="true"></i>
-                        <span>Top Skill</span>
+                        <span>Key Area</span>
                     </div>
-                    <div class="stat-value" id="topSkill" aria-live="polite">-</div>
-                    <div class="stat-label" id="topSkillRating">0/10</div>
+                    <div class="stat-value" id="keyArea" aria-live="polite">-</div>
+                    <div class="stat-label" id="keyAreaRating">0/10</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <i class="fas fa-bullseye" aria-hidden="true"></i>
-                        <span>Focus Area</span>
+                        <span>Weakest In</span>
                     </div>
-                    <div class="stat-value" id="focusSkill" aria-live="polite">-</div>
-                    <div class="stat-label" id="focusSkillRating">0/10</div>
+                    <div class="stat-value" id="weakestArea" aria-live="polite">-</div>
+                    <div class="stat-label" id="weakestAreaRating">0/10</div>
                 </div>
             </div>
 
@@ -1504,24 +1505,45 @@
             }
 
             static updateStats(ratings) {
-                const skillRatings = Object.entries(ratings)
-                    .map(([skill, value]) => ({ name: skill, value: Number(value) }))
-                    .sort((a, b) => b.value - a.value);
+                // Calculate averages for each main category
+                const categoryAverages = Object.entries(SKILL_CATEGORIES).map(([category, skillsOrSubcategories]) => {
+                    let validSkills = [];
+                    
+                    if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                        // Handle subcategories (like Throwing Skills)
+                        Object.values(skillsOrSubcategories).forEach(skills => {
+                            validSkills = validSkills.concat(
+                                skills
+                                    .filter(skill => ratings[skill])
+                                    .map(skill => ratings[skill])
+                            );
+                        });
+                    } else {
+                        // Handle regular categories
+                        validSkills = skillsOrSubcategories
+                            .filter(skill => ratings[skill])
+                            .map(skill => ratings[skill]);
+                    }
 
-                const highestValue = skillRatings[0]?.value || 0;
-                const highestSkills = skillRatings.filter(skill => skill.value === highestValue);
-                const lowestValue = skillRatings[skillRatings.length - 1]?.value || 0;
-                const lowestSkills = skillRatings.filter(skill => skill.value === lowestValue);
+                    const average = validSkills.length > 0 ? 
+                        Utils.calculateAverage(validSkills) : 0;
 
-                DOMHelper.setContent('topSkill', 
-                    highestSkills.length === 1 ? Utils.formatSkillName(highestSkills[0].name) 
-                    : `${highestSkills.length} Skills Tied`);
-                DOMHelper.setContent('topSkillRating', `${highestValue}/10`);
+                    return {
+                        category,
+                        average
+                    };
+                }).sort((a, b) => b.average - a.average); // Sort by average descending
 
-                DOMHelper.setContent('focusSkill',
-                    lowestSkills.length === 1 ? Utils.formatSkillName(lowestSkills[0].name)
-                    : `${lowestSkills.length} Skills Tied`);
-                DOMHelper.setContent('focusSkillRating', `${lowestValue}/10`);
+                // Find the highest and lowest categories
+                const highestCategory = categoryAverages[0];
+                const lowestCategory = categoryAverages[categoryAverages.length - 1];
+
+                // Update the display
+                DOMHelper.setContent('keyArea', highestCategory.category);
+                DOMHelper.setContent('keyAreaRating', `${highestCategory.average.toFixed(1)}/10`);
+
+                DOMHelper.setContent('weakestArea', lowestCategory.category);
+                DOMHelper.setContent('weakestAreaRating', `${lowestCategory.average.toFixed(1)}/10`);
             }
 
             static updateLevel(ratings) {
