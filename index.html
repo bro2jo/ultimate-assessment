@@ -400,7 +400,6 @@
             <p>Welcome to your personal Ultimate skills assessment! This tool is designed to help you reflect on your current abilities and identify areas for growth. Remember:</p>
             <ul>
                 <li>This is <strong>your personal assessment</strong> - rankings are subjective and based on your experiences</li>
-                <li>Don't compare yourself to others - focus on your own journey and progress</li>
                 <li>Use this as a tool to identify both strengths and areas for improvement</li>
                 <li>Consider revisiting this assessment every few months to track your progress</li>
             </ul>
@@ -701,16 +700,12 @@
     </div>
 
     <script>
+        const interactedFields = new Set();
+
         // Progress tracking
         function updateProgress() {
             const totalFields = document.querySelectorAll('.skill-range').length;
-            let completedFields = 0;
-            
-            document.querySelectorAll('.skill-range').forEach(range => {
-                if (range.value !== '5') {
-                    completedFields++;
-                }
-            });
+            const completedFields = interactedFields.size;
             
             const progress = (completedFields / totalFields) * 100;
             const progressFill = document.querySelector('.progress-fill');
@@ -729,13 +724,16 @@
                 const formGroup = this.closest('.form-group');
                 const valueDisplay = formGroup.querySelector('.skill-value');
                 
+                // Track that this field has been interacted with
+                interactedFields.add(this.name);
+                
                 // Update value display
                 valueDisplay.textContent = value;
                 
                 // Update value color class
                 valueDisplay.className = 'skill-value ' + 
                     (value <= 3 ? 'low' : 
-                     value <= 7 ? 'medium' : 'high');
+                    value <= 7 ? 'medium' : 'high');
                 
                 // Add animation
                 valueDisplay.classList.add('value-changed');
