@@ -608,7 +608,7 @@
                 <div class="level-header">
                     <div class="level-info">
                         <h2>Current Rating: <span id="playerRating">0</span></h2>
-                        <p id="levelTitle">${assessmentData.name} - ${assessmentData.date}</p>
+                        <p id="levelTitle">Ultimate Skills Assessment</p>
                     </div>
                     <div class="level-icon" id="levelIcon">
                         <i class="fas fa-star"></i>
@@ -716,6 +716,9 @@
                     <div class="stat-value" id="focusSkill">-</div>
                     <div class="stat-label" id="focusSkillRating">0/10</div>
                 </div>
+            </div>
+            <div class="results-summary" id="resultsSummary">
+                <!-- Original results will still be populated here -->
             </div>
         </div>
         <div class="reminder-box">
@@ -1377,7 +1380,12 @@
                 },
                 plugins: {
                     legend: {
-                        display: false, // Hide the legend
+                        labels: {
+                            color: '#e5e5e5',
+                            font: {
+                                size: 14
+                            }
+                        }
                     },
                     tooltip: {
                         enabled: false, // Disable the default tooltip
