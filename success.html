@@ -1659,7 +1659,7 @@
                                     <span class="category-avg">${categoryAvg}/10</span>
                                 </div>
                                 <div class="category-skills">
-                                   ${skills.map(skill => generateSkillBar(skill)).join('')}
+                                    ${skills.map((skill, index) => generateSkillBar(skill, index === 0)).join('')}
                                 </div>
                             </div>
                         `;
