@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Skills Self-Assessment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-color: #ff9123;
+            --secondary-color: #7a1fbf;
+            --background-dark: #1f1f1f;
+            --background-medium: #2d2d2d;
+            --background-light: #404040;
+            --text-primary: #ffffff;
+            --text-secondary: #e5e5e5;
+            --text-muted: #999999;
+            --success-color: #00C851;
+            --warning-color: #ffbb33;
+            --danger-color: #ff4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .progress-container {
+            position: sticky;
+            top: 0;
+            background: var(--background-dark);
+            padding: 15px 20px;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-text {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .progress-percentage {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--background-light);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .intro-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 145, 35, 0.1), 
+                rgba(122, 31, 191, 0.1));
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .intro-card h2 {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .intro-card p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .intro-card ul {
+            color: var(--text-secondary);
+            margin-left: 20px;
+            margin-top: 16px;
+        }
+
+        .intro-card li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .intro-card li::before {
+            content: "•";
+            color: var(--primary-color);
+        }
+
+        .scale-explanation {
+            display: flex;
+            justify-content: space-between;
+            background: var(--background-medium);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .scale-point {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .scale-point:hover {
+            transform: translateY(-2px);
+        }
+
+        .scale-point strong {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .scale-point:nth-child(1) strong { color: var(--danger-color); }
+        .scale-point:nth-child(2) strong { color: var(--warning-color); }
+        .scale-point:nth-child(3) strong { color: var(--success-color); }
+
+        .scale-point span {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--background-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 18px;
+        }
+
+        .form-group {
+            background: var(--background-medium);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .skill-category {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .skill-value {
+            font-size: 20px;
+            font-weight: 700;
+            min-width: 40px;
+            text-align: right;
+            transition: all 0.2s ease;
+        }
+
+        .skill-value.low { color: var(--danger-color); }
+        .skill-value.medium { color: var(--warning-color); }
+        .skill-value.high { color: var(--success-color); }
+
+        .skill-slider {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--background-dark);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+            transition: all 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 145, 35, 0.3);
+        }
+
+        .rating-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .skill-description {
+            position: relative;
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--background-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            cursor: help;
+            transition: all 0.2s ease;
+        }
+
+        .skill-description:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-description i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--background-dark);
+            border: 1px solid var(--background-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 145, 35, 0.2);
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            background: var(--background-dark);
+            padding: 0 4px;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: -8px;
+            font-size: 12px;
+            color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 145, 35, 0.3);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .value-changed {
+            animation: pulse 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .scale-explanation {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .scale-point {
+                padding: 8px;
+            }
+
+            .form-group {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-stats">
+            <div class="progress-text">Your Progress</div>
+            <div class="progress-percentage">0%</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h1>Ultimate Skills Self-Assessment</h1>
+        
+        <div class="intro-card">
+            <h2><i class="fas fa-info-circle"></i> About This Assessment</h2>
+            <p>Welcome to your personal Ultimate skills assessment! This tool is designed to help you reflect on your current abilities and identify areas for growth. Remember:</p>
+            <ul>
+                <li>This is <strong>your personal assessment</strong> - rankings are subjective and based on your experiences</li>
+                <li>Don't compare yourself to others - focus on your own journey and progress</li>
+                <li>Use this as a tool to identify both strengths and areas for improvement</li>
+                <li>Consider revisiting this assessment every few months to track your progress</li>
+            </ul>
+        </div>
+
+        <div class="scale-explanation">
+            <div class="scale-point" data-value="1">
+                <strong>1</strong>
+                <span>Bad</span>
+            </div>
+            <div class="scale-point" data-value="5">
+                <strong>5</strong>
+                <span>Neutral</span>
+            </div>
+            <div class="scale-point" data-value="10">
+                <strong>10</strong>
+                <span>Great</span>
+            </div>
+        </div>
+
+        <form name="ultimate-assessment" method="POST" data-netlify="true">
+            <div class="section-title">
+                <i class="fas fa-user"></i> Personal Information
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" id="name" name="name" placeholder=" " required>
+                    <label for="name">Full Name</label>
+                </div>
+                
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder=" " required>
+                    <label for="email">Email Address</label>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-running"></i> Cutting & Movement
+            </div>
+            
+            <div class="form-group" data-skill="downfield-cutting">
+                <div class="skill-category">
+                    <span class="skill-name">Downfield Cutting</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="downfield_cutting" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Ability to create separation, time cuts effectively, and read the field.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="handler-cutting">
+                <div class="skill-category">
+                    <span class="skill-name">Handler Cutting</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="handler_cutting" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Effectiveness in creating throwing opportunities and maintaining handler spacing.
+                </div>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-bullseye"></i> Throwing Skills
+            </div>
+
+            <div class="form-group" data-skill="throwing">
+                <div class="skill-category">
+                    <span class="skill-name">Throwing (General)</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="throwing" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Overall throwing ability including hucks, break throws, and touch passes.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="disc-moves">
+                <div class="skill-category">
+                    <span class="skill-name">With-Disc Moves</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="disc_moves" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Pivoting skills, faking ability, and effectiveness in manipulating the mark.
+                </div>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-shield-alt"></i> Defense
+            </div>
+
+            <div class="form-group" data-skill="marking">
+                <div class="skill-category">
+                    <span class="skill-name">Marking</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="marking" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Ability to effectively prevent throws and maintain proper marking position.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="downfield-defense">
+                <div class="skill-category">
+                    <span class="skill-name">Downfield Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="downfield_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Effectiveness in defending cuts and maintaining positioning downfield.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="handler-defense">
+                <div class="skill-category">
+                    <span class="skill-name">Handler Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="handler_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Ability to contain handler movement and prevent reset options.
+                </div>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-bolt"></i> Athletic Skills
+            </div>
+
+            <div class="form-group" data-skill="skying">
+                <div class="skill-category">
+                    <span class="skill-name">Skying & Boxing Out</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="skying" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Ability to win aerial battles and establish position for disc possession.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="laying-out">
+                <div class="skill-category">
+                    <span class="skill-name">Laying Out</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="laying_out" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Comfort and effectiveness in making diving plays with proper technique.
+                </div>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-brain"></i> Strategy & Game IQ
+            </div>
+
+            <div class="form-group" data-skill="defensive-strategy">
+                <div class="skill-category">
+                    <span class="skill-name">Defensive Team Strategy</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="defensive_strategy" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Understanding of defensive strategies, switching, and zone concepts.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="offensive-strategy">
+                <div class="skill-category">
+                    <span class="skill-name">Offensive Team Strategy</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="offensive_strategy" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Knowledge of offensive systems and ability to recognize defensive weaknesses.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="mental-game">
+                <div class="skill-category">
+                    <span class="skill-name">Mental Game</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="mental_game" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Focus, composure, and decision-making under pressure.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="fitness">
+                <div class="skill-category">
+                    <span class="skill-name">Fitness Level</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="fitness" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Overall conditioning, endurance, and athletic readiness.
+                </div>
+            </div>
+
+            <button type="submit">Submit Assessment</button>
+        </form>
+    </div>
+
+    <script>
+        // Progress tracking
+        function updateProgress() {
+            const totalFields = document.querySelectorAll('.skill-range').length;
+            let completedFields = 0;
+            
+            document.querySelectorAll('.skill-range').forEach(range => {
+                if (range.value !== '5') {
+                    completedFields++;
+                }
+            });
+            
+            const progress = (completedFields / totalFields) * 100;
+            const progressFill = document.querySelector('.progress-fill');
+            const progressText = document.querySelector('.progress-percentage');
+            
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+
+            return progress;
+        }
+
+        // Handle slider changes
+        document.querySelectorAll('.skill-range').forEach(range => {
+            range.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                const formGroup = this.closest('.form-group');
+                const valueDisplay = formGroup.querySelector('.skill-value');
+                
+                // Update value display
+                valueDisplay.textContent = value;
+                
+                // Update value color class
+                valueDisplay.className = 'skill-value ' + 
+                    (value <= 3 ? 'low' : 
+                     value <= 7 ? 'medium' : 'high');
+                
+                // Add animation
+                valueDisplay.classList.add('value-changed');
+                setTimeout(() => {
+                    valueDisplay.classList.remove('value-changed');
+                }, 300);
+
+                // Update progress
+                updateProgress();
+            });
+        });
+
+        // Handle form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const progress = updateProgress();
+            if (progress === 0) {
+                e.preventDefault();
+                alert('Please rate at least one skill before submitting.');
+            }
+        });
+
+        // Initialize floating labels
+        document.querySelectorAll('.input-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Scale point interaction
+        document.querySelectorAll('.scale-point').forEach(point => {
+            point.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                // Optional: Set all sliders to this value
+                // document.querySelectorAll('.skill-range').forEach(range => {
+                //     range.value = value;
+                //     range.dispatchEvent(new Event('input'));
+                // });
+            });
+        });
+    </script>
+</body>
+</html>
