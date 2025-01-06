@@ -5,10 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assessment Successfully Submitted</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Add to your existing CSS */
+.skill-analysis-wrapper {
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Add any missing Tailwind utility classes that might be needed */
+.bg-gray-900 {
+    background-color: #111827;
+}
+
+.border-gray-800 {
+    border-color: #1f2937;
+}
+
+.text-gray-200 {
+    color: #e5e5e5;
+}
+
+.text-gray-400 {
+    color: #9ca3af;
+}
+
+.text-gray-300 {
+    color: #d1d5db;
+}
+
+.bg-white\/5 {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.bg-orange-500\/10 {
+    background-color: rgba(249, 115, 22, 0.1);
+}
+
+.text-green-500 {
+    color: #22c55e;
+}
+
+.text-yellow-500 {
+    color: #eab308;
+}
+
+.text-red-500 {
+    color: #ef4444;
+}
+
+.bg-gray-700 {
+    background-color: #374151;
+}
+
+.bg-green-500 {
+    background-color: #22c55e;
+}
+
+.bg-yellow-500 {
+    background-color: #eab308;
+}
+
+.bg-red-500 {
+    background-color: #ef4444;
+}
+
+.text-orange-500 {
+    color: #f97316;
+}
+
+.bg-gray-800\/50 {
+    background-color: rgba(31, 41, 55, 0.5);
+}
         /* CSS Reset and Base Styles */
         * {
             box-sizing: border-box;
@@ -778,10 +850,7 @@
                 </div>
             </div>
 
-            <!-- Added resultsSummary div -->
-            <div id="resultsSummary">
-                <!-- Results will be populated by JavaScript -->
-            </div>
+            <div id="skillAnalysisRoot"></div>
         </section>
     
         <div class="action-buttons">
