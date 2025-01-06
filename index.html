@@ -447,7 +447,7 @@
                 <i class="fas fa-dumbbell"></i> Fitness & Athleticism
             </div>
 
-            <!-- New Skills Added Below -->
+            <!-- Existing Skills -->
             <!-- 1. Speed & Explosiveness -->
             <div class="form-group" data-skill="speed_explosiveness">
                 <div class="skill-category">
@@ -620,352 +620,512 @@
             </div>
             <!-- New Skills End Here -->
 
-           <!-- 2. Strategy & Game IQ -->
-           <div class="section-title">
-            <i class="fas fa-brain"></i> Strategy & Game IQ
-        </div>
-
-        <!-- Defensive Team Strategy -->
-        <div class="form-group" data-skill="defensive-strategy">
-            <div class="skill-category">
-                <span class="skill-name">Defensive Team Strategy</span>
-                <span class="skill-value">5</span>
+            <!-- 2. Strategy & Game IQ -->
+            <div class="section-title">
+                <i class="fas fa-brain"></i> Strategy & Game IQ
             </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="defensive_strategy" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+
+            <!-- Defensive Team Strategy -->
+            <div class="form-group" data-skill="defensive_strategy">
+                <div class="skill-category">
+                    <span class="skill-name">Defensive Team Strategy</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="defensive_strategy" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Understanding of defensive strategies, switching, and zone concepts.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Understanding of defensive strategies, switching, and zone concepts.
-            </div>
-        </div>
 
-        <!-- Offensive Team Strategy (Kept As Is) -->
-        <div class="form-group" data-skill="offensive-strategy">
-            <div class="skill-category">
-                <span class="skill-name">Offensive Team Strategy</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="offensive_strategy" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- Offensive Team Strategy -->
+            <div class="form-group" data-skill="offensive_strategy">
+                <div class="skill-category">
+                    <span class="skill-name">Offensive Team Strategy</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="offensive_strategy" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Knowledge of offensive systems and ability to recognize defensive weaknesses.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Knowledge of offensive systems and ability to recognize defensive weaknesses.
-            </div>
-        </div>
 
-        <!-- Mental Game (Updated Description) -->
-        <div class="form-group" data-skill="mental-game">
-            <div class="skill-category">
-                <span class="skill-name">Mental Game</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="mental_game" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- Mental Game (Updated Description) -->
+            <div class="form-group" data-skill="mental_game">
+                <div class="skill-category">
+                    <span class="skill-name">Mental Game</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="mental_game" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Focusing on controllables, showing fortitude, and embracing failure for growth.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Focusing on controllables, showing fortitude, and embracing failure for growth.
-            </div>
-        </div>
 
-        <!-- New Skill: Feedback Implementation -->
-        <div class="form-group" data-skill="feedback_implementation">
-            <div class="skill-category">
-                <span class="skill-name">Feedback Implementation</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="feedback_implementation" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- New Skill: Feedback Implementation -->
+            <div class="form-group" data-skill="feedback_implementation">
+                <div class="skill-category">
+                    <span class="skill-name">Feedback Implementation</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="feedback_implementation" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Receiving feedback and effectively applying it in play.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Receiving feedback and effectively applying it in play.
-            </div>
-        </div>
+            <!-- New Skill End Here -->
 
-        <!-- 3. Downfield Cutting -->
-        <div class="section-title">
-            <i class="fas fa-running"></i> Downfield Cutting
-        </div>
-
-        <div class="form-group" data-skill="downfield-cutting">
-            <div class="skill-category">
-                <span class="skill-name">Downfield Cutting</span>
-                <span class="skill-value">5</span>
+            <!-- 3. Downfield Cutting -->
+            <div class="section-title">
+                <i class="fas fa-running"></i> Downfield Cutting
             </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="downfield_cutting" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+
+            <!-- New Skills Added to Downfield Cutting -->
+            <!-- 1. Isolation Cutting -->
+            <div class="form-group" data-skill="isolation_cutting">
+                <div class="skill-category">
+                    <span class="skill-name">Isolation Cutting</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="isolation_cutting" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Creating space to receive the disc in open lanes.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Ability to create separation, time cuts effectively, and read the field.
-            </div>
-        </div>
 
-        <!-- 4. Defense -->
-        <div class="section-title">
-            <i class="fas fa-shield-alt"></i> Defense
-        </div>
-
-        <div class="form-group" data-skill="marking">
-            <div class="skill-category">
-                <span class="skill-name">Marking</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="marking" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- 2. Continuation Cutting -->
+            <div class="form-group" data-skill="continuation_cutting">
+                <div class="skill-category">
+                    <span class="skill-name">Continuation Cutting</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="continuation_cutting" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Following the initial play to maintain offensive flow.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Ability to effectively prevent throws and maintain proper marking position.
-            </div>
-        </div>
 
-        <div class="form-group" data-skill="downfield-defense">
-            <div class="skill-category">
-                <span class="skill-name">Downfield Defense</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="downfield_defense" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- 3. Angles -->
+            <div class="form-group" data-skill="angles">
+                <div class="skill-category">
+                    <span class="skill-name">Angles</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="angles" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Using sharp, effective cutting lines to maximize separation and give good windows.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Effectiveness in defending cuts and maintaining positioning downfield.
-            </div>
-        </div>
 
-        <div class="form-group" data-skill="handler-defense">
-            <div class="skill-category">
-                <span class="skill-name">Handler Defense</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="handler_defense" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- 4. Fakes & Footwork -->
+            <div class="form-group" data-skill="fakes_footwork">
+                <div class="skill-category">
+                    <span class="skill-name">Fakes & Footwork</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="fakes_footwork" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Misleading defenders with fakes and sudden directional changes.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Ability to contain handler movement and prevent reset options.
-            </div>
-        </div>
 
-        <!-- 5. Handling -->
-        <div class="section-title">
-            <i class="fas fa-handshake"></i> Handling
-        </div>
-
-        <div class="form-group" data-skill="handler_cutting">
-            <div class="skill-category">
-                <span class="skill-name">Handler Cutting</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="handler_cutting" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- 5. Timing & Field Vision -->
+            <div class="form-group" data-skill="timing_field_vision">
+                <div class="skill-category">
+                    <span class="skill-name">Timing & Field Vision</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="timing_field_vision" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Cutting in sync with handlers and offensive flow.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Effectiveness in creating throwing opportunities and maintaining handler spacing.
-            </div>
-        </div>
 
-        <!-- 6. Throwing -->
-        <div class="section-title">
-            <i class="fas fa-bullseye"></i> Throwing
-        </div>
-
-        <div class="form-group" data-skill="throwing">
-            <div class="skill-category">
-                <span class="skill-name">Throwing (General)</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="throwing" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- 6. Decisiveness -->
+            <div class="form-group" data-skill="decisiveness">
+                <div class="skill-category">
+                    <span class="skill-name">Decisiveness</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="decisiveness" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Making quick, confident decisions to maintain offensive rhythm.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Overall throwing ability including hucks, break throws, and touch passes.
-            </div>
-        </div>
 
-        <div class="form-group" data-skill="disc-moves">
-            <div class="skill-category">
-                <span class="skill-name">With-Disc Moves</span>
-                <span class="skill-value">5</span>
-            </div>
-            <div class="skill-slider">
-                <input type="range" min="1" max="10" value="5" name="disc_moves" class="skill-range">
-                <div class="rating-labels">
-                    <span>Bad</span>
-                    <span>Great</span>
+            <!-- 7. Catching -->
+            <div class="form-group" data-skill="catching">
+                <div class="skill-category">
+                    <span class="skill-name">Catching</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="catching" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Securing discs reliably in various and contested situations.
                 </div>
             </div>
-            <div class="skill-description">
-                <i class="fas fa-info-circle"></i>
-                Pivoting skills, faking ability, and effectiveness in manipulating the mark.
+
+            <!-- 8. Zone Offense -->
+            <div class="form-group" data-skill="zone_offense">
+                <div class="skill-category">
+                    <span class="skill-name">Zone Offense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="zone_offense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Moving smartly to exploit gaps in defensive zones.
+                </div>
             </div>
-        </div>
 
-        <button type="submit">Submit Assessment</button>
-    </form>
-</div>
+            <!-- 9. Reading the Disc -->
+            <div class="form-group" data-skill="reading_the_disc">
+                <div class="skill-category">
+                    <span class="skill-name">Reading the Disc</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="reading_the_disc" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Judging disc flight to position for successful catches.
+                </div>
+            </div>
+            <!-- New Skills Added End Here -->
 
-<script>
-    const interactedFields = new Set();
+            <!-- 3. Downfield Cutting -->
+            <!-- Note: The "Downfield Cutting" section has been replaced with the above new skills -->
+            <!-- If you prefer to keep "Downfield Cutting" as a category heading without a separate section, you can remove or adjust the section-title accordingly -->
 
-    // Progress tracking
-    function updateProgress() {
-        const totalFields = document.querySelectorAll('.skill-range').length;
-        const completedFields = interactedFields.size;
-        
-        const progress = (completedFields / totalFields) * 100;
-        const progressFill = document.querySelector('.progress-fill');
-        const progressText = document.querySelector('.progress-percentage');
-        
-        progressFill.style.width = `${progress}%`;
-        progressText.textContent = `${Math.round(progress)}%`;
+            <!-- 4. Defense -->
+            <div class="section-title">
+                <i class="fas fa-shield-alt"></i> Defense
+            </div>
 
-        return progress;
-    }
+            <div class="form-group" data-skill="marking">
+                <div class="skill-category">
+                    <span class="skill-name">Marking</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="marking" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Ability to effectively prevent throws and maintain proper marking position.
+                </div>
+            </div>
 
-    // Handle slider changes
-    document.querySelectorAll('.skill-range').forEach(range => {
-        range.addEventListener('input', function() {
-            const value = parseInt(this.value);
-            const formGroup = this.closest('.form-group');
-            const valueDisplay = formGroup.querySelector('.skill-value');
+            <div class="form-group" data-skill="downfield_defense">
+                <div class="skill-category">
+                    <span class="skill-name">Downfield Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="downfield_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Effectiveness in defending cuts and maintaining positioning downfield.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="handler_defense">
+                <div class="skill-category">
+                    <span class="skill-name">Handler Defense</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="handler_defense" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Ability to contain handler movement and prevent reset options.
+                </div>
+            </div>
+
+            <!-- 5. Handling -->
+            <div class="section-title">
+                <i class="fas fa-handshake"></i> Handling
+            </div>
+
+            <div class="form-group" data-skill="handler_cutting">
+                <div class="skill-category">
+                    <span class="skill-name">Handler Cutting</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="handler_cutting" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Effectiveness in creating throwing opportunities and maintaining handler spacing.
+                </div>
+            </div>
+
+            <!-- 6. Throwing -->
+            <div class="section-title">
+                <i class="fas fa-bullseye"></i> Throwing
+            </div>
+
+            <div class="form-group" data-skill="throwing">
+                <div class="skill-category">
+                    <span class="skill-name">Throwing (General)</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="throwing" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Overall throwing ability including hucks, break throws, and touch passes.
+                </div>
+            </div>
+
+            <div class="form-group" data-skill="disc_moves">
+                <div class="skill-category">
+                    <span class="skill-name">With-Disc Moves</span>
+                    <span class="skill-value">5</span>
+                </div>
+                <div class="skill-slider">
+                    <input type="range" min="1" max="10" value="5" name="disc_moves" class="skill-range">
+                    <div class="rating-labels">
+                        <span>Bad</span>
+                        <span>Great</span>
+                    </div>
+                </div>
+                <div class="skill-description">
+                    <i class="fas fa-info-circle"></i>
+                    Pivoting skills, faking ability, and effectiveness in manipulating the mark.
+                </div>
+            </div>
+
+            <button type="submit">Submit Assessment</button>
+        </form>
+    </div>
+
+    <script>
+        const interactedFields = new Set();
+
+        // Progress tracking
+        function updateProgress() {
+            const totalFields = document.querySelectorAll('.skill-range').length;
+            const completedFields = interactedFields.size;
             
-            // Track that this field has been interacted with
-            interactedFields.add(this.name);
+            const progress = (completedFields / totalFields) * 100;
+            const progressFill = document.querySelector('.progress-fill');
+            const progressText = document.querySelector('.progress-percentage');
             
-            // Update value display
-            valueDisplay.textContent = value;
-            
-            // Update value color class
-            valueDisplay.className = 'skill-value ' + 
-                (value <= 3 ? 'low' : 
-                value <= 7 ? 'medium' : 'high');
-            
-            // Add animation
-            valueDisplay.classList.add('value-changed');
-            setTimeout(() => {
-                valueDisplay.classList.remove('value-changed');
-            }, 300);
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
 
-            // Update progress
-            updateProgress();
-        });
-    });
-
-    // Initialize floating labels
-    document.querySelectorAll('.input-group input').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
-        });
-        
-        input.addEventListener('blur', function() {
-            this.parentElement.classList.remove('focused');
-        });
-    });
-
-    // Scale point interaction
-    document.querySelectorAll('.scale-point').forEach(point => {
-        point.addEventListener('click', function() {
-            const value = this.getAttribute('data-value');
-            // Optional: Set all sliders to this value
-            // document.querySelectorAll('.skill-range').forEach(range => {
-            //     range.value = value;
-            //     range.dispatchEvent(new Event('input'));
-            // });
-        });
-    });
-
-    // Handle form submission
-    document.querySelector('form').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
-
-        // Optional: Check if at least one skill has been rated
-        // If you want to ensure at least one slider is interacted with
-        // Uncomment the following lines:
-        /*
-        const progress = updateProgress();
-        if (progress === 0) {
-            alert('Please rate at least one skill before submitting.');
-            return;
+            return progress;
         }
-        */
 
-        // Gather all form data
-        const formData = new FormData(this);
-        const assessmentData = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            ratings: {},
-            date: new Date().toLocaleDateString()
-        };
-
-        // Collect all skill ratings, regardless of interaction
+        // Handle slider changes
         document.querySelectorAll('.skill-range').forEach(range => {
-            assessmentData.ratings[range.name] = range.value;
+            range.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                const formGroup = this.closest('.form-group');
+                const valueDisplay = formGroup.querySelector('.skill-value');
+                
+                // Track that this field has been interacted with
+                interactedFields.add(this.name);
+                
+                // Update value display
+                valueDisplay.textContent = value;
+                
+                // Update value color class
+                valueDisplay.className = 'skill-value ' + 
+                    (value <= 3 ? 'low' : 
+                    value <= 7 ? 'medium' : 'high');
+                
+                // Add animation
+                valueDisplay.classList.add('value-changed');
+                setTimeout(() => {
+                    valueDisplay.classList.remove('value-changed');
+                }, 300);
+
+                // Update progress
+                updateProgress();
+            });
         });
 
-        // Store in localStorage
-        localStorage.setItem('skillAssessment', JSON.stringify(assessmentData));
-
-        // Create URL parameters for all the data
-        const params = new URLSearchParams();
-        params.append('name', assessmentData.name);
-        params.append('email', assessmentData.email);
-        
-        // Add all ratings to URL parameters
-        Object.entries(assessmentData.ratings).forEach(([key, value]) => {
-            params.append(key, value);
+        // Initialize floating labels
+        document.querySelectorAll('.input-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
         });
 
-        // Redirect to success page with parameters
-        window.location.href = `/success?${params.toString()}`;
-    });
-</script>    
+        // Scale point interaction
+        document.querySelectorAll('.scale-point').forEach(point => {
+            point.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                // Optional: Set all sliders to this value
+                // document.querySelectorAll('.skill-range').forEach(range => {
+                //     range.value = value;
+                //     range.dispatchEvent(new Event('input'));
+                // });
+            });
+        });
+
+        // Handle form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            // Optional: Check if at least one skill has been rated
+            // If you want to ensure at least one slider is interacted with
+            // Uncomment the following lines:
+            /*
+            const progress = updateProgress();
+            if (progress === 0) {
+                alert('Please rate at least one skill before submitting.');
+                return;
+            }
+            */
+
+            // Gather all form data
+            const formData = new FormData(this);
+            const assessmentData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                ratings: {},
+                date: new Date().toLocaleDateString()
+            };
+
+            // Collect all skill ratings, regardless of interaction
+            document.querySelectorAll('.skill-range').forEach(range => {
+                assessmentData.ratings[range.name] = range.value;
+            });
+
+            // Store in localStorage
+            localStorage.setItem('skillAssessment', JSON.stringify(assessmentData));
+
+            // Create URL parameters for all the data
+            const params = new URLSearchParams();
+            params.append('name', assessmentData.name);
+            params.append('email', assessmentData.email);
+            
+            // Add all ratings to URL parameters
+            Object.entries(assessmentData.ratings).forEach(([key, value]) => {
+                params.append(key, value);
+            });
+
+            // Redirect to success page with parameters
+            window.location.href = `/success?${params.toString()}`;
+        });
+    </script>    
 </body>
 </html>

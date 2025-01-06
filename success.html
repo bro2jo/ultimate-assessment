@@ -545,7 +545,7 @@
                         <p class="text-muted">High game IQ</p>
                     </div>
                 </div>
-                <div class="achievement-card achievement-locked" id="cutting_movement_master" role="listitem">
+                <div class="achievement-card achievement-locked" id="movementMaster" role="listitem">
                     <div class="achievement-icon" style="background: linear-gradient(135deg, #22c55e, #059669);" aria-hidden="true">
                         <i class="fas fa-running"></i>
                     </div>
@@ -554,7 +554,7 @@
                         <p class="text-muted">Exceptional cutting skills</p>
                     </div>
                 </div>
-                <div class="achievement-card achievement-locked" id="defense_master" role="listitem">
+                <div class="achievement-card achievement-locked" id="defenseMaster" role="listitem">
                     <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);" aria-hidden="true">
                         <i class="fas fa-shield-alt"></i>
                     </div>
@@ -654,7 +654,18 @@
     <script>
         // Configuration Constants
         const SKILL_CATEGORIES = {
-            'Cutting & Movement': ['downfield_cutting', 'handler_cutting'],
+            'Cutting & Movement': [
+                'isolation_cutting',
+                'continuation_cutting',
+                'angles',
+                'fakes_footwork',
+                'timing_field_vision',
+                'decisiveness',
+                'catching',
+                'zone_offense',
+                'reading_the_disc',
+                'handler_cutting'
+            ],
             'Throwing Skills': ['throwing', 'disc_moves'],
             'Defense': ['marking', 'downfield_defense', 'handler_defense'],
             'Fitness & Athleticism': [
@@ -682,9 +693,30 @@
 
         const ACHIEVEMENT_THRESHOLDS = {
             masterHandler: { skill: 'throwing', threshold: 8 },
-            speedDemon: { skill: 'downfield_cutting', threshold: 8 },
+            speedDemon: { skills: [
+                'isolation_cutting',
+                'continuation_cutting',
+                'angles',
+                'fakes_footwork',
+                'timing_field_vision',
+                'decisiveness',
+                'catching',
+                'zone_offense',
+                'reading_the_disc'
+            ], threshold: 8 }, // Updated to multiple skills
             strategist: { skill: 'mental_game', threshold: 8 },
-            athleticExcellence: { category: 'Fitness & Athleticism', threshold: 8 }
+            athleticExcellence: { category: 'Fitness & Athleticism', threshold: 8 },
+            movementMaster: { skills: [
+                'isolation_cutting',
+                'continuation_cutting',
+                'angles',
+                'fakes_footwork',
+                'timing_field_vision',
+                'decisiveness',
+                'catching',
+                'zone_offense',
+                'reading_the_disc'
+            ], threshold: 9 } // New achievement based on detailed cutting skills
             // (Optional) Add new achievement thresholds here if needed
             // e.g., feedbackImplementation: { skill: 'feedback_implementation', threshold: 8 }
         };
@@ -941,10 +973,14 @@
             }
 
             static updateAchievements(ratings) {
-                Object.entries(ACHIEVEMENT_THRESHOLDS).forEach(([id, { skill, category, threshold }]) => {
+                Object.entries(ACHIEVEMENT_THRESHOLDS).forEach(([id, { skill, skills, category, threshold }]) => {
                     if (skill) {
                         // Achievement based on individual skill
                         DOMHelper.toggleClass(id, 'achievement-locked', ratings[skill] < threshold);
+                    } else if (skills) {
+                        // Achievement based on multiple skills
+                        const hasAllSkills = skills.every(skill => ratings[skill] >= threshold);
+                        DOMHelper.toggleClass(id, 'achievement-locked', !hasAllSkills);
                     } else if (category) {
                         // Achievement based on category average
                         const categorySkills = SKILL_CATEGORIES[category];
@@ -1128,6 +1164,7 @@
                 return points.map(point => `<li>${point}</li>`).join('');
             }
         }
+
         class ChartManager {
             static detailedSkills = {};  // Add static class property to store skills data
 
