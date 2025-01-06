@@ -46,7 +46,11 @@
             justify-content: center;
             padding: var(--spacing-md);
         }
-
+        /* Canvas Element */
+        #radarChart {
+            width: 100% !important;
+            height: auto !important;
+        }
         /* Success Page Styles */
         .success-container {
             max-width: 800px;
@@ -605,7 +609,12 @@
                     <span>Maximum Rating: 100</span>
                 </div>
             </div>
-            <div id="radarChart" class="w-full h-96 bg-[#2d2d2d] rounded-xl p-6 mb-8"></div>
+
+            <!-- Canvas Container for Responsive Chart -->
+            <div class="chart-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+
             <div class="achievements-grid">
                 <!-- Original achievements -->
                 <div class="achievement-card" id="masterHandler">
@@ -1326,108 +1335,106 @@
                 alert('There was an error generating your PDF. Please try again.');
             }
         }
-        // Radar Chart Implementation
-        function initializeRadarChart() {
-            const { RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip, ResponsiveContainer } = Recharts;
 
-            // Use your existing SKILL_CATEGORIES and ratings from AssessmentDataManager
+        // Chart.js Radar Chart Implementation
+        function initializeRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
             const assessmentData = AssessmentDataManager.getAssessmentData();
             if (!assessmentData) return;
 
-            function calculateCategoryScores() {
-                return Object.entries(SKILL_CATEGORIES).map(([category, skills]) => {
-                    const validSkills = skills.filter(skill => assessmentData.ratings[skill]);
-                    const average = validSkills.length > 0
-                        ? validSkills.reduce((sum, skill) => sum + assessmentData.ratings[skill], 0) / validSkills.length
-                        : 0;
-                    
-                    return {
-                        category,
-                        score: average * 10,
-                        skills: validSkills.map(skill => ({
-                            name: utils.formatSkillName(skill),
-                            value: assessmentData.ratings[skill]
-                        }))
-                    };
-                });
-            }
+            // Prepare data for Chart.js
+            const labels = Object.keys(SKILL_CATEGORIES);
+            const dataPoints = Object.keys(SKILL_CATEGORIES).map(category => {
+                const skills = SKILL_CATEGORIES[category];
+                const validSkills = skills.filter(skill => assessmentData.ratings[skill]);
+                const average = validSkills.length > 0
+                    ? validSkills.reduce((sum, skill) => sum + assessmentData.ratings[skill], 0) / validSkills.length
+                    : 0;
+                return average * 10; // Scaling to match your original calculation
+            });
 
-            const CustomTooltip = ({ active, payload }) => {
-                if (!active || !payload || !payload[0]) return null;
-                
-                const data = payload[0].payload;
-                return React.createElement('div', {
-                    className: 'bg-[#1f1f1f] p-4 rounded-lg border border-[#3f3f3f] shadow-lg'
-                }, [
-                    React.createElement('p', {
-                        className: 'text-[#ff9123] font-semibold mb-2',
-                        key: 'category'
-                    }, data.category),
-                    React.createElement('p', {
-                        className: 'text-white mb-2',
-                        key: 'average'
-                    }, `Average: ${(data.score / 10).toFixed(1)}/10`),
-                    React.createElement('div', {
-                        className: 'space-y-1',
-                        key: 'skills'
-                    }, data.skills.map((skill, index) => 
-                        React.createElement('p', {
-                            className: 'text-[#e5e5e5] text-sm',
-                            key: index
-                        }, `${skill.name}: ${skill.value}/10`)
-                    ))
-                ]);
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Skill Ratings',
+                    data: dataPoints,
+                    backgroundColor: 'rgba(122, 31, 191, 0.2)',
+                    borderColor: 'rgba(255, 145, 35, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(255, 145, 35, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(255, 145, 35, 1)'
+                }]
             };
 
-            const data = calculateCategoryScores();
-            
-            const chart = React.createElement(ResponsiveContainer, {
-                width: '100%',
-                height: '100%'
-            }, [
-                React.createElement(RadarChart, {
-                    cx: '50%',
-                    cy: '50%',
-                    outerRadius: '80%',
-                    data: data
-                }, [
-                    React.createElement(PolarGrid, {
-                        stroke: 'rgba(255,255,255,0.1)',
-                        key: 'grid'
-                    }),
-                    React.createElement(PolarAngleAxis, {
-                        dataKey: 'category',
-                        tick: {
-                            fill: '#e5e5e5',
-                            fontSize: 12,
-                            dy: 4
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            backdropColor: 'rgba(0,0,0,0)', // Transparent backdrop for mobile
+                            color: '#e5e5e5',
+                            font: {
+                                size: 12
+                            }
                         },
-                        key: 'axis'
-                    }),
-                    React.createElement(Tooltip, {
-                        content: CustomTooltip,
-                        key: 'tooltip'
-                    }),
-                    React.createElement(Radar, {
-                        name: 'Skills',
-                        dataKey: 'score',
-                        stroke: 'rgba(255, 145, 35, 0.8)',
-                        fill: 'rgba(122, 31, 191, 0.2)',
-                        fillOpacity: 0.6,
-                        activeDot: { r: 4, fill: '#ff9123' },
-                        isAnimationActive: true,
-                        animationBegin: 0,
-                        animationDuration: 1200,
-                        animationEasing: 'ease-out',
-                        key: 'radar'
-                    })
-                ])
-            ]);
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        },
+                        pointLabels: {
+                            color: '#e5e5e5',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e5e5e5',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed.r || 0;
+                                return `${label}: ${value}/100`;
+                            }
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#ff9123',
+                        borderWidth: 1
+                    }
+                }
+            };
 
-            ReactDOM.render(chart, document.getElementById('radarChart'));
+            // Initialize Chart.js Radar Chart
+            new Chart(ctx, {
+                type: 'radar',
+                data: data,
+                options: options
+            });
         }
+
         // Event Listeners
-        window.addEventListener('load', populateResults);
+        window.addEventListener('load', () => {
+            populateResults();
+            initializeRadarChart();
+        });
         window.addEventListener('error', function(e) {
             if (e.message.includes('html2pdf') || e.message.includes('jsPDF')) {
                 console.error('PDF Generation Error:', e);
@@ -1442,10 +1449,6 @@
             meta.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.netlify.app https://cdnjs.cloudflare.com";
             document.head.appendChild(meta);
         }
-        window.addEventListener('load', () => {
-            populateResults();
-            initializeRadarChart();
-        });
     </script>
 </body>
 </html>
