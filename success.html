@@ -1918,8 +1918,255 @@
                 }
             }
         }
+        class ChartManager {
+            // ... ChartManager code ...
+        }
 
+        // Define the SkillAnalysis React component
+        const SkillAnalysis = ({ ratings = {} }) => {
+            // Validate input
+            if (!ratings || typeof ratings !== 'object') {
+                return React.createElement('div', { className: "bg-gray-900 border-gray-800 p-6 rounded-lg" },
+                    React.createElement('div', { className: "text-gray-400" }, "No skill data available")
+                );
+            }
 
+            // Helper function to get skill tier
+            const getSkillTier = (rating) => {
+                const numRating = Number(rating);
+                if (numRating >= 8) return 'high';
+                if (numRating >= 5) return 'mid';
+                return 'low';
+            };
+
+            // Process and sort skills
+            const processedSkills = Object.entries(ratings)
+                .filter(([, rating]) => rating !== null && rating !== undefined)
+                .map(([skill, rating]) => ({
+                    name: skill.replace(/_/g, ' ').split(' ').map(word => 
+                        word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join(' '),
+                    rating: Number(rating),
+                    tier: getSkillTier(rating)
+                }));
+
+            const skillsByTier = {
+                high: processedSkills.filter(s => s.tier === 'high').sort((a, b) => b.rating - a.rating),
+                mid: processedSkills.filter(s => s.tier === 'mid').sort((a, b) => b.rating - a.rating),
+                low: processedSkills.filter(s => s.tier === 'low').sort((a, b) => b.rating - a.rating)
+            };
+
+            // Component for individual skill bars
+            const SkillBar = ({ skill, highlight }) => {
+                const barClassMap = {
+                    high: 'bg-green-500',
+                    mid: 'bg-yellow-500',
+                    low: 'bg-red-500'
+                };
+
+                const iconMap = {
+                    high: React.createElement('svg', { 
+                        xmlns: "http://www.w3.org/2000/svg",
+                        width: "20",
+                        height: "20",
+                        viewBox: "0 0 24 24",
+                        fill: "none",
+                        stroke: "currentColor",
+                        strokeWidth: "2",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        className: "text-green-500"
+                    }, React.createElement('polyline', { points: "23 6 13.5 15.5 8.5 10.5 1 18" })),
+                    mid: React.createElement('svg', {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        width: "20",
+                        height: "20",
+                        viewBox: "0 0 24 24",
+                        fill: "none",
+                        stroke: "currentColor",
+                        strokeWidth: "2",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        className: "text-yellow-500"
+                    }, React.createElement('line', { x1: "5", y1: "12", x2: "19", y2: "12" })),
+                    low: React.createElement('svg', {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        width: "20",
+                        height: "20",
+                        viewBox: "0 0 24 24",
+                        fill: "none",
+                        stroke: "currentColor",
+                        strokeWidth: "2",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        className: "text-red-500"
+                    }, React.createElement('polyline', { points: "23 18 13.5 8.5 8.5 13.5 1 6" }))
+                };
+
+                return React.createElement('div', {
+                    className: `flex items-center justify-between p-3 rounded-lg transition-all ${
+                        highlight ? 'bg-orange-500/10' : 'hover:bg-white/5'
+                    }`
+                }, [
+                    React.createElement('div', { className: "flex items-center gap-3", key: "left" }, [
+                        iconMap[skill.tier],
+                        React.createElement('span', { className: "text-gray-200" }, skill.name)
+                    ]),
+                    React.createElement('div', { className: "flex items-center gap-4", key: "right" }, [
+                        React.createElement('div', { className: "w-32 bg-gray-700 rounded-full h-2 overflow-hidden" },
+                            React.createElement('div', {
+                                className: `h-full rounded-full ${barClassMap[skill.tier]}`,
+                                style: { width: `${skill.rating * 10}%` }
+                            })
+                        ),
+                        React.createElement('span', { className: "text-gray-300 font-medium w-12 text-right" },
+                            `${skill.rating}/10`
+                        )
+                    ])
+                ]);
+            };
+
+            // Component for skill section
+            const SkillSection = ({ title, skills, icon, description }) => {
+                if (!skills || skills.length === 0) return null;
+
+                const InfoIcon = () => React.createElement('svg', {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    width: "16",
+                    height: "16",
+                    viewBox: "0 0 24 24",
+                    fill: "none",
+                    stroke: "currentColor",
+                    strokeWidth: "2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    className: "text-gray-400 cursor-help"
+                }, [
+                    React.createElement('circle', { cx: "12", cy: "12", r: "10", key: "circle" }),
+                    React.createElement('line', { x1: "12", y1: "16", x2: "12", y2: "12", key: "line1" }),
+                    React.createElement('line', { x1: "12", y1: "8", x2: "12.01", y2: "8", key: "line2" })
+                ]);
+
+                return React.createElement('div', { className: "mb-8" }, [
+                    React.createElement('div', { className: "flex items-center gap-2 mb-4", key: "header" }, [
+                        icon,
+                        React.createElement('h3', { className: "text-xl font-semibold text-gray-200" }, title),
+                        React.createElement('div', { className: "group relative ml-2" }, [
+                            React.createElement(InfoIcon),
+                            React.createElement('div', {
+                                className: "absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-2 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity invisible group-hover:visible text-sm text-gray-300"
+                            }, description)
+                        ])
+                    ]),
+                    React.createElement('div', { className: "space-y-2", key: "skills" },
+                        skills.map((skill, idx) => 
+                            React.createElement(SkillBar, { 
+                                key: skill.name,
+                                skill: skill,
+                                highlight: idx === 0
+                            })
+                        )
+                    )
+                ]);
+            };
+
+            return React.createElement('div', { className: "bg-gray-900 border-gray-800 rounded-lg" },
+                React.createElement('div', { className: "p-6" }, [
+                    React.createElement('div', { className: "mb-6", key: "header" }, [
+                        React.createElement('h2', { className: "text-2xl font-bold text-gray-100 mb-2" },
+                            "Skill Analysis"
+                        ),
+                        React.createElement('p', { className: "text-gray-400" },
+                            "Detailed breakdown of your Ultimate skills by proficiency level"
+                        )
+                    ]),
+                    
+                    skillsByTier.high.length > 0 && React.createElement(SkillSection, {
+                        key: "high",
+                        title: "Master Skills",
+                        skills: skillsByTier.high,
+                        icon: React.createElement('svg', {
+                            xmlns: "http://www.w3.org/2000/svg",
+                            width: "24",
+                            height: "24",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            stroke: "currentColor",
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            className: "text-green-500"
+                        }, React.createElement('polyline', { points: "23 6 13.5 15.5 8.5 10.5 1 18" })),
+                        description: "Skills rated 8-10: These are your standout abilities that set you apart"
+                    }),
+
+                    skillsByTier.mid.length > 0 && React.createElement(SkillSection, {
+                        key: "mid",
+                        title: "Developing Skills",
+                        skills: skillsByTier.mid,
+                        icon: React.createElement('svg', {
+                            xmlns: "http://www.w3.org/2000/svg",
+                            width: "24",
+                            height: "24",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            stroke: "currentColor",
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            className: "text-yellow-500"
+                        }, React.createElement('line', { x1: "5", y1: "12", x2: "19", y2: "12" })),
+                        description: "Skills rated 5-7: Solid foundation with room for improvement"
+                    }),
+
+                    skillsByTier.low.length > 0 && React.createElement(SkillSection, {
+                        key: "low",
+                        title: "Growth Opportunities",
+                        skills: skillsByTier.low,
+                        icon: React.createElement('svg', {
+                            xmlns: "http://www.w3.org/2000/svg",
+                            width: "24",
+                            height: "24",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            stroke: "currentColor",
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            className: "text-red-500"
+                        }, React.createElement('polyline', { points: "23 18 13.5 8.5 8.5 13.5 1 6" })),
+                        description: "Skills rated 1-4: Areas to focus on for significant improvement"
+                    }),
+
+                    processedSkills.length > 0 && React.createElement('div', {
+                        key: "protip",
+                        className: "mt-6 p-4 bg-gray-800/50 rounded-lg"
+                    }, React.createElement('div', { className: "flex items-start gap-3" }, [
+                        React.createElement('svg', {
+                            key: "icon",
+                            xmlns: "http://www.w3.org/2000/svg",
+                            width: "20",
+                            height: "20",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            stroke: "currentColor",
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            className: "text-orange-500 mt-1"
+                        }, React.createElement('polyline', { points: "9 18 15 12 9 6" })),
+                        React.createElement('div', { key: "content" }, [
+                            React.createElement('h4', { className: "text-gray-200 font-medium mb-1" },
+                                "Pro Tip"
+                            ),
+                            React.createElement('p', { className: "text-gray-400 text-sm" },
+                                "Focus on mastering 1-2 skills from your \"Developing Skills\" category while maintaining your strengths. This balanced approach leads to the most effective improvement."
+                            )
+                        ])
+                    ]))
+                ])
+            );
+        };
         // Initialize application
         window.addEventListener('load', () => {
             UIManager.init();
