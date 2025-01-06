@@ -354,11 +354,24 @@
         }
         /* Level Card Styles */
         .level-card {
-            background: linear-gradient(135deg, #7a1fbf, #4f46e5);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             border-radius: var(--border-radius);
             padding: 24px;
             margin-bottom: var(--spacing-lg);
             color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
         }
 
         .level-header {
@@ -371,24 +384,41 @@
         .level-info h2 {
             font-size: 32px;
             margin-bottom: 8px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        #levelTitle {
+            font-size: 16px;
+            opacity: 0.9;
         }
 
         .level-icon {
             font-size: 48px;
             color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .level-icon:hover {
+            transform: scale(1.1);
         }
 
         .progress-track {
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
+            border-radius: 6px;
             height: 8px;
             overflow: hidden;
+            margin: 8px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .progress-fill {
             height: 100%;
             background: rgba(255, 255, 255, 0.9);
-            transition: width 0.3s ease;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .progress-labels {
@@ -397,6 +427,10 @@
             margin-top: 8px;
             font-size: 14px;
             color: rgba(255, 255, 255, 0.8);
+        }
+
+        #progressPercent::after {
+            content: ' / 100';
         }
 
         /* Achievement Cards */
@@ -554,19 +588,19 @@
             <div class="level-card">
                 <div class="level-header">
                     <div class="level-info">
-                        <h2>Level <span id="playerLevel">5</span></h2>
-                        <p>Ultimate Skills Master</p>
+                        <h2>Level <span id="playerLevel">Beginner</span></h2>
+                        <p id="levelTitle">Starting Your Ultimate Journey</p>
                     </div>
-                    <div class="level-icon">
-                        <i class="fas fa-star"></i>
+                    <div class="level-icon" id="levelIcon">
+                        <i class="fas fa-seedling"></i>
                     </div>
                 </div>
                 <div class="progress-track">
                     <div class="progress-fill" id="levelProgress"></div>
                 </div>
                 <div class="progress-labels">
-                    <span id="progressPercent">0%</span>
-                    <span>Next Level</span>
+                    <span id="progressPercent">0</span>
+                    <span id="nextMilestone">Next Level</span>
                 </div>
             </div>
         
@@ -755,7 +789,39 @@
             'Strategy & Game IQ': ['defensive_strategy', 'offensive_strategy', 'mental_game'],
             'Physical': ['fitness']
         };
-
+        // Level System Configuration
+        const LEVEL_CONFIG = {
+            0: {
+                title: 'Beginner',
+                description: 'Starting Your Ultimate Journey',
+                icon: 'seedling'
+            },
+            20: {
+                title: 'Developing',
+                description: 'Building Fundamental Skills',
+                icon: 'child'
+            },
+            40: {
+                title: 'Intermediate',
+                description: 'Refining Your Game',
+                icon: 'running'
+            },
+            60: {
+                title: 'Advanced',
+                description: 'Mastering Complex Skills',
+                icon: 'star'
+            },
+            80: {
+                title: 'Elite',
+                description: 'Exceptional Performance',
+                icon: 'crown'
+            },
+            95: {
+                title: 'Master',
+                description: 'Ultimate Skills Master',
+                icon: 'trophy'
+            }
+        };
         // Utility Functions
         const utils = {
             isValidSkill: (skill) => {
@@ -937,15 +1003,56 @@
 
         // Main Functions
         function calculateLevel(ratings) {
-            const avgRating = Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length;
-            return Math.floor(avgRating);
+            // Convert ratings to 100-point scale
+            const values = Object.values(ratings);
+            const avgRating = (values.reduce((a, b) => a + b, 0) / values.length) * 10;
+            
+            // Find the appropriate level based on the rating
+            const levels = Object.keys(LEVEL_CONFIG).map(Number).sort((a, b) => a - b);
+            const currentLevel = levels.reduce((acc, level) => {
+                if (avgRating >= level) return level;
+                return acc;
+            }, 0);
+
+            // Calculate progress to next level
+            const nextLevel = levels.find(level => level > currentLevel) || 100;
+            const progress = Math.min(100, Math.max(0, avgRating));
+            
+            return {
+                currentLevel,
+                nextLevel,
+                progress: Math.round(progress),
+                config: LEVEL_CONFIG[currentLevel]
+            };
         }
 
         function calculateProgress(ratings) {
             const avgRating = Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length;
             return ((avgRating % 1) * 100).toFixed(0);
         }
-
+        function updateLevelUI(ratings) {
+            const levelData = calculateLevel(ratings);
+            
+            // Update level display
+            document.getElementById('playerLevel').textContent = levelData.config.title;
+            document.getElementById('levelTitle').textContent = levelData.config.description;
+            
+            // Update progress
+            document.getElementById('levelProgress').style.width = `${levelData.progress}%`;
+            document.getElementById('progressPercent').textContent = levelData.progress;
+            
+            // Update icon
+            const levelIcon = document.getElementById('levelIcon');
+            levelIcon.innerHTML = `<i class="fas fa-${levelData.config.icon}"></i>`;
+            
+            // Update next milestone text
+            const nextLevelConfig = LEVEL_CONFIG[levelData.nextLevel];
+            if (nextLevelConfig) {
+                document.getElementById('nextMilestone').textContent = `Next: ${nextLevelConfig.title}`;
+            } else {
+                document.getElementById('nextMilestone').textContent = 'Mastery Achieved';
+            }
+        }
         function updateAchievements(ratings) {
             // Original achievements checks
             const masterHandler = document.getElementById('masterHandler');
@@ -1038,7 +1145,6 @@
             document.getElementById('maintainTitle').textContent = `Maintain ${utils.formatSkillName(highestSkill.name)}`;
         }
 
-        // Modify the existing populateResults function by adding these lines after the original content:
         const originalPopulateResults = populateResults;
         populateResults = function() {
             const assessmentData = AssessmentDataManager.getAssessmentData();
@@ -1051,6 +1157,7 @@
             originalPopulateResults();
 
             // Update new UI elements
+            updateLevelUI(assessmentData.ratings);
             const level = calculateLevel(assessmentData.ratings);
             const progress = calculateProgress(assessmentData.ratings);
 
