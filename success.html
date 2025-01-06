@@ -433,6 +433,10 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        #progressPercent {
+            text-align: right;
+        }
+
         #progressPercent::after {
             content: ' / 100';
         }
@@ -470,6 +474,7 @@
         }
 
         .achievement-locked {
+            display: none;  /* This will completely hide locked achievements */
             opacity: 0.5;
             filter: grayscale(1);
         }
@@ -622,6 +627,7 @@
                     <div class="progress-fill" id="levelProgress"></div>
                 </div>
                 <div class="progress-labels">
+                    <span></span>  <!-- Empty span to maintain flex spacing -->
                     <span id="progressPercent" aria-live="polite">0</span>
                 </div>
             </div>
@@ -1087,30 +1093,6 @@
                     lowestSkills.length === 1 ? Utils.formatSkillName(lowestSkills[0].name)
                     : `${lowestSkills.length} Skills Tied`);
                 DOMHelper.setContent('focusSkillRating', `${lowestValue}/10`);
-
-                this.updateDevelopmentPath(highestSkills, lowestSkills);
-            }
-
-            static updateDevelopmentPath(highestSkills, lowestSkills) {
-                DOMHelper.setContent('focusAreaTitle',
-                    lowestSkills.length === 1 
-                        ? `Focus on ${Utils.formatSkillName(lowestSkills[0].name)}`
-                        : 'Focus on Lowest Rated Skills');
-                
-                DOMHelper.setContent('focusAreaDesc',
-                    lowestSkills.length === 1
-                        ? 'Specific drills and exercises for improvement'
-                        : `Work on: ${lowestSkills.map(s => Utils.formatSkillName(s.name)).join(', ')}`);
-
-                DOMHelper.setContent('maintainTitle',
-                    highestSkills.length === 1
-                        ? `Maintain ${Utils.formatSkillName(highestSkills[0].name)}`
-                        : 'Maintain Top Skills');
-                
-                DOMHelper.setContent('maintainDesc',
-                    highestSkills.length === 1
-                        ? 'Continue practicing your best skill'
-                        : `Keep practicing: ${highestSkills.map(s => Utils.formatSkillName(s.name)).join(', ')}`);
             }
 
             static updateLevel(ratings) {
