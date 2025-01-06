@@ -263,8 +263,82 @@
 <body>
     <!-- Success Container -->
     <div class="success-container">
-        <!-- Your existing HTML content here... -->
-        [Your existing HTML content from the original file]
+        <div class="success-header">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h1>Assessment Submitted Successfully!</h1>
+            <p class="subtitle">Thank you for completing your Ultimate skills self-assessment.</p>
+        </div>
+
+        <div class="next-steps">
+            <h2><i class="fas fa-forward"></i> Next Steps</h2>
+            <ul class="steps-list">
+                <li>
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>Schedule your next assessment in 3 months to track your progress. Regular assessments help monitor improvement.</div>
+                </li>
+                <li>
+                    <i class="fas fa-bullseye"></i>
+                    <div>Focus on skills you rated lower and create specific drills or exercises to improve them.</div>
+                </li>
+                <li>
+                    <i class="fas fa-users"></i>
+                    <div>Share your goals with teammates or coaches to get support and guidance in your development.</div>
+                </li>
+            </ul>
+        </div>
+        <div class="assessment-results">
+            <div class="results-summary" id="resultsSummary">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </div>
+        <div class="reminder-box">
+            <i class="fas fa-bell reminder-icon"></i>
+            <div class="reminder-text">
+                <strong>Pro Tip:</strong> Take photos or videos of your practice sessions. They're great for tracking progress and getting feedback from experienced players.
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/" class="button">
+                <i class="fas fa-redo"></i>
+                Take Another Assessment
+            </a>
+            <button onclick="saveResults()" class="button outline">
+                <i class="fas fa-download"></i>
+                Save Results as PDF
+            </button>
+        </div>
+    </div>
+    <!-- Add this template div to your success.html -->
+    <div class="pdf-template" id="pdfTemplate">
+        <div class="pdf-header">
+            <h1>Ultimate Skills Assessment Report</h1>
+            <div class="assessment-date" id="pdfDate"></div>
+        </div>
+
+        <div class="pdf-meta">
+            <div class="pdf-meta-item">
+                <strong>Player Name:</strong>
+                <span id="pdfName"></span>
+            </div>
+            <div class="pdf-meta-item">
+                <strong>Assessment Date:</strong>
+                <span id="pdfAssessmentDate"></span>
+            </div>
+        </div>
+
+        <div id="pdfSkillSections">
+            <!-- Skill sections will be populated by JavaScript -->
+        </div>
+
+        <div class="pdf-summary">
+            <h3>Assessment Summary</h3>
+            <ul id="pdfSummaryPoints">
+                <!-- Summary points will be populated by JavaScript -->
+            </ul>
+        </div>
     </div>
 
     <!-- PDF Template -->
