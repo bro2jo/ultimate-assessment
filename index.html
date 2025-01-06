@@ -22,7 +22,8 @@
             --text-primary: #ffffff;
             --text-secondary: #e5e5e5;
             --text-muted: #999999;
-            --success-color: #00C851;
+            --success-color: #66cc66;
+            --Elite-color: #bb66ff;
             --warning-color: #ffbb33;
             --danger-color: #ff4444;
         }
@@ -227,6 +228,7 @@
         .skill-value.low { color: var(--danger-color); }
         .skill-value.medium { color: var(--warning-color); }
         .skill-value.high { color: var(--success-color); }
+        .skill-value.Elite { color: var(--Elite-color); }
 
         .skill-slider {
             position: relative;
@@ -398,27 +400,12 @@
         
         <div class="intro-card">
             <h2><i class="fas fa-info-circle"></i> About This Assessment</h2>
-            <p>Welcome to your personal Ultimate skills assessment! This tool is designed to help you reflect on your current abilities and identify areas for growth. Remember:</p>
+            <p>Welcome to your personal Ultimate skills assessment! This tool is designed to help you reflect on your current abilities and identify areas for growth.</p>
             <ul>
-                <li>This is <strong>your personal assessment</strong> - rankings are subjective and based on your experiences</li>
+                <li>This is your personal assessment, rankings are subjective and based on your experiences</li>
                 <li>Use this as a tool to identify both strengths and areas for improvement</li>
                 <li>Consider revisiting this assessment every few months to track your progress</li>
             </ul>
-        </div>
-
-        <div class="scale-explanation">
-            <div class="scale-point" data-value="1">
-                <strong>1</strong>
-                <span>Bad</span>
-            </div>
-            <div class="scale-point" data-value="5">
-                <strong>5</strong>
-                <span>Neutral</span>
-            </div>
-            <div class="scale-point" data-value="10">
-                <strong>10</strong>
-                <span>Great</span>
-            </div>
         </div>
 
         <form name="ultimate-assessment" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success">
@@ -457,8 +444,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="speed_explosiveness" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -476,8 +463,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="endurance" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -495,8 +482,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="vertical_leap" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -514,8 +501,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="change_of_direction" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -533,8 +520,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="boxing_out" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -552,8 +539,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="laying_out" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -571,8 +558,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="recovery" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -590,8 +577,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="flexibility_mobility" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -609,8 +596,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="injury_prevention" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -634,8 +621,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="defensive_strategy" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -653,8 +640,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="offensive_strategy" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -672,8 +659,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="mental_game" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -691,8 +678,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="feedback_implementation" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -717,8 +704,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="isolation_cutting" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -736,8 +723,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="continuation_cutting" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -755,8 +742,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="angles" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -774,8 +761,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="fakes_footwork" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -793,8 +780,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="timing_field_vision" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -812,8 +799,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="decisiveness" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -831,8 +818,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="catching" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -850,8 +837,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="zone_offense" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -869,8 +856,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="reading_the_disc" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -894,8 +881,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="normal_marking" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -913,8 +900,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="sideline_trap_marking" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -932,8 +919,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="downfield_defending" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -951,8 +938,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="handler_defending" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -970,8 +957,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="defensive_pattern_recognition" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -989,8 +976,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="help_defense" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1008,8 +995,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="switching_on_defense" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1027,8 +1014,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="zone_defense" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1046,8 +1033,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="defensive_mental_fortitude" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1071,8 +1058,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="handler_movement" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1090,8 +1077,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="poise_with_disc" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1109,8 +1096,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="breaking_the_mark" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1128,8 +1115,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="resetting_from_trap_sideline" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1147,8 +1134,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="decision_making_vision" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1166,8 +1153,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="flow_awareness" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1185,8 +1172,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="throw_and_go" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1204,8 +1191,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="offensive_pattern_recognition" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1227,8 +1214,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_power" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1245,8 +1232,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_accuracy" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1263,8 +1250,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_quick_release" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1281,8 +1268,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_release_variations" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1299,8 +1286,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_against_wind" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1317,8 +1304,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_against_difficult_marks" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1335,8 +1322,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="backhand_tempo_control" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1354,8 +1341,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_power" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1372,8 +1359,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_accuracy" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1390,8 +1377,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_quick_release" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1408,8 +1395,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_release_variations" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1426,8 +1413,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_against_wind" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1444,8 +1431,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_against_difficult_marks" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1462,8 +1449,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="forehand_tempo_control" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1481,8 +1468,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_power" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1499,8 +1486,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_accuracy" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1517,8 +1504,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_quick_release" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1535,8 +1522,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_release_variations" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1553,8 +1540,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_against_wind" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1571,8 +1558,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_against_difficult_marks" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1589,8 +1576,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="specialty_tempo_control" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1610,8 +1597,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="hucking_confidence" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1628,8 +1615,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="hucking_shape_control" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1646,8 +1633,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="hucking_tempo_control" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1664,8 +1651,8 @@
                 <div class="skill-slider">
                     <input type="range" min="1" max="10" value="5" name="hucking_placement" class="skill-range">
                     <div class="rating-labels">
-                        <span>Bad</span>
-                        <span>Great</span>
+                        <span>Poor</span>
+                        <span>Elite</span>
                     </div>
                 </div>
                 <div class="skill-description">
@@ -1712,10 +1699,10 @@
                 // Update value display
                 valueDisplay.textContent = value;
                 
-                // Update value color class
                 valueDisplay.className = 'skill-value ' + 
                     (value <= 3 ? 'low' : 
-                    value <= 7 ? 'medium' : 'high');
+                    value <= 6 ? 'medium' : 
+                    value <= 8 ? 'high' : 'Elite');
                 
                 // Add animation
                 valueDisplay.classList.add('value-changed');

@@ -144,7 +144,12 @@
             margin-bottom: var(--spacing-sm);
             font-size: 16px;
         }
-
+        /* Sub-Category Styles */
+        .results-group.sub-category {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 16px;
+            margin-bottom: 20px;
+        }
         .skill-result {
             display: flex;
             justify-content: space-between;
@@ -453,6 +458,156 @@
             transform: translate(-50%, 0);
             z-index: 1000;
         }
+        .sub-category {
+            margin-top: 30px;
+        }
+
+        .sub-category-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Tooltip Styles */
+        .sub-category-title .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--background-dark);
+            color: var(--text-secondary);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%; /* Position above the title */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .sub-category-title:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Average Rating Display */
+        .average-rating {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .average-rating span {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-left: 5px;
+        }
+
+        /* Optional: Highlight Sub-Categories on Hover */
+        .sub-category-title:hover {
+            color: var(--primary-color);
+        }
+        /* PDF Template Styles */
+        .pdf-template {
+            font-family: Arial, sans-serif;
+            color: #333;
+            padding: 20px;
+        }
+
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pdf-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .pdf-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .pdf-meta-item {
+            font-size: 14px;
+        }
+
+        .pdf-section {
+            margin-bottom: 20px;
+        }
+
+        .pdf-section h2 {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pdf-average-rating {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .pdf-skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .pdf-skill-name {
+            font-size: 14px;
+        }
+
+        .pdf-rating-value {
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .pdf-rating-bar {
+            width: 100px;
+            height: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .pdf-rating-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .pdf-summary {
+            margin-top: 30px;
+        }
+
+        .pdf-summary h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-summary ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .pdf-summary li {
+            margin-bottom: 5px;
+        }
+
     </style>
 </head>
 <body>
@@ -686,37 +841,41 @@
                 'throw_and_go',
                 'offensive_pattern_recognition'
             ],
-            'Throwing Skills': [ // Updated Throwing Skills
-                // Backhand Skills
-                'backhand_power',
-                'backhand_accuracy',
-                'backhand_quick_release',
-                'backhand_release_variations',
-                'backhand_against_wind',
-                'backhand_against_difficult_marks',
-                'backhand_tempo_control',
-                // Forehand Skills
-                'forehand_power',
-                'forehand_accuracy',
-                'forehand_quick_release',
-                'forehand_release_variations',
-                'forehand_against_wind',
-                'forehand_against_difficult_marks',
-                'forehand_tempo_control',
-                // Specialty Skills
-                'specialty_power',
-                'specialty_accuracy',
-                'specialty_quick_release',
-                'specialty_release_variations',
-                'specialty_against_wind',
-                'specialty_against_difficult_marks',
-                'specialty_tempo_control',
-                // Hucking Skills
-                'hucking_confidence',
-                'hucking_shape_control',
-                'hucking_tempo_control',
-                'hucking_placement'
-            ],
+            'Throwing Skills': { // Changed from array to object for subcategories
+                'Backhand': [
+                    'backhand_power',
+                    'backhand_accuracy',
+                    'backhand_quick_release',
+                    'backhand_release_variations',
+                    'backhand_against_wind',
+                    'backhand_against_difficult_marks',
+                    'backhand_tempo_control'
+                ],
+                'Forehand': [
+                    'forehand_power',
+                    'forehand_accuracy',
+                    'forehand_quick_release',
+                    'forehand_release_variations',
+                    'forehand_against_wind',
+                    'forehand_against_difficult_marks',
+                    'forehand_tempo_control'
+                ],
+                'Specialty': [
+                    'specialty_power',
+                    'specialty_accuracy',
+                    'specialty_quick_release',
+                    'specialty_release_variations',
+                    'specialty_against_wind',
+                    'specialty_against_difficult_marks',
+                    'specialty_tempo_control'
+                ],
+                'Hucks': [
+                    'hucking_confidence',
+                    'hucking_shape_control',
+                    'hucking_tempo_control',
+                    'hucking_placement'
+                ]
+            },
             'Defending': [ // Renamed from 'Defense' to 'Defending' and updated skills
                 'normal_marking',
                 'sideline_trap_marking',
@@ -1001,16 +1160,32 @@
                     throw new AppError('Invalid assessment data structure', 'validation');
                 }
 
+                const flattenedRatings = {};
+
+                // Flatten ratings from nested categories if any
+                Object.entries(SKILL_CATEGORIES).forEach(([category, skillsOrSubcategories]) => {
+                    if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                        // Handle subcategories
+                        Object.values(skillsOrSubcategories).flat().forEach(skill => {
+                            if (data.ratings[skill]) {
+                                flattenedRatings[skill] = Utils.validateRating(data.ratings[skill]);
+                            }
+                        });
+                    } else {
+                        // Handle regular categories
+                        skillsOrSubcategories.forEach(skill => {
+                            if (data.ratings[skill]) {
+                                flattenedRatings[skill] = Utils.validateRating(data.ratings[skill]);
+                            }
+                        });
+                    }
+                });
+
                 return {
                     name: Utils.sanitizeInput(data.name) || 'Anonymous',
                     email: Utils.sanitizeInput(data.email) || '',
                     date: data.date || new Date().toLocaleDateString(),
-                    ratings: Object.entries(data.ratings || {})
-                        .filter(([key]) => Utils.isValidSkill(key))
-                        .reduce((acc, [key, value]) => {
-                            acc[key] = Utils.validateRating(value);
-                            return acc;
-                        }, {})
+                    ratings: flattenedRatings
                 };
             }
         }
@@ -1026,28 +1201,59 @@
                     improvementAreas: []
                 };
 
-                Object.entries(SKILL_CATEGORIES).forEach(([category, skills]) => {
-                    const validSkills = skills.filter(skill => ratings[skill]);
-                    if (!validSkills.length) return;
+                Object.entries(SKILL_CATEGORIES).forEach(([category, skillsOrSubcategories]) => {
+                    let categoryAvg = 0;
+                    let validSkills = [];
 
-                    const categoryAvg = Utils.calculateAverage(
-                        validSkills.map(skill => Number(ratings[skill]))
-                    );
+                    if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                        // Handle subcategories
+                        Object.entries(skillsOrSubcategories).forEach(([subCategory, skills]) => {
+                            const subCategoryRatings = skills.map(skill => Number(ratings[skill])).filter(r => !isNaN(r));
+                            const subCategoryAvg = Utils.calculateAverage(subCategoryRatings);
+                            
+                            if (subCategoryAvg > summary.strongestScore) {
+                                summary.strongestScore = subCategoryAvg;
+                                summary.strongestCategory = `${category} - ${subCategory}`;
+                            }
+                            if (subCategoryAvg < summary.weakestScore) {
+                                summary.weakestScore = subCategoryAvg;
+                                summary.weakestCategory = `${category} - ${subCategory}`;
+                            }
 
-                    if (categoryAvg > summary.strongestScore) {
-                        summary.strongestScore = categoryAvg;
-                        summary.strongestCategory = category;
+                            // Collect top skills and improvement areas
+                            skills.forEach(skill => {
+                                const rating = Number(ratings[skill]);
+                                if (rating >= 8) summary.topSkills.push({ name: skill, rating });
+                                if (rating <= 4) summary.improvementAreas.push({ name: skill, rating });
+                            });
+
+                            // Aggregate for overall category average if needed
+                            validSkills = validSkills.concat(subCategoryRatings);
+                        });
+
+                        categoryAvg = Utils.calculateAverage(validSkills);
+                    } else {
+                        // Handle regular categories
+                        const skills = skillsOrSubcategories;
+                        const skillRatings = skills.map(skill => Number(ratings[skill])).filter(r => !isNaN(r));
+                        categoryAvg = Utils.calculateAverage(skillRatings);
+
+                        if (categoryAvg > summary.strongestScore) {
+                            summary.strongestScore = categoryAvg;
+                            summary.strongestCategory = category;
+                        }
+                        if (categoryAvg < summary.weakestScore) {
+                            summary.weakestScore = categoryAvg;
+                            summary.weakestCategory = category;
+                        }
+
+                        // Collect top skills and improvement areas
+                        skills.forEach(skill => {
+                            const rating = Number(ratings[skill]);
+                            if (rating >= 8) summary.topSkills.push({ name: skill, rating });
+                            if (rating <= 4) summary.improvementAreas.push({ name: skill, rating });
+                        });
                     }
-                    if (categoryAvg < summary.weakestScore) {
-                        summary.weakestScore = categoryAvg;
-                        summary.weakestCategory = category;
-                    }
-
-                    validSkills.forEach(skill => {
-                        const rating = Number(ratings[skill]);
-                        if (rating >= 8) summary.topSkills.push({ name: skill, rating });
-                        if (rating <= 4) summary.improvementAreas.push({ name: skill, rating });
-                    });
                 });
 
                 return summary;
@@ -1114,7 +1320,18 @@
                     } else if (category) {
                         // Achievement based on category average
                         const categorySkills = SKILL_CATEGORIES[category];
-                        const validSkills = categorySkills.filter(skill => ratings[skill]);
+                        let validSkills = [];
+
+                        if (typeof categorySkills === 'object' && !Array.isArray(categorySkills)) {
+                            // Handle subcategories
+                            Object.values(categorySkills).forEach(subSkills => {
+                                validSkills = validSkills.concat(subSkills.filter(skill => ratings[skill]));
+                            });
+                        } else {
+                            // Handle regular categories
+                            validSkills = categorySkills.filter(skill => ratings[skill]);
+                        }
+
                         const categoryAvg = validSkills.length ? Utils.calculateAverage(validSkills.map(skill => ratings[skill])) : 0;
                         DOMHelper.toggleClass(id, 'achievement-locked', categoryAvg < threshold);
                     }
@@ -1161,39 +1378,80 @@
             }
 
             static updateResults(data) {
-                const resultsDiv = document.getElementById('resultsSummary');
+                let resultsDiv = document.getElementById('resultsSummary');
                 if (!resultsDiv) {
                     // If the element doesn't exist, create it within the assessment-results section
                     const assessmentResults = document.querySelector('.assessment-results');
-                    const newResultsDiv = document.createElement('div');
-                    newResultsDiv.id = 'resultsSummary';
-                    assessmentResults.appendChild(newResultsDiv);
+                    resultsDiv = document.createElement('div');
+                    resultsDiv.id = 'resultsSummary';
+                    assessmentResults.appendChild(resultsDiv);
                 }
 
                 const metaHtml = `
                     <div class="assessment-meta">
-                        <div>Name: ${data.name}</div>
-                        <div>Date: ${data.date}</div>
+                        <div>Name: ${Utils.sanitizeInput(data.name)}</div>
+                        <div>Date: ${Utils.sanitizeInput(data.date)}</div>
                     </div>
                 `;
 
                 const resultsHtml = Object.entries(SKILL_CATEGORIES)
-                    .map(([category, skills]) => {
-                        const categorySkills = skills
-                            .filter(skill => data.ratings[skill])
-                            .map(skill => `
-                                <div class="skill-result">
-                                    <span>${Utils.formatSkillName(skill)}</span>
-                                    <span class="rating">${data.ratings[skill]}/10</span>
-                                </div>
-                            `).join('');
+                    .map(([category, skillsOrSubcategories]) => {
+                        if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                            // Handle subcategories
+                            return Object.entries(skillsOrSubcategories)
+                                .map(([subCategory, skills]) => {
+                                    const subCategorySkills = skills
+                                        .filter(skill => data.ratings[skill])
+                                        .map(skill => ({
+                                            name: Utils.formatSkillName(skill),
+                                            rating: data.ratings[skill]
+                                        }));
 
-                        return categorySkills ? `
-                            <div class="results-group">
-                                <h3>${category}</h3>
-                                ${categorySkills}
-                            </div>
-                        ` : '';
+                                    const subCategoryAvg = Utils.calculateAverage(subCategorySkills.map(s => s.rating)).toFixed(1);
+
+                                    const skillsHtml = subCategorySkills
+                                        .map(skill => `
+                                            <div class="skill-result">
+                                                <span>${skill.name}</span>
+                                                <span class="rating">${skill.rating}/10</span>
+                                            </div>
+                                        `).join('');
+
+                                    return `
+                                        <div class="results-group sub-category">
+                                            <h3>${category} - ${subCategory}</h3>
+                                            <div class="average-rating">Average: <span>${subCategoryAvg}/10</span></div>
+                                            ${skillsHtml}
+                                        </div>
+                                    `;
+                                }).join('');
+                        } else {
+                            // Handle regular categories
+                            const categorySkills = skillsOrSubcategories
+                                .filter(skill => data.ratings[skill])
+                                .map(skill => ({
+                                    name: Utils.formatSkillName(skill),
+                                    rating: data.ratings[skill]
+                                }));
+
+                            const categoryAvg = Utils.calculateAverage(categorySkills.map(s => s.rating)).toFixed(1);
+
+                            const skillsHtml = categorySkills
+                                .map(skill => `
+                                    <div class="skill-result">
+                                        <span>${skill.name}</span>
+                                        <span class="rating">${skill.rating}/10</span>
+                                    </div>
+                                `).join('');
+
+                            return categorySkills.length > 0 ? `
+                                <div class="results-group">
+                                    <h3>${category}</h3>
+                                    <div class="average-rating">Average: <span>${categoryAvg}/10</span></div>
+                                    ${skillsHtml}
+                                </div>
+                            ` : '';
+                        }
                     })
                     .join('');
 
@@ -1201,30 +1459,8 @@
             }
         }
 
+
         class PDFManager {
-            static async generatePDF(data) {
-                try {
-                    await this.populatePDFTemplate(data);
-                    const element = DOMHelper.getElement('pdfTemplate');
-                    element.classList.add('visible');
-
-                    const options = {
-                        margin: [10, 20, 20, 20],
-                        filename: `ultimate-skills-assessment-${Utils.sanitizeFileName(data.name)}.pdf`,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                        pagebreak: { mode: ['css'] }
-                    };
-
-                    await html2pdf().set(options).from(element).save();
-                    element.classList.remove('visible');
-
-                } catch (error) {
-                    ErrorHandler.handleError(error, 'pdf-generation');
-                }
-            }
-
             static async populatePDFTemplate(data) {
                 try {
                     const elements = ['pdfName', 'pdfDate', 'pdfAssessmentDate', 'pdfSkillSections', 'pdfSummaryPoints']
@@ -1252,30 +1488,67 @@
 
             static generateSkillSections(ratings) {
                 return Object.entries(SKILL_CATEGORIES)
-                    .map(([category, skills]) => {
-                        const validSkills = skills.filter(skill => ratings[skill]);
-                        if (!validSkills.length) return '';
+                    .map(([category, skillsOrSubcategories]) => {
+                        if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                            // Handle subcategories
+                            return Object.entries(skillsOrSubcategories)
+                                .map(([subCategory, skills]) => {
+                                    const subCategoryRatings = skills.map(skill => Number(ratings[skill])).filter(r => !isNaN(r));
+                                    const subCategoryAvg = Utils.calculateAverage(subCategoryRatings).toFixed(1);
 
-                        const skillsList = validSkills.map(skill => `
-                            <div class="pdf-skill-item">
-                                <span class="pdf-skill-name">${Utils.formatSkillName(skill)}</span>
-                                <div style="display: flex; align-items: center;">
-                                    <span class="pdf-rating-value">${ratings[skill]}/10</span>
-                                    <div class="pdf-rating-bar">
-                                        <div class="pdf-rating-fill" style="width: ${ratings[skill] * 10}%"></div>
+                                    const skillsList = skills
+                                        .filter(skill => ratings[skill])
+                                        .map(skill => `
+                                            <div class="pdf-skill-item">
+                                                <span class="pdf-skill-name">${Utils.formatSkillName(skill)}</span>
+                                                <div style="display: flex; align-items: center;">
+                                                    <span class="pdf-rating-value">${ratings[skill]}/10</span>
+                                                    <div class="pdf-rating-bar">
+                                                        <div class="pdf-rating-fill" style="width: ${ratings[skill] * 10}%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('');
+
+                                    return `
+                                        <div class="pdf-section">
+                                            <h2>${category} - ${subCategory}</h2>
+                                            <div class="pdf-average-rating">Average: ${subCategoryAvg}/10</div>
+                                            <div class="pdf-skill-grid">
+                                                ${skillsList}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('');
+                        } else {
+                            // Handle regular categories
+                            const skills = skillsOrSubcategories;
+                            const skillsList = skills
+                                .filter(skill => ratings[skill])
+                                .map(skill => `
+                                    <div class="pdf-skill-item">
+                                        <span class="pdf-skill-name">${Utils.formatSkillName(skill)}</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <span class="pdf-rating-value">${ratings[skill]}/10</span>
+                                            <div class="pdf-rating-bar">
+                                                <div class="pdf-rating-fill" style="width: ${ratings[skill] * 10}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('');
+
+                            const categoryAvg = Utils.calculateAverage(skills.map(skill => Number(ratings[skill])).filter(r => !isNaN(r))).toFixed(1);
+
+                            return `
+                                <div class="pdf-section">
+                                    <h2>${category}</h2>
+                                    <div class="pdf-average-rating">Average: ${categoryAvg}/10</div>
+                                    <div class="pdf-skill-grid">
+                                        ${skillsList}
                                     </div>
                                 </div>
-                            </div>
-                        `).join('');
-
-                        return `
-                            <div class="pdf-section">
-                                <h2>${category}</h2>
-                                <div class="pdf-skill-grid">
-                                    ${skillsList}
-                                </div>
-                            </div>
-                        `;
+                            `;
+                        }
                     })
                     .join('');
             }
@@ -1295,8 +1568,9 @@
             }
         }
 
+
         class ChartManager {
-            static detailedSkills = {};  // Add static class property to store skills data
+            static detailedSkills = {};  // Stores skills data per category and subcategory
 
             static initializeRadarChart(data) {
                 try {
@@ -1314,22 +1588,45 @@
             }
 
             static prepareChartData(data) {
-                const labels = Object.keys(SKILL_CATEGORIES);
-                this.detailedSkills = {};  // Reset detailed skills before populating
+                let labels = [];
+                let dataPoints = [];
+                this.detailedSkills = {};  // Reset before populating
 
-                const dataPoints = labels.map(category => {
-                    const skills = SKILL_CATEGORIES[category];
-                    const validSkills = skills.filter(skill => data.ratings[skill]);
-                    const average = validSkills.length > 0
-                        ? Utils.calculateAverage(validSkills.map(skill => data.ratings[skill]))
-                        : 0;
+                Object.entries(SKILL_CATEGORIES).forEach(([category, skillsOrSubcategories]) => {
+                    if (typeof skillsOrSubcategories === 'object' && !Array.isArray(skillsOrSubcategories)) {
+                        // Handle subcategories
+                        Object.entries(skillsOrSubcategories).forEach(([subCategory, skills]) => {
+                            const validSkills = skills.filter(skill => data.ratings[skill]);
+                            const average = validSkills.length > 0
+                                ? Utils.calculateAverage(validSkills.map(skill => data.ratings[skill]))
+                                : 0;
 
-                    this.detailedSkills[category] = validSkills.map(skill => ({
-                        name: Utils.formatSkillName(skill),
-                        value: data.ratings[skill]
-                    }));
+                            labels.push(`${category} - ${subCategory}`);
+                            dataPoints.push(average.toFixed(1));
 
-                    return average;
+                            // Store detailed skills for tooltips
+                            this.detailedSkills[`${category} - ${subCategory}`] = validSkills.map(skill => ({
+                                name: Utils.formatSkillName(skill),
+                                value: data.ratings[skill]
+                            }));
+                        });
+                    } else {
+                        // Handle regular categories
+                        const skills = skillsOrSubcategories;
+                        const validSkills = skills.filter(skill => data.ratings[skill]);
+                        const average = validSkills.length > 0
+                            ? Utils.calculateAverage(validSkills.map(skill => data.ratings[skill]))
+                            : 0;
+
+                        labels.push(category);
+                        dataPoints.push(average.toFixed(1));
+
+                        // Store detailed skills for tooltips
+                        this.detailedSkills[category] = validSkills.map(skill => ({
+                            name: Utils.formatSkillName(skill),
+                            value: data.ratings[skill]
+                        }));
+                    }
                 });
 
                 return {
@@ -1347,6 +1644,7 @@
                     }]
                 };
             }
+
             static getChartOptions() {
                 return {
                     responsive: true,
@@ -1366,12 +1664,12 @@
                     },
                     plugins: {
                         legend: {
-                            display: false  // This will hide the legend completely
+                            display: false
                         },
                         tooltip: {
                             enabled: false,
                             external: function(context) {
-                                ChartManager.handleChartTooltip(context);  // Changed to explicitly reference ChartManager
+                                ChartManager.handleChartTooltip(context);
                             }
                         }
                     },
@@ -1383,6 +1681,7 @@
                     }
                 };
             }
+
             static handleChartTooltip(context) {
                 const { chart, tooltip } = context;
                 let tooltipEl = document.getElementById('chartjs-tooltip');
@@ -1433,9 +1732,9 @@
                 // Populate tooltip content
                 if (tooltip.body) {
                     const index = tooltip.dataPoints[0].dataIndex;
-                    const category = chart.data.labels[index];
-                    const average = chart.data.datasets[0].data[index].toFixed(1);
-                    const skills = this.detailedSkills[category] || [];
+                    const label = chart.data.labels[index];
+                    const average = chart.data.datasets[0].data[index];
+                    const skills = this.detailedSkills[label] || [];
 
                     const headerContent = tooltipEl.querySelector('.tooltip-header');
                     const bodyContent = tooltipEl.querySelector('.tooltip-body');
@@ -1446,7 +1745,7 @@
                     headerContent.style.paddingBottom = '8px';
                     headerContent.innerHTML = `
                         <div style="font-weight: 600; font-size: 16px; color: #ff9123; margin-bottom: 4px;">
-                            ${category}
+                            ${label}
                         </div>
                         <div style="font-size: 14px; color: rgba(255,255,255,0.9);">
                             Average: ${average}/10
@@ -1485,6 +1784,7 @@
                 }
             }
         }
+
         // Initialize application
         window.addEventListener('load', () => {
             UIManager.init();
