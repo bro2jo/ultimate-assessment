@@ -691,9 +691,8 @@
                 fitness: 8
             }
         };
-        /*
         // ... existing code ...
-        }
+        }/*
             try {
                 const pdfName = document.getElementById('pdfName');
                 const pdfDate = document.getElementById('pdfDate');
@@ -722,7 +721,7 @@
             } catch (error) {
                 console.error('Error populating PDF template:', error);
             }
-        }
+        }*/
 
         function sanitizeFileName(name) {
             return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -782,7 +781,6 @@
             meta.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.netlify.app https://cdnjs.cloudflare.com";
             document.head.appendChild(meta);
         }
-            */}
     </script>
 </body>
 </html>
