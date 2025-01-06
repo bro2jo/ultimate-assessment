@@ -230,7 +230,7 @@
 
         /* PDF Template Styles */
         .pdf-template {
-            width: 210mm;
+            width: 170mm; /* Adjusted to fit within margins */
             min-height: 297mm;
             padding: 20mm;
             margin: 0 auto;
@@ -285,6 +285,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
+            width: 100%; /* Ensure it doesn't exceed parent width */
         }
 
         .pdf-skill-item {
@@ -294,10 +295,12 @@
             padding: 10px;
             background: #f9f9f9;
             border-radius: 4px;
+            width: 100%; /* Ensure it fits within the parent */
         }
 
         .pdf-skill-name {
             font-weight: 500;
+            word-wrap: break-word; /* Allows long words to wrap */
         }
 
         .pdf-rating-value {
@@ -306,7 +309,7 @@
         }
 
         .pdf-rating-bar {
-            width: 100px;
+            width: 100px; /* Adjust if needed */
             height: 8px;
             background: #eee;
             border-radius: 4px;
@@ -395,7 +398,7 @@
                 <i class="fas fa-redo"></i>
                 Take Another Assessment
             </a>
-            <button onclick="saveResults()" class="button outline">
+            <button onclick="saveResults()" class="button outline" id="saveButton">
                 <i class="fas fa-download"></i>
                 Save Results as PDF
             </button>
@@ -722,7 +725,7 @@
                 element.classList.add('visible');
 
                 const opt = {
-                    margin:       20,
+                    margin:       20, // in millimeters
                     filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2, useCORS: true },
