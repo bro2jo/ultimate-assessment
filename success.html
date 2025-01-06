@@ -445,28 +445,98 @@
         class PDFGenerator {
             constructor(assessmentData) {
                 this.assessmentData = assessmentData;
-                this.pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
-                this.pageWidth = this.pdf.internal.pageSize.getWidth();
-                this.pageHeight = this.pdf.internal.pageSize.getHeight();
-                this.margin = 20;
+                this.styleElement = null;
+                this.originalOverflow = null;
             }
 
             async generatePDF() {
-                // Populate the PDF template with assessment data
-                document.getElementById('pdfName').innerText = this.assessmentData.name;
-                document.getElementById('pdfDate').innerText = this.assessmentData.date;
-                document.getElementById('pdfAssessmentDate').innerText = this.assessmentData.date;
+                if (!this.assessmentData) {
+                    throw new Error('No assessment data available');
+                }
 
-                // Optionally, populate skill sections and summary points here
+                try {
+                    await this.setupPDFEnvironment();
+                    await this.generateContent();
+                    await this.createPDF();
+                } catch (error) {
+                    throw error;
+                } finally {
+                    this.cleanup();
+                }
+            }
 
-                // Use html2canvas to capture the PDF template
-                const pdfTemplate = document.getElementById('pdfTemplate');
-                const canvas = await html2canvas(pdfTemplate);
-                const imgData = canvas.toDataURL('image/png');
+            async setupPDFEnvironment() {
+                this.styleElement = document.createElement('style');
+                this.styleElement.textContent = pdfStyles;
+                document.head.appendChild(this.styleElement);
 
-                // Add the image to the PDF and save
-                this.pdf.addImage(imgData, 'PNG', this.margin, this.margin, this.pageWidth - 2 * this.margin, 0);
-                this.pdf.save('Assessment_Report.pdf');
+                this.originalOverflow = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+                window.scrollTo(0, 0);
+            }
+
+            async generateContent() {
+                const template = document.getElementById('pdfTemplate');
+                if (!template) throw new Error('PDF template not found');
+
+                template.classList.add('generating');
+                template.innerHTML = this.generateTemplateHTML();
+            }
+
+            async createPDF() {
+                const options = {
+                    margin: 0,
+                    filename: `ultimate-skills-assessment-${this.assessmentData.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        allowTaint: true,
+                        scrollY: 0,
+                        windowWidth: 210 * 2.83465,
+                        windowHeight: 297 * 2.83465,
+                        backgroundColor: '#ffffff'
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait',
+                        compress: true,
+                        hotfixes: ['px_scaling']
+                    },
+                    pagebreak: {
+                        mode: ['avoid-all', 'css', 'legacy'],
+                        before: '.page-break-before',
+                        after: '.page-break-after',
+                        avoid: ['tr', '.pdf-skill-item', '.pdf-section h2']
+                    }
+                };
+
+                await html2pdf()
+                    .set(options)
+                    .from(document.getElementById('pdfTemplate'))
+                    .save();
+            }
+
+            cleanup() {
+                const template = document.getElementById('pdfTemplate');
+                if (template) template.classList.remove('generating');
+                
+                document.body.style.overflow = this.originalOverflow || '';
+                
+                if (this.styleElement && this.styleElement.parentNode) {
+                    this.styleElement.parentNode.removeChild(this.styleElement);
+                }
+            }
+
+            generateTemplateHTML() {
+                // Your existing template generation code...
+                return `
+                    <div class="pdf-page">
+                        <!-- Your existing template structure -->
+                    </div>
+                `;
             }
         }
     
