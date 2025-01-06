@@ -1482,36 +1482,25 @@
             }
 
             static updateAchievements(ratings) {
-                Object.entries(ACHIEVEMENT_THRESHOLDS).forEach(([id, { skill, skills, category, threshold }]) => {
-                    if (skill) {
-                        // Achievement based on individual skill
-                        DOMHelper.toggleClass(id, 'achievement-locked', ratings[skill] < threshold);
-                    } else if (skills) {
-                        // Achievement based on multiple skills
-                        const hasAllSkills = skills.every(skill => ratings[skill] >= threshold);
-                        DOMHelper.toggleClass(id, 'achievement-locked', !hasAllSkills);
-                    } else if (category) {
-                        // Achievement based on category average
-                        const categorySkills = SKILL_CATEGORIES[category];
-                        let validSkills = [];
+                // Debug logging
+                console.log("Checking achievements with ratings:", ratings);
 
-                        if (typeof categorySkills === 'object' && !Array.isArray(categorySkills)) {
-                            // Handle subcategories
-                            Object.values(categorySkills).forEach(subSkills => {
-                                validSkills = validSkills.concat(subSkills.filter(skill => ratings[skill]));
-                            });
-                        } else {
-                            // Handle regular categories
-                            validSkills = categorySkills.filter(skill => ratings[skill]);
-                        }
-
-                        const categoryAvg = validSkills.length ? Utils.calculateAverage(validSkills.map(skill => ratings[skill])) : 0;
-                        DOMHelper.toggleClass(id, 'achievement-locked', categoryAvg < threshold);
-                    }
+                Object.entries(ACHIEVEMENT_THRESHOLDS).forEach(([id, { skills, threshold }]) => {
+                    // Calculate average for the skills
+                    const validSkills = skills.filter(skill => ratings[skill]);
+                    const skillValues = validSkills.map(skill => ratings[skill]);
+                    const skillsAverage = validSkills.length ? 
+                        skillValues.reduce((a, b) => a + b, 0) / validSkills.length : 0;
+                    
+                    console.log(`Achievement ${id}:`);
+                    console.log(`- Skills checked:`, validSkills);
+                    console.log(`- Skill values:`, skillValues);
+                    console.log(`- Average:`, skillsAverage);
+                    console.log(`- Threshold:`, threshold);
+                    console.log(`- Unlocked:`, skillsAverage >= threshold);
+                    
+                    DOMHelper.toggleClass(id, 'achievement-locked', skillsAverage < threshold);
                 });
-
-                const hasPerfectSkill = Object.values(ratings).some(rating => Number(rating) === 10);
-                DOMHelper.toggleClass('ultimate_master', 'achievement-locked', !hasPerfectSkill);
             }
 
             static updateStats(ratings) {
