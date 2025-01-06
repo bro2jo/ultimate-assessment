@@ -625,6 +625,7 @@
                     <span id="progressPercent" aria-live="polite">0</span>
                     <span>Maximum Rating: 100</span>
                 </div>
+                <div id="nextMilestone" class="next-milestone" aria-live="polite"></div>
             </div>
     
             <div class="chart-container" role="img" aria-label="Skills radar chart">
@@ -767,7 +768,7 @@
                 <i class="fas fa-redo" aria-hidden="true"></i>
                 Take Another Assessment
             </a>
-            <button type="button" onclick="saveResults()" class="button outline" id="saveButton">
+            <button type="button" id="saveButton" class="button outline">
                 <i class="fas fa-download" aria-hidden="true"></i>
                 Save Results as PDF
             </button>
@@ -1455,6 +1456,10 @@
                 ErrorHandler.handleError(new Error(e.message), 'pdf-generation');
             }
         }, true);
+
+        document.getElementById('saveButton').addEventListener('click', () => {
+            PDFManager.generatePDF(AssessmentDataManager.getAssessmentData());
+        });
 
         // Export for testing
         if (typeof module !== 'undefined') {
