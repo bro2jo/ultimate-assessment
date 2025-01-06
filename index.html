@@ -777,6 +777,42 @@
                 // });
             });
         });
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Gather all form data
+            const formData = new FormData(this);
+            const skillRatings = {};
+            const assessmentData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                ratings: {},
+                date: new Date().toLocaleDateString()
+            };
+
+            // Collect all skill ratings
+            document.querySelectorAll('.skill-range').forEach(range => {
+                if (range.value !== '5') { // Only include changed values
+                    assessmentData.ratings[range.name] = range.value;
+                }
+            });
+
+            // Store in localStorage
+            localStorage.setItem('skillAssessment', JSON.stringify(assessmentData));
+
+            // Create URL parameters for all the data
+            const params = new URLSearchParams();
+            params.append('name', assessmentData.name);
+            params.append('email', assessmentData.email);
+            
+            // Add all ratings to URL parameters
+            Object.entries(assessmentData.ratings).forEach(([key, value]) => {
+                params.append(key, value);
+            });
+
+            // Redirect to success page with parameters
+            window.location.href = `/success?${params.toString()}`;
+        });
     </script>
 </body>
 </html>
