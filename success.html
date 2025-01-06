@@ -581,6 +581,7 @@
                         <p class="text-muted">Achieved perfect mastery</p>
                     </div>
                 </div>
+                <!-- (Optional) Add new achievement card here if needed -->
             </div>
     
             <div class="stats-grid">
@@ -667,7 +668,7 @@
                 'flexibility_mobility',
                 'injury_prevention'
             ],
-            'Strategy & Game IQ': ['defensive_strategy', 'offensive_strategy', 'mental_game']
+            'Strategy & Game IQ': ['defensive_strategy', 'offensive_strategy', 'mental_game', 'feedback_implementation'] // Added 'feedback_implementation'
         };
 
         const LEVEL_CONFIG = {
@@ -684,6 +685,8 @@
             speedDemon: { skill: 'downfield_cutting', threshold: 8 },
             strategist: { skill: 'mental_game', threshold: 8 },
             athleticExcellence: { category: 'Fitness & Athleticism', threshold: 8 }
+            // (Optional) Add new achievement thresholds here if needed
+            // e.g., feedbackImplementation: { skill: 'feedback_implementation', threshold: 8 }
         };
 
         class AppError extends Error {
