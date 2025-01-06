@@ -238,16 +238,11 @@
             color: #333333;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
-            position: absolute;
-            left: -9999px; /* Position off-screen */
-            top: 0;
-            visibility: hidden; /* Keep hidden from user */
+            display: none; /* Hide from user */
         }
 
         .pdf-template.visible {
-            position: static;
-            left: 0;
-            visibility: visible;
+            display: block; /* Show during PDF generation */
         }
 
         .pdf-header {
@@ -671,28 +666,6 @@
         }
 
         function populatePDFTemplate(data) {
-        // Uncomment below to use sample data for testing
-        data = {
-            name: 'John Doe',
-            date: 'January 1, 2025',
-            ratings: {
-                downfield_cutting: 8,
-                handler_cutting: 7,
-                throwing: 9,
-                disc_moves: 6,
-                marking: 5,
-                downfield_defense: 4,
-                handler_defense: 7,
-                skying: 6,
-                laying_out: 5,
-                defensive_strategy: 8,
-                offensive_strategy: 7,
-                mental_game: 9,
-                fitness: 8
-            }
-        };
-        // ... existing code ...
-        }/*
             try {
                 const pdfName = document.getElementById('pdfName');
                 const pdfDate = document.getElementById('pdfDate');
@@ -721,7 +694,7 @@
             } catch (error) {
                 console.error('Error populating PDF template:', error);
             }
-        }*/
+        }
 
         function sanitizeFileName(name) {
             return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -745,6 +718,9 @@
                 }
                 console.log('PDF template element found:', element);
 
+                // Make the PDF template visible for html2pdf.js to capture
+                element.classList.add('visible');
+
                 const opt = {
                     margin:       20,
                     filename:     `ultimate-skills-assessment-${sanitizeFileName(assessmentData.name)}.pdf`,
@@ -757,6 +733,8 @@
                 console.log('Starting PDF generation with options:', opt);
                 html2pdf().set(opt).from(element).save().then(() => {
                     console.log('PDF generation completed.');
+                    // Hide the PDF template after generation
+                    element.classList.remove('visible');
                 });
 
             } catch (error) {
