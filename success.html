@@ -623,9 +623,7 @@
                 </div>
                 <div class="progress-labels">
                     <span id="progressPercent" aria-live="polite">0</span>
-                    <span>Maximum Rating: 100</span>
                 </div>
-                <div id="nextMilestone" class="next-milestone" aria-live="polite"></div>
             </div>
     
             <div class="chart-container" role="img" aria-label="Skills radar chart">
@@ -716,43 +714,6 @@
                     <div class="stat-value" id="focusSkill" aria-live="polite">-</div>
                     <div class="stat-label" id="focusSkillRating">0/10</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-chart-line" aria-hidden="true"></i>
-                        <span>Average Rating</span>
-                    </div>
-                    <div class="stat-value" id="avgRating">0.0</div>
-                    <div class="stat-label">Across all skills</div>
-                </div>
-            </div>
-    
-            <div class="development-path">
-                <h3 class="section-title">Development Path</h3>
-                <div class="path-step">
-                    <div class="step-number" aria-hidden="true">1</div>
-                    <div class="step-content">
-                        <h4 id="focusAreaTitle">Focus on Primary Skill</h4>
-                        <p id="focusAreaDesc">Specific drills and exercises for improvement</p>
-                    </div>
-                </div>
-                <div class="path-step">
-                    <div class="step-number" aria-hidden="true">2</div>
-                    <div class="step-content">
-                        <h4 id="maintainTitle">Maintain Strengths</h4>
-                        <p id="maintainDesc">Continue practicing your best skills</p>
-                    </div>
-                </div>
-                <div class="path-step">
-                    <div class="step-number" aria-hidden="true">3</div>
-                    <div class="step-content">
-                        <h4>Set New Goals</h4>
-                        <p>Define specific targets for your next assessment</p>
-                    </div>
-                </div>
-            </div>
-    
-            <div class="results-summary" id="resultsSummary" aria-live="polite">
-                <!-- Results will be populated by JavaScript -->
             </div>
         </section>
     
@@ -1161,10 +1122,6 @@
                 DOMHelper.setContent('progressPercent', levelData.progress);
                 
                 DOMHelper.setHTML('levelIcon', `<i class="fas fa-${levelData.config.icon}"></i>`);
-                
-                const nextLevelConfig = LEVEL_CONFIG[levelData.nextLevel];
-                DOMHelper.setContent('nextMilestone', 
-                    nextLevelConfig ? `Next: ${nextLevelConfig.title}` : 'Mastery Achieved');
             }
 
             static updateLevelTitle(name) {
@@ -1370,10 +1327,7 @@
                     },
                     plugins: {
                         legend: {
-                            labels: {
-                                color: '#e5e5e5',
-                                font: { size: 14 }
-                            }
+                            display: false  // This will hide the legend completely
                         },
                         tooltip: {
                             enabled: false,
