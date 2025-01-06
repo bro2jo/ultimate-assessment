@@ -571,6 +571,7 @@
             </div>
         
             <div class="achievements-grid">
+                <!-- Original achievements -->
                 <div class="achievement-card" id="masterHandler">
                     <div class="achievement-icon" style="background: linear-gradient(135deg, #fbbf24, #d97706);">
                         <i class="fas fa-crown"></i>
@@ -596,6 +597,46 @@
                     <div>
                         <h3>Strategic Mind</h3>
                         <p class="text-muted">High game IQ</p>
+                    </div>
+                </div>
+                
+                <!-- New category achievements -->
+                <div class="achievement-card" id="cutting_movement_master">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #22c55e, #059669);">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div>
+                        <h3>Movement Master</h3>
+                        <p class="text-muted">Exceptional cutting skills</p>
+                    </div>
+                </div>
+                <div class="achievement-card" id="defense_master">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3>Defense Specialist</h3>
+                        <p class="text-muted">Superior defensive skills</p>
+                    </div>
+                </div>
+                <div class="achievement-card" id="athletic_master">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f472b6, #db2777);">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div>
+                        <h3>Athletic Excellence</h3>
+                        <p class="text-muted">Exceptional physical ability</p>
+                    </div>
+                </div>
+                
+                <!-- Ultimate Mastery Achievement -->
+                <div class="achievement-card" id="ultimate_master">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f59e0b, #b45309);">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div>
+                        <h3>Ultimate Master</h3>
+                        <p class="text-muted">Achieved perfect mastery</p>
                     </div>
                 </div>
             </div>
@@ -906,7 +947,7 @@
         }
 
         function updateAchievements(ratings) {
-            // Master Handler achievement
+            // Original achievements checks
             const masterHandler = document.getElementById('masterHandler');
             if (ratings.throwing >= 8) {
                 masterHandler.classList.remove('achievement-locked');
@@ -914,7 +955,6 @@
                 masterHandler.classList.add('achievement-locked');
             }
 
-            // Speed Demon achievement
             const speedDemon = document.getElementById('speedDemon');
             if (ratings.downfield_cutting >= 8) {
                 speedDemon.classList.remove('achievement-locked');
@@ -922,12 +962,50 @@
                 speedDemon.classList.add('achievement-locked');
             }
 
-            // Strategic Mind achievement
             const strategist = document.getElementById('strategist');
             if (ratings.mental_game >= 8) {
                 strategist.classList.remove('achievement-locked');
             } else {
                 strategist.classList.add('achievement-locked');
+            }
+
+            // Helper function to calculate category average
+            function getCategoryAverage(skills) {
+                const validSkills = skills.filter(skill => ratings[skill]);
+                if (validSkills.length === 0) return 0;
+                return validSkills.reduce((sum, skill) => sum + Number(ratings[skill]), 0) / validSkills.length;
+            }
+
+            // New category achievements checks
+            const categoryAchievements = {
+                'cutting_movement_master': getCategoryAverage(SKILL_CATEGORIES['Cutting & Movement']) >= 8,
+                'defense_master': getCategoryAverage(SKILL_CATEGORIES['Defense']) >= 8,
+                'athletic_master': getCategoryAverage(SKILL_CATEGORIES['Athletic Skills']) >= 8
+            };
+
+            // Check for ultimate mastery (any skill rated 10)
+            const hasPerfectSkill = Object.values(ratings).some(rating => rating === 10);
+
+            // Update UI for category achievements
+            Object.entries(categoryAchievements).forEach(([id, achieved]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (achieved) {
+                        element.classList.remove('achievement-locked');
+                    } else {
+                        element.classList.add('achievement-locked');
+                    }
+                }
+            });
+
+            // Update ultimate master achievement
+            const ultimateMaster = document.getElementById('ultimate_master');
+            if (ultimateMaster) {
+                if (hasPerfectSkill) {
+                    ultimateMaster.classList.remove('achievement-locked');
+                } else {
+                    ultimateMaster.classList.add('achievement-locked');
+                }
             }
         }
 
