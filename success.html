@@ -1627,8 +1627,8 @@
                     });
 
                     // Generate skill bar HTML
-                    const generateSkillBar = (skill) => `
-                        <div class="skill-bar>
+                    const generateSkillBar = (skill, isHighlight) => `
+                        <div class="skill-bar ${isHighlight ? 'highlight' : ''}">
                             <div class="skill-info">
                                 <span class="skill-icon ${skill.tier}-tier">
                                     <i class="fas ${
