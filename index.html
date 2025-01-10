@@ -1703,13 +1703,21 @@
           });
           
           range.addEventListener('input', function(e) {
+              // If it's the initial touch without movement, prevent all changes
               if (!touchMoved && e.isTrusted && initialValue !== null) {
                   requestAnimationFrame(() => {
                       this.value = initialValue;
                       const formGroup = this.closest('.form-group');
                       const valueDisplay = formGroup.querySelector('.skill-value');
+                      
+                      // Restore original value and class
                       valueDisplay.textContent = initialValue;
+                      valueDisplay.className = 'skill-value ' + 
+                          (initialValue <= 3 ? 'low' : 
+                          initialValue <= 6 ? 'medium' : 
+                          initialValue <= 8 ? 'high' : 'Elite');
                   });
+                  return false; // Prevent the other input handler from firing
               }
           });
 

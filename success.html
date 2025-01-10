@@ -40,7 +40,6 @@
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
             padding: var(--spacing-md);
         }
@@ -51,11 +50,18 @@
         }
         /* Success Page Styles */
         .success-container {
-            max-width: 800px;
-            padding: 40px;
+            max-width: 100%;
+            padding: 20px;
             background: var(--darker-bg);
             border-radius: var(--border-radius);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .success-container {
+                max-width: 800px;
+                padding: 40px;
+            }
         }
 
         .success-header {
@@ -231,7 +237,7 @@
         .chart-container {
             position: relative;
             width: 100%;
-            height: 400px;
+            height: auto;
             margin-bottom: var(--spacing-lg);
         }
 
@@ -327,6 +333,13 @@
             gap: 20px;
             margin-bottom: var(--spacing-lg);
         }
+
+        @media (max-width: 400px) {
+            .achievements-grid {
+                grid-template-columns: 1fr; /* Single column on very narrow screens */
+            }
+        }
+
 
         .achievement-card {
             background: var(--darker-bg);
