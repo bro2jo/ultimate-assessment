@@ -1688,7 +1688,30 @@
 
             return progress;
         }
+        document.querySelectorAll('.skill-slider').forEach(slider => {
+            const range = slider.querySelector('.skill-range');
+            let initialValue = null;
+            
+            // Store initial value on touch start
+            slider.addEventListener('touchstart', (e) => {
+                initialValue = range.value;
+            });
+            
+            // Prevent value changes unless it's an intentional slide
+            range.addEventListener('input', function(e) {
+                if (e.isTrusted && initialValue !== null) {  // isTrusted means it's from user input
+                    requestAnimationFrame(() => {
+                        this.value = initialValue;
+                        initialValue = null;
+                    });
+                }
+            });
 
+            // Clear the initial value when touch ends
+            slider.addEventListener('touchend', () => {
+                initialValue = null;
+            });
+        });
         // Handle slider changes
         document.querySelectorAll('.skill-range').forEach(range => {
             range.addEventListener('input', function() {
