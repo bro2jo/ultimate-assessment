@@ -1689,62 +1689,59 @@
             return progress;
         }
         document.querySelectorAll('.skill-slider').forEach(slider => {
-            const range = slider.querySelector('.skill-range');
-            let initialValue = null;
-            let shouldUpdate = true;
-            
-            slider.addEventListener('touchstart', (e) => {
-                initialValue = range.value;
-                shouldUpdate = false;
-            });
-            
-            range.addEventListener('input', function(e) {
-                if (e.isTrusted && initialValue !== null) {
-                    requestAnimationFrame(() => {
-                        this.value = initialValue;
-                        // Also update the display back to the initial value
-                        const formGroup = this.closest('.form-group');
-                        const valueDisplay = formGroup.querySelector('.skill-value');
-                        valueDisplay.textContent = initialValue;
-                        initialValue = null;
-                    });
-                    return; // Prevent further processing
-                }
-                shouldUpdate = true;
-            });
+          const range = slider.querySelector('.skill-range');
+          let initialValue = null;
+          let touchMoved = false;
+          
+          slider.addEventListener('touchstart', (e) => {
+              initialValue = range.value;
+              touchMoved = false;
+          });
 
-            slider.addEventListener('touchend', () => {
-                initialValue = null;
-                shouldUpdate = true;
-            });
-        });
+          slider.addEventListener('touchmove', () => {
+              touchMoved = true;
+          });
+          
+          range.addEventListener('input', function(e) {
+              if (!touchMoved && e.isTrusted && initialValue !== null) {
+                  requestAnimationFrame(() => {
+                      this.value = initialValue;
+                      const formGroup = this.closest('.form-group');
+                      const valueDisplay = formGroup.querySelector('.skill-value');
+                      valueDisplay.textContent = initialValue;
+                  });
+              }
+          });
+
+          slider.addEventListener('touchend', () => {
+              initialValue = null;
+              touchMoved = false;
+          });
+      });
 
         // Handle slider changes
         document.querySelectorAll('.skill-range').forEach(range => {
-            range.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                const formGroup = this.closest('.form-group');
-                const valueDisplay = formGroup.querySelector('.skill-value');
-                
-                // Only update if it's not from the initial touch
-                if (shouldUpdate) {
-                    interactedFields.add(this.name);
-                    valueDisplay.textContent = value;
-                    
-                    valueDisplay.className = 'skill-value ' + 
-                        (value <= 3 ? 'low' : 
-                        value <= 6 ? 'medium' : 
-                        value <= 8 ? 'high' : 'Elite');
-                    
-                    valueDisplay.classList.add('value-changed');
-                    setTimeout(() => {
-                        valueDisplay.classList.remove('value-changed');
-                    }, 300);
+          range.addEventListener('input', function() {
+              const value = parseInt(this.value);
+              const formGroup = this.closest('.form-group');
+              const valueDisplay = formGroup.querySelector('.skill-value');
+              
+              interactedFields.add(this.name);
+              valueDisplay.textContent = value;
+              
+              valueDisplay.className = 'skill-value ' + 
+                  (value <= 3 ? 'low' : 
+                  value <= 6 ? 'medium' : 
+                  value <= 8 ? 'high' : 'Elite');
+              
+              valueDisplay.classList.add('value-changed');
+              setTimeout(() => {
+                  valueDisplay.classList.remove('value-changed');
+              }, 300);
 
-                    updateProgress();
-                }
-            });
-        });
+              updateProgress();
+          });
+      });
 
         // Initialize floating labels
         document.querySelectorAll('.input-group input').forEach(input => {
