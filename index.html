@@ -243,6 +243,7 @@
             background: var(--background-dark);
             border-radius: 3px;
             outline: none;
+            touch-action: pan-y; /* allow vertical panning (scroll) without changing the slider */
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -1670,80 +1671,6 @@
 
     <script>
         const interactedFields = new Set();
-        document.querySelectorAll('.skill-slider').forEach(slider => {
-          const range = slider.querySelector('.skill-range');
-          let touchStartY = null;
-          let touchStartX = null;
-          let isScrollGesture = false;
-          let initialValue = null;
-
-          slider.addEventListener('touchstart', (e) => {
-              // Store the initial slider value
-              initialValue = range.value;
-              touchStartY = e.touches[0].clientY;
-              touchStartX = e.touches[0].clientX;
-              isScrollGesture = false;
-              
-              // Prevent the default touch behavior which would update the slider
-              e.preventDefault();
-          });
-
-          slider.addEventListener('touchmove', (e) => {
-              if (!touchStartY || !touchStartX) return;
-              
-              const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
-              const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
-              
-              // If it's determined to be a scroll gesture
-              if (deltaY > deltaX && deltaY > 10) {
-                  isScrollGesture = true;
-                  range.blur();
-                  // Restore the initial value
-                  range.value = initialValue;
-                  // Trigger input event to update display
-                  range.dispatchEvent(new Event('input'));
-              }
-              // If it's determined to be a horizontal slider gesture
-              else if (deltaX > deltaY && deltaX > 10) {
-                  isScrollGesture = false;
-                  // Now allow slider changes
-                  range.disabled = false;
-              }
-          });
-
-          slider.addEventListener('touchend', () => {
-              touchStartY = null;
-              touchStartX = null;
-              initialValue = null;
-          });
-
-          // Modify your existing input handler
-          range.addEventListener('input', function(e) {
-              if (isScrollGesture) {
-                  this.value = initialValue;
-                  return;
-              }
-              
-              const value = parseInt(this.value);
-              const formGroup = this.closest('.form-group');
-              const valueDisplay = formGroup.querySelector('.skill-value');
-              
-              interactedFields.add(this.name);
-              valueDisplay.textContent = value;
-              
-              valueDisplay.className = 'skill-value ' + 
-                  (value <= 3 ? 'low' : 
-                  value <= 6 ? 'medium' : 
-                  value <= 8 ? 'high' : 'Elite');
-              
-              valueDisplay.classList.add('value-changed');
-              setTimeout(() => {
-                  valueDisplay.classList.remove('value-changed');
-              }, 300);
-
-              updateProgress();
-          });
-      });
 
         // Initialize floating labels
         document.querySelectorAll('.input-group input').forEach(input => {
