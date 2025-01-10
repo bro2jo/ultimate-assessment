@@ -248,8 +248,8 @@
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border-radius: 50%;
             cursor: pointer;
@@ -1670,7 +1670,62 @@
 
     <script>
         const interactedFields = new Set();
+        document.querySelectorAll('.skill-slider').forEach(slider => {
+          const range = slider.querySelector('.skill-range');
+          let touchStartY = null;
+          let touchStartX = null;
+          let isScrollGesture = false;
 
+          slider.addEventListener('touchstart', (e) => {
+              touchStartY = e.touches[0].clientY;
+              touchStartX = e.touches[0].clientX;
+              isScrollGesture = false;
+          });
+
+          slider.addEventListener('touchmove', (e) => {
+              if (!touchStartY || !touchStartX) return;
+              
+              const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+              const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+              
+              if (deltaY > deltaX && deltaY > 10) {
+                  isScrollGesture = true;
+                  range.blur();
+              }
+          });
+
+          slider.addEventListener('touchend', () => {
+              touchStartY = null;
+              touchStartX = null;
+          });
+
+          // Modify your existing input handler
+          range.addEventListener('input', function(e) {
+              if (isScrollGesture) {
+                  e.preventDefault();
+                  return;
+              }
+              
+              const value = parseInt(this.value);
+              const formGroup = this.closest('.form-group');
+              const valueDisplay = formGroup.querySelector('.skill-value');
+              
+              interactedFields.add(this.name);
+              valueDisplay.textContent = value;
+              
+              valueDisplay.className = 'skill-value ' + 
+                  (value <= 3 ? 'low' : 
+                  value <= 6 ? 'medium' : 
+                  value <= 8 ? 'high' : 'Elite');
+              
+              valueDisplay.classList.add('value-changed');
+              setTimeout(() => {
+                  valueDisplay.classList.remove('value-changed');
+              }, 300);
+
+              updateProgress();
+          });
+      });
         // Progress tracking
         function updateProgress() {
             const totalFields = document.querySelectorAll('.skill-range').length;
