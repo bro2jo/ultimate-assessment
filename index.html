@@ -233,6 +233,7 @@
         .skill-slider {
             position: relative;
             padding: 10px 0;
+            touch-action: pan-y; /* allow vertical scrolling without affecting the slider */
         }
 
         input[type="range"] {
@@ -243,7 +244,6 @@
             background: var(--background-dark);
             border-radius: 3px;
             outline: none;
-            touch-action: pan-y; /* allow vertical panning (scroll) without changing the slider */
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -1671,6 +1671,50 @@
 
     <script>
         const interactedFields = new Set();
+
+        // Progress tracking
+        function updateProgress() {
+            const totalFields = document.querySelectorAll('.skill-range').length;
+            const completedFields = interactedFields.size;
+            
+            const progress = (completedFields / totalFields) * 100;
+            const progressFill = document.querySelector('.progress-fill');
+            const progressText = document.querySelector('.progress-percentage');
+            
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+
+            return progress;
+        }
+
+        // Handle slider changes
+        document.querySelectorAll('.skill-range').forEach(range => {
+            range.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                const formGroup = this.closest('.form-group');
+                const valueDisplay = formGroup.querySelector('.skill-value');
+                
+                // Track that this field has been interacted with
+                interactedFields.add(this.name);
+                
+                // Update value display
+                valueDisplay.textContent = value;
+                
+                valueDisplay.className = 'skill-value ' + 
+                    (value <= 3 ? 'low' : 
+                    value <= 6 ? 'medium' : 
+                    value <= 8 ? 'high' : 'Elite');
+                
+                // Add animation
+                valueDisplay.classList.add('value-changed');
+                setTimeout(() => {
+                    valueDisplay.classList.remove('value-changed');
+                }, 300);
+
+                // Update progress
+                updateProgress();
+            });
+        });
 
         // Initialize floating labels
         document.querySelectorAll('.input-group input').forEach(input => {
